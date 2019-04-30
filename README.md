@@ -1,7 +1,7 @@
 # xm-select
 
 #### 介绍
-基于Layui, 下拉选择框的多选解决方案
+始于Layui, 下拉选择框的多选解决方案
 
 #### 软件架构
 1. 引入第三方[preact](https://preactjs.com/)库, 利用jsx渲染页面结构
