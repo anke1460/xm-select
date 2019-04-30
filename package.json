@@ -1,0 +1,28 @@
+{
+  "name": "xm-select",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node_modules/.bin/webpack-dev-server",
+    "build": "webpack"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "babel-loader": "^8.0.5",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "css-loader": "^2.1.1",
+    "less": "^3.9.0",
+    "less-loader": "^4.1.0",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0",
+    "webpack-dev-server": "^3.2.1"
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^3.2.0"
+  }
+}

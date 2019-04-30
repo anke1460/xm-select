@@ -1,0 +1,209 @@
+@fontColor: #666;
+@defaultBorderColor: #E6E6E6;
+@disabledColor: #C2C2C2;
+@border: 1px solid @defaultBorderColor;
+@height: 36px;
+
+@-webkit-keyframes xm-upbit {
+	from {-webkit-transform: translate3d(0, 30px, 0);opacity: .3}
+	to {-webkit-transform: translate3d(0, 0, 0);opacity: 1}
+}
+@keyframes xm-upbit {
+	from {transform: translate3d(0, 30px, 0);opacity: .3}
+	to {transform: translate3d(0, 0, 0);opacity: 1}
+}
+
+xm-select{
+	*{
+		margin: 0; 
+		padding: 0; 
+		box-sizing: border-box; 
+		font-size: 14px;
+		font-weight: 400;
+		color: @fontColor;
+		text-overflow: ellipsis;
+		user-select: none;
+	}
+	
+	position: relative;
+	border: @border;
+	border-radius: 2px;
+	height: @height;
+	line-height: @height;
+	display: block;
+	width: 100%;
+	cursor: pointer;
+	
+	&:hover{
+		border-color: #C0C4CC;
+	}
+	
+	
+	& > .xm-tips{
+		color: #999999;
+		padding: 0 10px;
+		height: 100%;
+	} 
+	
+	& > .xm-icon{
+		display: inline-block;
+		overflow: hidden;
+		position: absolute;
+		width: 0;
+		height: 0;
+		right: 10px;
+		top: 50%;
+		margin-top: -3px;
+		cursor: pointer;
+		border: 6px dashed transparent;
+		border-top-color: #C2C2C2;
+		border-top-style: solid;
+		transition: all .3s;
+		-webkit-transition: all .3s
+	}
+	
+	& > .xm-icon-expand{
+		margin-top: -9px;
+		transform: rotate(180deg);
+	}
+	
+	& > .xm-label{
+		padding: 0 10px;
+		height: 100%;
+		overflow-y: hidden;
+		
+		.xm-label-block{
+			display: inline-block;
+			position: relative;
+			padding: 0px 5px;
+			margin: 2px 5px 2px 0;
+			height: 22px;
+			line-height: 22px;
+			border-radius: 3px;
+			vertical-align: middle;
+			color: #FFF;
+			max-width: calc(100% - 20px);
+			
+			& > span{
+				display: inline-block;
+				color: #FFF;
+				text-overflow: ellipsis;
+				overflow: hidden;
+			}
+			
+			& > i{
+				color: #FFF;
+				margin-left: 8px;
+				font-size: 12px;
+				cursor: pointer;
+				line-height: 20px;
+				position: relative;
+				top: -6px;
+			}
+			
+			&.disabled{
+				background-color: @disabledColor !important;
+				cursor: no-drop !important;
+				&>i{
+					cursor: no-drop !important;
+				}
+			}
+		}
+	}
+	
+	& > .xm-body {
+		position: absolute;
+		left: 0;
+		top: 42px;
+		padding: 5px 0;
+		z-index: 999;
+		width: 100%;
+		border: @border;
+		max-height: 300px;
+		overflow-y: auto;
+		background-color: #fff;
+		border-radius: 2px;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
+		animation-fill-mode: both;
+		animation-name: xm-upbit;
+		animation-duration: .3s;
+		animation-fill-mode: both;
+		
+		.xm-option{
+			position: relative;
+			padding: 0 10px;
+			cursor: pointer;
+			
+			&:hover{
+				background-color: #f2f2f2;
+				
+				&>.xm-option-icon>i{
+					color: #f2f2f2;
+				}
+			}
+			
+			&-icon{
+				color: #FFF;
+				font-size: 16px;
+				width: 18px;
+				height: 18px;
+				position: absolute;
+				top: 9px;
+				border: @border;
+				border-radius: 5px;
+				z-index: 2;
+				
+				& > i {
+					position: absolute; 
+					right: 0px; 
+					top: -10px; 
+					color: #FFF;
+				}
+			}
+			
+			&-content{
+				display: inline-block;
+				position: relative;
+				padding: 0 15px 0 30px;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				color: #666;
+				line-height: 36px;
+				vertical-align: top;
+				width: 100%;
+			}
+		}
+		
+		.xm-select-empty{
+			text-align: center;
+			color: #999;
+		}
+		
+		.disabled{
+			cursor: no-drop;
+			&:hover{
+				background-color: #FFF;
+				&>.xm-option-icon>i{
+					color: #FFF !important;
+				}
+			}
+			.xm-option-icon{
+				border-color: @disabledColor !important;
+			}
+			.xm-option-content{
+				color: @disabledColor !important;
+			}
+			
+			&.selected>.xm-option-icon>i{
+				color: @disabledColor !important;
+			}
+		}
+	}
+	
+	
+	.dis{
+		display: none;
+	}
+	
+}
