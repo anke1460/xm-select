@@ -109,6 +109,8 @@ xmSelect: setValue(array, show)
 
 #### 示例
 
+[示例页面](https://maplemei.gitee.io/xm-select/)
+
 ```
 <h3>这是一个多选</h3>
 <div id="demo1"></div>
