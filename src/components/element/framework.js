@@ -57,7 +57,8 @@ class Framework extends Component{
 		
 	}
 	
-	render({ tips, theme, data, prop, template, model, empty }, { sels, show }) {
+	render(config, { sels, show }) {
+		const { tips, theme, data, prop, template, model, empty } = config;
 		const borderStyle = { borderColor: theme.color };
 		//最外层边框的属性
 		const xmSelectProps = {
@@ -93,8 +94,8 @@ class Framework extends Component{
 			}
 		};
 		
-		const labelProps = {  data, prop, model, theme, sels, ck, title: sels.map(sel => sel[prop.name]).join(',') }
-		const bodyProps = {  data, prop, template, theme, sels, ck, empty }
+		const labelProps = {  ...config, sels, ck, title: sels.map(sel => sel[prop.name]).join(',') }
+		const bodyProps = {  ...config, sels, ck, show }
 		//控制下拉框的显示于隐藏
 		const bodyClass = show ? 'xm-body' : 'xm-body dis';
 		

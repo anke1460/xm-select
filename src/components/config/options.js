@@ -19,6 +19,17 @@ export default function (lan = 'zn') {
 		reset: false,
 		//用来判断多选是否显示
 		isShow: false,
+		//搜索延迟 ms
+		delay: 500,
+		//搜索默认提示
+		searchTips: setting.searchTips,
+		//是否开始本地搜索
+		filterable: false,
+		//本地搜索过滤方法
+		filterMethod: function(val, item, index, prop){
+			if(!val) return true;
+			return item[prop.name].indexOf(val) != -1;
+		},
 		//自定义属性名称
 		prop: {
 			name: 'name',

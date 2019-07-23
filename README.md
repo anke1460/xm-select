@@ -36,6 +36,17 @@ QQ群: 769620939
 	tips: '请选择', //please selected
 	//空数据提示
 	empty: '暂无数据', //no data
+	//搜索延迟 ms
+	delay: 500,
+	//搜索默认提示
+	searchTips: '请选择', //please search
+	//是否开始本地搜索
+	filterable: false,
+	//本地搜索过滤方法, 返回true表示显示, false不显示, val:当前输入框搜索值, item:选项数据, index: 数组坐标, porp: 自定义属性
+	filterMethod: function(val, item, index, prop){
+		if(!val) return true;
+		return item[prop.name].indexOf(val) != -1;
+	},
 	//自定义属性名称
 	prop: {
 		name: 'name',
@@ -150,6 +161,15 @@ xmSelect: setValue(array, show)
 
 <h3>换一个主题</h3>
 <div id="demo13"></div>
+
+<h3>开启搜索模式</h3>
+<div id="demo14"></div>
+
+<h3>自定义搜索方法</h3>
+<div id="demo15"></div>
+
+<h3>自定义搜索延迟 和 提示</h3>
+<div id="demo16"></div>
 
 
 <script src="../dist/xm-select.js" type="text/javascript" charset="utf-8"></script>
@@ -335,6 +355,45 @@ xmSelect: setValue(array, show)
 		theme: {
 			color: 'red',
 		},
+	})
+	
+	var demo14 = xmSelect.render({
+		el: '#demo14', 
+		data: [
+			{name: '水果', value: 1, selected: true, disabled: true},
+			{name: '蔬菜', value: 2, selected: true},
+			{name: '桌子', value: 3, disabled: true},
+			{name: '北京', value: 4},
+		],
+		filterable: true, //开启搜索
+	})
+	
+	var demo15 = xmSelect.render({
+		el: '#demo15', 
+		data: [
+			{name: '水果', value: 1, selected: true, disabled: true},
+			{name: '蔬菜', value: 2, selected: true},
+			{name: '桌子', value: 3, disabled: true},
+			{name: '北京', value: 4},
+		],
+		filterable: true, //开启搜索
+		filterMethod: function(val, item, index, prop){
+			if(!val) return true;
+			return item[prop.name].indexOf(val) != -1;
+		},
+	})
+	
+	var demo16 = xmSelect.render({
+		el: '#demo16', 
+		data: [
+			{name: '水果', value: 1, selected: true, disabled: true},
+			{name: '蔬菜', value: 2, selected: true},
+			{name: '桌子', value: 3, disabled: true},
+			{name: '北京', value: 4},
+		],
+		filterable: true, //开启搜索
+		delay: 2000,
+		searchTips: '搜索呀 搜索呀...',
 	})
 </script>
 ```

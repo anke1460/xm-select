@@ -7,6 +7,8 @@ class General extends Component{
 	
 	constructor(options){
 		super(options);
+		this.searchCid = 0;
+		this.setState({ searchVal: '', });
 	}
 	
 	optionClick(item, selected, disabled, e){
@@ -15,11 +17,26 @@ class General extends Component{
 		e.stopPropagation();
 	}
 	
-	render({ data, prop, template, theme, sels, empty }) {
+	searchInputClick(e){
+		e.stopPropagation();
+	}
+	
+	searchInput(e){
+		clearTimeout(this.searchCid);
+		this.searchCid = setTimeout(() => this.setState({ searchVal: e.target.value }), this.props.delay);
+	}
+	
+	componentWillReceiveProps(props){
+		if(!props.show){
+			this.setState({ searchVal: '', })
+		}
+	}
+	
+	render({ data, prop, template, theme, sels, empty, filterable, filterMethod, delay, searchTips }) {
 		
 		const { name, value, disabled } = prop;
-		
-		const arr = data.map(item => {
+
+		const arr = (filterable ? data.filter((item, index) => filterMethod(this.state.searchVal, item, index, prop)) : data).map(item => {
 			
 			const selected = !!sels.find(sel => sel[value] == item[value])
 			const iconStyle = { color: selected ? theme.color : '' }
@@ -36,14 +53,25 @@ class General extends Component{
 			)
 		}) 
 		
-		if(!data.length){
+		if(!arr.length){
 			arr.push(
 				<div class="xm-select-empty">{ empty }</div>
 			)
 		}
 		
+		const searchClass = ['xm-search', filterable ? '':'dis'].join(' ');
+		const search = (
+			<div class={ searchClass }>
+				<i class="xm-iconfont xm-icon-sousuo"></i>
+				<input type="text" class="xm-input xm-search-input" placeholder={ searchTips } value={ this.state.searchVal } onInput={ this.searchInput.bind(this) } onClick={ this.searchInputClick.bind(this) } />
+			</div>
+		);
+		
 		return (
-			<div> { arr } </div>
+			<div> 
+				{ search }
+				<div>{ arr }</div>
+			</div>
 		)
 	}
 }
