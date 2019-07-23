@@ -259,7 +259,7 @@ xmSelect: setValue(array, show)
 			label: {
 				type: 'count',
 				count: {
-					template(data, sels){
+					template: function(data, sels){
 						return "已选中 " + sels.length + " 项, 共 " + data.length + " 项"
 					}
 				}
@@ -279,7 +279,7 @@ xmSelect: setValue(array, show)
 			label: {
 				type: 'count',
 				count: {
-					template(data, sels){
+					template: function(data, sels){
 						return "我是自定义的... 已选中 " + sels.length + " 项, 共 " + data.length + " 项"
 					}
 				}

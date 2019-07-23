@@ -1,4 +1,5 @@
 import { name, version } from '../package.json'
+import '@/components/common/expand'
 import Core from '@/components/core'
 import '@/style/index.less'
 import '@/style/iconfont.less'
