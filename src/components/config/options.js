@@ -15,10 +15,6 @@ export default function (lan = 'zn') {
 		tips: setting.tips,
 		//空数据提示
 		empty: setting.empty,
-		//是否重置多选
-		reset: false,
-		//用来判断多选是否显示
-		isShow: false,
 		//搜索延迟 ms
 		delay: 500,
 		//搜索默认提示

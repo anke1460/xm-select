@@ -30,13 +30,13 @@ class xmOptions {
 		//定义默认值
 		this.options = defaultOptions(options.language);
 		//开始渲染数据
-		this.update(options);
+		this.update(options, true);
 	}
 	
 	/**
 	 * 更新数据 + 重新渲染
 	 */
-	update(options = {}){
+	update(options = {}, isNew){
 		//记录最新的配置项
 		this.options = {...this.options, ...options};
 		
@@ -46,6 +46,9 @@ class xmOptions {
 			warn(`没有找到渲染对象: ${options.el}, 请检查`)
 			return ;
 		}
+		//如果是历史渲染过的数据, 重置一下数据
+		isNew && childs[this.options.el] && childs[this.options.el].reset();
+		
 		const onRef = (ref) => childs[this.options.el] = ref;
 		
 		render(<Framework { ...this.options } onClose={ onClose } onRef={ onRef } />, dom);

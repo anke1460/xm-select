@@ -171,6 +171,9 @@ xmSelect: setValue(array, show)
 <h3>自定义搜索延迟 和 提示</h3>
 <div id="demo16"></div>
 
+<h3>1000条数据测试</h3>
+<div id="demo17"></div>
+
 
 <script src="../dist/xm-select.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
@@ -395,5 +398,13 @@ xmSelect: setValue(array, show)
 		delay: 2000,
 		searchTips: '搜索呀 搜索呀...',
 	})
+	
+	var startTime = Date.now();
+	var demo17 = xmSelect.render({
+		el: '#demo17', 
+		data: ''.padEnd(1000, ' ').split('').map((a, i) => ( {name: 'name' + i, value: i} )),
+		filterable: true, //开启搜索
+	})
+	console.log('1000条数据渲染耗时: ' + (Date.now() - startTime) + 'ms');
 </script>
 ```
