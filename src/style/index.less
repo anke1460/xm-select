@@ -97,8 +97,8 @@ xm-select{
 				font-size: 12px;
 				cursor: pointer;
 				line-height: 20px;
-				position: relative;
-				top: -6px;
+				float: right;
+				margin-top: 2px;
 			}
 			
 			&.disabled{
@@ -144,19 +144,20 @@ xm-select{
 			
 			&-icon{
 				color: #FFF;
-				font-size: 16px;
 				width: 18px;
 				height: 18px;
-				position: absolute;
-				top: 9px;
 				border: @border;
 				border-radius: 5px;
 				z-index: 2;
+				display: inline-block;
+				vertical-align: middle;
+				// position: absolute;
+				// top: 9px;
 				
 				& > i {
-					position: absolute; 
-					right: 0px; 
-					top: -10px; 
+					float: left;
+					height: 18px;
+					line-height: 17px;
 					color: #FFF;
 				}
 			}
@@ -164,14 +165,14 @@ xm-select{
 			&-content{
 				display: inline-block;
 				position: relative;
-				padding: 0 15px 0 30px;
+				padding: 0 15px;
 				overflow: hidden;
 				white-space: nowrap;
 				text-overflow: ellipsis;
 				color: #666;
 				line-height: 36px;
-				vertical-align: top;
-				width: 100%;
+				vertical-align: middle;
+				width: calc(100% - 18px);
 			}
 		}
 		

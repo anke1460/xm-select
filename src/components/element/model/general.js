@@ -29,7 +29,7 @@ class General extends Component{
 			return (
 				<div class={className} value={ item[value] } onClick={ this.optionClick.bind(this, item, selected, item[disabled]) }>
 					<div class="xm-option-icon" style={ { borderColor: theme.color, } }>
-						<i class="xm-iconfont icon-duox" style={ iconStyle }></i>
+						<i class="xm-iconfont xm-icon-duox" style={ iconStyle }></i>
 					</div>
 					<div class='xm-option-content' dangerouslySetInnerHTML={{ __html: template(item, sels, item[name], item[value]) }}></div>
 				</div>

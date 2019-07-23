@@ -43,7 +43,7 @@ class Label extends Component{
 				return (
 					<div class={className} style={ style }>
 						<span style={ styleProps }>{ sel[name] }</span>
-						{ conf.showIcon && <i class="xm-iconfont icon-close" onClick={ this.iconClick.bind(this, sel, true, sel[disabled]) }></i> }
+						{ conf.showIcon && <i class="xm-iconfont xm-icon-close" onClick={ this.iconClick.bind(this, sel, true, sel[disabled]) }></i> }
 					</div>
 				)
 			})
