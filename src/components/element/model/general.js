@@ -9,7 +9,6 @@ class General extends Component{
 		super(options);
 		this.searchCid = 0;
 		this.setState({ searchVal: '', });
-		this.viewRef = null;
 	}
 	
 	optionClick(item, selected, disabled, e){
@@ -31,13 +30,7 @@ class General extends Component{
 		if(!props.show){
 			//清空输入框的值
 			this.setState({ searchVal: '', });
-			this.goTop();
 		}
-	}
-	
-	goTop(){
-		//返回顶部
-		this.viewRef.scrollIntoView(true);
 	}
 	
 	render({ data, prop, template, theme, sels, empty, filterable, filterMethod, delay, searchTips }) {
@@ -75,12 +68,8 @@ class General extends Component{
 			</div>
 		);
 		
-		
-		const onRef = (ref) => {
-			this.viewRef = ref;
-		};
 		return (
-			<div ref={ onRef }> 
+			<div> 
 				{ search }
 				<div>{ arr }</div>
 			</div>

@@ -16,6 +16,7 @@ class Framework extends Component{
 		this.reset();
 		//回传子组件
 		this.props.onRef(this);
+		this.bodyView = null;
 	}
 	
 	reset(){
@@ -26,10 +27,14 @@ class Framework extends Component{
 	value(sels, show){
 		let data = this.props.data;
 		let value = this.props.prop.value;
+		let direction = this.props.direction;
 		this.setState({ 
 			sels: sels.map(sel => typeof sel === 'object' ? sel[value] : sel).map(val => data.find(item => item[value] == val)).filter(a => a),
 			//下拉框是否展开
-			show
+			show,
+			//下拉方向
+			direction,
+			directionVal: '',
 		})
 	}
 	
@@ -42,13 +47,26 @@ class Framework extends Component{
 			}
 			//事件互斥原则, 打开一个多选, 关闭其他所有多选
 			this.props.onClose(this.props.el);
+			
+			let direction = this.state.direction;
+			if(direction === 'auto'){
+				//确定下拉框是朝上还是朝下
+				let bodyHeight = document.documentElement.clientHeight;
+				let rect = this.base.getBoundingClientRect();
+				let diff = bodyHeight - rect.y - rect.height - 20;
+				direction = diff > 300 ? 'down' : 'up';
+			}
+			this.setState({ directionVal: direction })
 		}else{
 			if(this.props.hidn && this.props.hidn() == false){
 				return;
 			}
+			//如果产生滚动条, 关闭下拉后回到顶部
+			this.bodyView.scroll(0, 0);
 		}
 		
-		this.setState({ show })
+		this.setState({ show });
+		
 		//阻止其他绑定事件的冒泡
 		e && e.stopPropagation();
 	}
@@ -58,11 +76,14 @@ class Framework extends Component{
 	}
 	
 	render(config, { sels, show }) {
-		const { tips, theme, data, prop, template, model, empty } = config;
+		const { tips, theme, data, prop, template, model, empty, style } = config;
 		const borderStyle = { borderColor: theme.color };
 		//最外层边框的属性
 		const xmSelectProps = {
-			style: show ? borderStyle : '',
+			style: {
+				...style,
+				...(show ? borderStyle : {})
+			},
 			onClick: this.onClick.bind(this)
 		}
 		//右边下拉箭头的变化class
@@ -97,14 +118,14 @@ class Framework extends Component{
 		const labelProps = {  ...config, sels, ck, title: sels.map(sel => sel[prop.name]).join(',') }
 		const bodyProps = {  ...config, sels, ck, show }
 		//控制下拉框的显示于隐藏
-		const bodyClass = show ? 'xm-body' : 'xm-body dis';
+		const bodyClass = ['xm-body', this.state.directionVal, show ? '' : 'dis'].join(' ');
 		
 		return (
-			<xm-select { ...xmSelectProps }>
+			<xm-select { ...xmSelectProps } >
 				<i class={ iconClass } />
 				<Tips { ...tipsProps } />
 				<Label { ...labelProps } />
-				<div class={ bodyClass }>
+				<div class={ bodyClass } ref={ ref => this.bodyView = ref}>
 					<General { ...bodyProps } />
 				</div>
 			</xm-select>

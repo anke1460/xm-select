@@ -47,6 +47,10 @@ QQ群: 769620939
 		if(!val) return true;
 		return item[prop.name].indexOf(val) != -1;
 	},
+	//下拉方向
+	direction: 'auto', //auto, down, up
+	//自定义样式
+	style: {},
 	//自定义属性名称
 	prop: {
 		name: 'name',
@@ -173,6 +177,18 @@ xmSelect: setValue(array, show)
 
 <h3>1000条数据测试</h3>
 <div id="demo17"></div>
+
+<h3>自动判断下拉方向</h3>
+<div id="demo18"></div>
+
+<h3>只会往下</h3>
+<div id="demo19"></div>
+
+<h3>只会往上</h3>
+<div id="demo20"></div>
+
+<h3>自定义style样式</h3>
+<div id="demo21"></div>
 
 
 <script src="../dist/xm-select.js" type="text/javascript" charset="utf-8"></script>
@@ -406,5 +422,36 @@ xmSelect: setValue(array, show)
 		filterable: true, //开启搜索
 	})
 	console.log('1000条数据渲染耗时: ' + (Date.now() - startTime) + 'ms');
+	
+	var demo18 = xmSelect.render({
+		el: '#demo18', 
+		data: ''.padEnd(100, ' ').split('').map((a, i) => ( {name: 'name' + i, value: i} )),
+		filterable: true, //开启搜索
+		direction: 'auto',
+	})
+	
+	var demo19 = xmSelect.render({
+		el: '#demo19', 
+		data: ''.padEnd(100, ' ').split('').map((a, i) => ( {name: 'name' + i, value: i} )),
+		filterable: true, //开启搜索
+		direction: 'down',
+	})
+	
+	var demo20 = xmSelect.render({
+		el: '#demo20', 
+		data: ''.padEnd(100, ' ').split('').map((a, i) => ( {name: 'name' + i, value: i} )),
+		filterable: true, //开启搜索
+		direction: 'up',
+	})
+	
+	var demo21 = xmSelect.render({
+		el: '#demo21', 
+		data: ''.padEnd(100, ' ').split('').map((a, i) => ( {name: 'name' + i, value: i} )),
+		filterable: true, //开启搜索
+		style: {
+			width: '200px',
+			marginLeft: '20px',
+		}
+	})
 </script>
 ```

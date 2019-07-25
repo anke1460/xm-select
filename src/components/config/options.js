@@ -26,6 +26,10 @@ export default function (lan = 'zn') {
 			if(!val) return true;
 			return item[prop.name].indexOf(val) != -1;
 		},
+		//下拉方向
+		direction: 'auto',
+		//自定义样式
+		style: {},
 		//自定义属性名称
 		prop: {
 			name: 'name',
