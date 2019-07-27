@@ -342,7 +342,7 @@ var demo10 = xmSelect.render({
 		label: {
 			type: 'count',
 			count: {
-				template: function({data, arr}){
+				template: function(data, arr){
 					return "我是自定义的... 已选中 " + arr.length + " 项, 共 " + data.length + " 项"
 				}
 			}
