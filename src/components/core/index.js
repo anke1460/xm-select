@@ -38,7 +38,7 @@ class xmOptions {
 	 */
 	update(options = {}, isNew){
 		//记录最新的配置项
-		this.options = {...this.options, ...options};
+		this.options = Object.assign(this.options, options);
 		
 		//如果dom不存在, 则不进行渲染事项
 		let dom = selector(this.options.el);

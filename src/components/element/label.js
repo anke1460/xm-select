@@ -10,7 +10,7 @@ class Label extends Component{
 	}
 	
 	iconClick(item, selected, disabled, e){
-		this.props.ck(item, selected, disabled);
+		this.props.ck(item, selected, disabled, true);
 		//阻止父组件上的事件冒泡
 		e.stopPropagation();
 	}
@@ -58,7 +58,7 @@ class Label extends Component{
 			}
 		}else{
 			if(sels.length && conf && conf.template){
-				html = conf.template(data, sels);
+				html = conf.template({data, arr: sels});
 			}else{
 				html = sels.map(sel => sel[name]).join(',')
 			}

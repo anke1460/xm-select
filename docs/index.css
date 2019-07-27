@@ -1,0 +1,13 @@
+.syntaxhighlighter a, .syntaxhighlighter div, .syntaxhighlighter code, .syntaxhighlighter table, .syntaxhighlighter table td, .syntaxhighlighter table tr, .syntaxhighlighter table tbody, .syntaxhighlighter table thead, .syntaxhighlighter table caption, .syntaxhighlighter textarea{line-height: 1.3em !important;}
+.syntaxhighlighter {overflow-y: hidden !important;}
+.syntaxhighlighter .toolbar{background: none!important;}
+.syntaxhighlighter .toolbar a{display: none!important;}
+.syntaxhighlighter .line.alt1,.syntaxhighlighter .line.alt2{background-color: #FAFAFA !important;}
+.syntaxhighlighter{background-color: #FAFAFA !important; padding: 10px; width: calc(100% - 20px) !important; border-radius: 5px;}
+div.slide{width: 90vw; overflow: auto;}
+h3{font-size: 20px; font-weight: bold; margin-bottom: 20px;}
+.dcode{margin-top: 100px;}
+.mt10{margin-top: 10px;}
+#header{left: 5vw; right: 5vw; top: 20px; position: fixed;}
+p{font-size: 14px; color: #5e6d82; line-height: 1.5em;margin: 15px 0 10px;}
+a{color: #409eff; text-decoration: none;}

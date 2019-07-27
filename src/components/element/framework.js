@@ -76,7 +76,7 @@ class Framework extends Component{
 	}
 	
 	render(config, { sels, show }) {
-		const { tips, theme, data, prop, template, model, empty, style } = config;
+		const { tips, theme, data, prop, template, model, empty, style, radio, repeat, clickClose, on } = config;
 		const borderStyle = { borderColor: theme.color };
 		//最外层边框的属性
 		const xmSelectProps = {
@@ -97,22 +97,31 @@ class Framework extends Component{
 		//普通多选数据
 		const valueProp = prop.value;
 		
-		const ck = (item, selected, disabled) => {
+		//选项, 选中状态, 禁用状态, 是否强制删除:在label上点击删除
+		const ck = (item, selected, disabled, mandatoryDelete) => {
 			//如果是禁用状态, 不能进行操作
 			if(disabled) return;
 			
 			//如果现在是选中状态
-			if(selected){
+			if(selected && (!repeat || mandatoryDelete)){
 				let index = sels.findIndex(sel => sel[valueProp] == item[valueProp])
 				if(index != -1){
 					sels.splice(index, 1);
 					this.setState(sels);
 				}
 			}else{
-				this.setState({
-					sels: [...sels, item]
-				})
+				//如果是单选模式
+				if(radio){
+					this.setState({ sels: [item] });
+				}else{
+					this.setState({ sels: [...sels, item] });
+				}
 			}
+			
+			on && on({ arr: sels, item, selected: !selected });
+
+			//检查是否为选择即关闭状态, 强制删除情况下不做处理
+			clickClose && !mandatoryDelete && this.onClick();
 		};
 		
 		const labelProps = {  ...config, sels, ck, title: sels.map(sel => sel[prop.name]).join(',') }

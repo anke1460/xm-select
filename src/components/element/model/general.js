@@ -49,7 +49,7 @@ class General extends Component{
 					<div class="xm-option-icon" style={ { borderColor: theme.color, } }>
 						<i class="xm-iconfont xm-icon-duox" style={ iconStyle }></i>
 					</div>
-					<div class='xm-option-content' dangerouslySetInnerHTML={{ __html: template(item, sels, item[name], item[value]) }}></div>
+					<div class='xm-option-content' dangerouslySetInnerHTML={{ __html: template({ data, item, arr: sels, name: item[name], value: item[value] }) }}></div>
 				</div>
 			)
 		}) 

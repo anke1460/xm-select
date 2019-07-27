@@ -30,6 +30,12 @@ export default function (lan = 'zn') {
 		direction: 'auto',
 		//自定义样式
 		style: {},
+		//是否开启单选模式
+		radio: false,
+		//是否开启重复选模式
+		repeat: false,
+		//是否点击选项后自动关闭下拉框
+		clickClose: false,
 		//自定义属性名称
 		prop: {
 			name: 'name',
@@ -71,8 +77,12 @@ export default function (lan = 'zn') {
 			
 		},
 		// 模板组成, 当前option数据, 已经选中的数据, name, value  
-		template(item, sels, name, value){
+		template({ item, sels, name, value }){
 			return name;
+		},
+		//监听选中事件
+		on({ arr, item, selected }){
+			
 		}
 	}
 }
