@@ -58,7 +58,7 @@ class Label extends Component{
 			}
 		}else{
 			if(sels.length && conf && conf.template){
-				html = conf.template({data, arr: sels});
+				html = conf.template(data, sels);
 			}else{
 				html = sels.map(sel => sel[name]).join(',')
 			}
