@@ -1,8 +1,8 @@
 
 var htmls = [], js = [];
-data.forEach(function(item){
+data.forEach(function(item, index){
 	htmls.push([
-		'<div class="slide">',
+		'<div class="slide" id="XM'+index+'">',
 			item.html,
 			'<div class="dcode mt10"><script type="syntaxhighlighter" class="brush:html"><![CDATA[',
 				item.comment ? item.comment.replace(/</g, '&lt;') : item.html.replace(/</g, '&lt;'),
@@ -17,6 +17,8 @@ data.forEach(function(item){
 
 var box = $('#content');
 box.append($(htmls.join('')));
+// var box = document.getElementById('content');
+
 
 js.forEach(function(item){
 	eval(item);
@@ -26,7 +28,7 @@ SyntaxHighlighter.defaults["quick-code"] = false;
 SyntaxHighlighter.defaults["gutter"] = false;
 SyntaxHighlighter.all();
 
-var ele = new Fathom('#content')
+// var ele = new Fathom('#content')
 
 xmSelect.render({
 	el: '#header',
@@ -53,6 +55,10 @@ xmSelect.render({
 	radio: true,
 	clickClose: true,
 	on: function(data){
-		data.selected && ele.scrollToSlide($('.slide:nth-child('+(data.item.value + 1)+')'));
+		window.location.hash = '#XM' + data.item.value;
 	}
 });
+
+var hash = window.location.hash;
+window.location.hash = '';
+window.location.hash = hash;

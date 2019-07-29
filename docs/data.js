@@ -34,6 +34,10 @@ xmSelect.render({
 
 <h3>更新日志</h3>
 `, js: ``, comment: `
+[2019-07-29] v1.0.0.0729
+1. 更新文档显示问题
+
+
 [2019-07-27] v1.0.0.0727
 1. 新增单选模式, {radio: true|false}
 2. 新增重复选模式, {repeat: true|false}

@@ -4,10 +4,15 @@
 .syntaxhighlighter .toolbar a{display: none!important;}
 .syntaxhighlighter .line.alt1,.syntaxhighlighter .line.alt2{background-color: #FAFAFA !important;}
 .syntaxhighlighter{background-color: #FAFAFA !important; padding: 10px; width: calc(100% - 20px) !important; border-radius: 5px;}
-div.slide{width: 90vw; overflow: auto;}
+/* div.slide{width: 90vw; overflow: auto;} */
 h3{font-size: 20px; font-weight: bold; margin-bottom: 20px;}
 .dcode{margin-top: 100px;}
 .mt10{margin-top: 10px;}
-#header{left: 5vw; right: 5vw; top: 20px; position: fixed;}
+
 p{font-size: 14px; color: #5e6d82; line-height: 1.5em;margin: 15px 0 10px;}
 a{color: #409eff; text-decoration: none;}
+#content{height: calc(100vh - 99px); overflow: auto; padding: 10px;}
+/* #header{left: 5vw; right: 5vw; top: 20px; position: fixed;} */
+#header{padding: 20px 50px; background-color: #0B0D10; top: 0; left: 0; right: 0; z-index: 99999; border-bottom: 1px solid #DCDFE5;}
+#header xm-select{background-color: #17191C; color: #FFF;}
+body{margin: 0;}

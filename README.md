@@ -39,18 +39,24 @@ QQ群: 769620939
 	//搜索延迟 ms
 	delay: 500,
 	//搜索默认提示
-	searchTips: '请选择', //please search
+	searchTips: setting.searchTips,
 	//是否开始本地搜索
 	filterable: false,
-	//本地搜索过滤方法, 返回true表示显示, false不显示, val:当前输入框搜索值, item:选项数据, index: 数组坐标, porp: 自定义属性
+	//本地搜索过滤方法
 	filterMethod: function(val, item, index, prop){
 		if(!val) return true;
 		return item[prop.name].indexOf(val) != -1;
 	},
 	//下拉方向
-	direction: 'auto', //auto, down, up
+	direction: 'auto',
 	//自定义样式
 	style: {},
+	//是否开启单选模式
+	radio: false,
+	//是否开启重复选模式
+	repeat: false,
+	//是否点击选项后自动关闭下拉框
+	clickClose: false,
 	//自定义属性名称
 	prop: {
 		name: 'name',
@@ -77,22 +83,27 @@ QQ群: 769620939
 			},
 			count: {
 				template(data, sels){
-					return "已选中 " + sels.length + " 项, 共 " + data.length + " 项"
+					return '已选中 '+sels.length+' 项, 共 '+data.length+' 项'
 				}
 			},
 		},
 	},
-	// 展开下拉框, return false; 代表组件受控
+	
+	// 展开下拉框
 	show(){
 		
 	},
-	// 隐藏下拉框, return false; 代表组件受控
+	// 隐藏下拉框
 	hidn(){
 		
 	},
 	// 模板组成, 当前option数据, 已经选中的数据, name, value  
-	template(item, sels, name, value){
+	template({ item, sels, name, value }){
 		return name;
+	},
+	//监听选中事件
+	on({ arr, item, selected }){
+		
 	}
 }
 ```
