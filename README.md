@@ -3,18 +3,7 @@
 #### 介绍
 始于Layui, 下拉选择框的多选解决方案
 
-#### 软件架构
-1. 引入第三方[preact](https://preactjs.com/)库, 利用jsx渲染页面结构
-2. 使用[webpack](https://www.webpackjs.com/)进行打包
-
-#### 安装教程
-```
-1. git clone https://gitee.com/maplemei/xm-select.git
-2. cd xm-select
-3. yarn 或者 npm install
-```
-
-#### 使用说明
+前身`formSelectes`, 移除了对`jquery`的依赖, 提高渲染速度
 
 > 历史版本
 
@@ -22,9 +11,59 @@
 
 > 联系方式 
 
-QQ群: 769620939
+QQ群: 660408068
+
+
+[更新日志](docs/changelog.md)
+
+
+#### 软件架构
+1. 引入第三方[preact](https://preactjs.com/)库, 利用jsx渲染页面结构
+2. 使用[webpack](https://www.webpackjs.com/)进行打包
+
+
+#### 快读上手
+
+> 直接使用
+
+```
+1. 引入 `dist/xm-select.js`
+2. 写一个`<div id="demo1"></div>`
+3. 渲染
+	var demo1 = xmSelect.render({
+		el: '#demo1', 
+		data: [
+			{name: '水果', value: 1, selected: true, disabled: true},
+			{name: '蔬菜', value: 2, selected: true},
+			{name: '桌子', value: 3, disabled: true},
+			{name: '北京', value: 4},
+		],
+   })
+```
+
+> 二次开发
+
+```
+1. git clone https://gitee.com/maplemei/xm-select.git
+2. cd xm-select
+3. yarn 或者 npm install
+```
+
+> 打赏
+
+如果喜欢作者的插件, 可以请作者吃雪糕 ^_^
+
+<p>
+  <a href="javascript:;">
+    <img src="docs/wx.jpg" alt="打赏" width="300">
+  </a>
+</p>
+
+
+#### 使用说明
 
 > 默认配置项
+
 
 ```
 {
@@ -68,7 +107,7 @@ QQ群: 769620939
 	theme: {
 		color: '#009688',
 	},
-	//模型
+	//模型, 用来控制插件的显示方式, 标签/文字/汇总个数/自定义
 	model: {
 		label: {
 			type: 'block',
@@ -97,7 +136,7 @@ QQ群: 769620939
 	hidn(){
 		
 	},
-	// 模板组成, 当前option数据, 已经选中的数据, name, value  
+	// 模板组成, 当前option数据
 	template({ item, sels, name, value }){
 		return name;
 	},
@@ -137,332 +176,32 @@ xmSelect: setValue(array, show)
 
 [示例页面](https://maplemei.gitee.io/xm-select/)
 
+> 一个小栗子
+
 ```
-<h3>这是一个多选</h3>
+<!-- 占位 -->
 <div id="demo1"></div>
 
-<h3>这是一个国际版多选</h3>
-<div id="demo2"></div>
 
-<h3>有基础数据</h3>
-<div id="demo3"></div>
-
-<h3>有选中, 禁用的</h3>
-<div id="demo4"></div>
-
-<h3>自定义key</h3>
-<div id="demo5"></div>
-
-<h3>使用template自己构建选项1</h3>
-<div id="demo6"></div>
-
-<h3>使用template自己构建选项2</h3>
-<div id="demo7"></div>
-
-<h3>简单的展示形式1</h3>
-<div id="demo8"></div>
-
-<h3>简单的展示形式2</h3>
-<div id="demo9"></div>
-
-<h3>自定义展示</h3>
-<div id="demo10"></div>
-
-<h3>多余的用 +隐藏</h3>
-<div id="demo11"></div>
-
-<h3>不显示删除图标</h3>
-<div id="demo12"></div>
-
-<h3>换一个主题</h3>
-<div id="demo13"></div>
-
-<h3>开启搜索模式</h3>
-<div id="demo14"></div>
-
-<h3>自定义搜索方法</h3>
-<div id="demo15"></div>
-
-<h3>自定义搜索延迟 和 提示</h3>
-<div id="demo16"></div>
-
-<h3>1000条数据测试</h3>
-<div id="demo17"></div>
-
-<h3>自动判断下拉方向</h3>
-<div id="demo18"></div>
-
-<h3>只会往下</h3>
-<div id="demo19"></div>
-
-<h3>只会往上</h3>
-<div id="demo20"></div>
-
-<h3>自定义style样式</h3>
-<div id="demo21"></div>
-
-
+<!-- 引入插件 -->
 <script src="../dist/xm-select.js" type="text/javascript" charset="utf-8"></script>
+<!-- 渲染页面 -->
 <script type="text/javascript">
-	
 	var demo1 = xmSelect.render({
+		// 这里绑定css选择器
 		el: '#demo1', 
-		language: 'zn',
-		isShow: true,
-	})
-
-	var demo2 = xmSelect.render({
-		el: '#demo2', 
-		language: 'en'
-	})
-
-	var demo3 = xmSelect.render({
-		el: '#demo3', 
-		data: [
-			{name: '水果', value: 1},
-			{name: '蔬菜', value: 2},
-			{name: '桌子', value: 3},
-		]
-	})
-
-	var demo4 = xmSelect.render({
-		el: '#demo4', 
-		data: [
-			{name: '水果', value: 1, selected: true, disabled: true},
-			{name: '蔬菜', value: 2, selected: true},
-			{name: '桌子', value: 3, disabled: true},
-			{name: '北京', value: 4},
-		]
-	})
-
-	var demo5 = xmSelect.render({
-		el: '#demo5', 
-		data: [
-			{label: '水果', val: 1, sel: true, dis: true},
-			{label: '蔬菜', val: 2, sel: true},
-			{label: '桌子', val: 3, dis: true},
-			{label: '北京', val: 4},
-		],
-		prop: {
-			name: 'label',
-			value: 'val',
-			selected: 'sel',
-			disabled: 'dis'
-		}
-	})
-
-	var demo6 = xmSelect.render({
-		el: '#demo6', 
+		// 渲染的数据
 		data: [
 			{name: '水果', value: 1, selected: true, disabled: true},
 			{name: '蔬菜', value: 2, selected: true},
 			{name: '桌子', value: 3, disabled: true},
 			{name: '北京', value: 4},
 		],
-		template: function(item, sels, name, value){
-			return name  + '<span style="color: red; margin-left: 20px;">'+value+'</span>' 
-		}
-	})
-
-	var demo7 = xmSelect.render({
-		el: '#demo7', 
-		data: [
-			{name: '水果', value: 1, selected: true, disabled: true},
-			{name: '蔬菜', value: 2, selected: true},
-			{name: '桌子', value: 3, disabled: true},
-			{name: '北京', value: 4},
-		],
-		template: function(item, sels, name, value){
-			return name  + '<span style="position: absolute; right: 10px; color: red">'+value+'</span>' 
-		}
-	})
-
-	var demo8 = xmSelect.render({
-		el: '#demo8', 
-		data: [
-			{name: '水果', value: 1, selected: true, disabled: true},
-			{name: '蔬菜', value: 2, selected: true},
-			{name: '桌子', value: 3, disabled: true},
-			{name: '北京', value: 4},
-		],
-		model: {
-			label: {
-				type: 'text',
-				text: {
-					left: '<',
-					right: '>',
-					separator: ', ',
-				},
-			}
-		}
-	})
-
-	var demo9 = xmSelect.render({
-		el: '#demo9', 
-		data: [
-			{name: '水果', value: 1, selected: true, disabled: true},
-			{name: '蔬菜', value: 2, selected: true},
-			{name: '桌子', value: 3, disabled: true},
-			{name: '北京', value: 4},
-		],
-		model: {
-			label: {
-				type: 'count',
-				count: {
-					template: function(data, sels){
-						return "已选中 " + sels.length + " 项, 共 " + data.length + " 项"
-					}
-				}
-			}
-		}
-	})
-
-	var demo10 = xmSelect.render({
-		el: '#demo10', 
-		data: [
-			{name: '水果', value: 1, selected: true, disabled: true},
-			{name: '蔬菜', value: 2, selected: true},
-			{name: '桌子', value: 3, disabled: true},
-			{name: '北京', value: 4},
-		],
-		model: {
-			label: {
-				type: 'count',
-				count: {
-					template: function(data, sels){
-						return "我是自定义的... 已选中 " + sels.length + " 项, 共 " + data.length + " 项"
-					}
-				}
-			}
-		}
-	})
-
-	var demo11 = xmSelect.render({
-		el: '#demo11', 
-		data: [
-			{name: '水果', value: 1, selected: true, disabled: true},
-			{name: '蔬菜', value: 2, selected: true},
-			{name: '桌子', value: 3, disabled: true},
-			{name: '北京', value: 4},
-		],
-		model: {
-			label: {
-				type: 'block',
-				block: {
-					showCount: 1,
-				}
-			}
-		}
-	})
-
-	var demo12 = xmSelect.render({
-		el: '#demo12', 
-		data: [
-			{name: '水果', value: 1, selected: true, disabled: true},
-			{name: '蔬菜', value: 2, selected: true},
-			{name: '桌子', value: 3, disabled: true},
-			{name: '北京', value: 4},
-		],
-		model: {
-			label: {
-				type: 'block',
-				block: {
-					showCount: 1,
-					showIcon: false,
-				}
-			}
-		}
-	})
-
-	var demo13 = xmSelect.render({
-		el: '#demo13', 
-		data: [
-			{name: '水果', value: 1, selected: true, disabled: true},
-			{name: '蔬菜', value: 2, selected: true},
-			{name: '桌子', value: 3, disabled: true},
-			{name: '北京', value: 4},
-		],
-		theme: {
-			color: 'red',
-		},
 	})
 	
-	var demo14 = xmSelect.render({
-		el: '#demo14', 
-		data: [
-			{name: '水果', value: 1, selected: true, disabled: true},
-			{name: '蔬菜', value: 2, selected: true},
-			{name: '桌子', value: 3, disabled: true},
-			{name: '北京', value: 4},
-		],
-		filterable: true, //开启搜索
-	})
-	
-	var demo15 = xmSelect.render({
-		el: '#demo15', 
-		data: [
-			{name: '水果', value: 1, selected: true, disabled: true},
-			{name: '蔬菜', value: 2, selected: true},
-			{name: '桌子', value: 3, disabled: true},
-			{name: '北京', value: 4},
-		],
-		filterable: true, //开启搜索
-		filterMethod: function(val, item, index, prop){
-			if(!val) return true;
-			return item[prop.name].indexOf(val) != -1;
-		},
-	})
-	
-	var demo16 = xmSelect.render({
-		el: '#demo16', 
-		data: [
-			{name: '水果', value: 1, selected: true, disabled: true},
-			{name: '蔬菜', value: 2, selected: true},
-			{name: '桌子', value: 3, disabled: true},
-			{name: '北京', value: 4},
-		],
-		filterable: true, //开启搜索
-		delay: 2000,
-		searchTips: '搜索呀 搜索呀...',
-	})
-	
-	var startTime = Date.now();
-	var demo17 = xmSelect.render({
-		el: '#demo17', 
-		data: ''.padEnd(1000, ' ').split('').map((a, i) => ( {name: 'name' + i, value: i} )),
-		filterable: true, //开启搜索
-	})
-	console.log('1000条数据渲染耗时: ' + (Date.now() - startTime) + 'ms');
-	
-	var demo18 = xmSelect.render({
-		el: '#demo18', 
-		data: ''.padEnd(100, ' ').split('').map((a, i) => ( {name: 'name' + i, value: i} )),
-		filterable: true, //开启搜索
-		direction: 'auto',
-	})
-	
-	var demo19 = xmSelect.render({
-		el: '#demo19', 
-		data: ''.padEnd(100, ' ').split('').map((a, i) => ( {name: 'name' + i, value: i} )),
-		filterable: true, //开启搜索
-		direction: 'down',
-	})
-	
-	var demo20 = xmSelect.render({
-		el: '#demo20', 
-		data: ''.padEnd(100, ' ').split('').map((a, i) => ( {name: 'name' + i, value: i} )),
-		filterable: true, //开启搜索
-		direction: 'up',
-	})
-	
-	var demo21 = xmSelect.render({
-		el: '#demo21', 
-		data: ''.padEnd(100, ' ').split('').map((a, i) => ( {name: 'name' + i, value: i} )),
-		filterable: true, //开启搜索
-		style: {
-			width: '200px',
-			marginLeft: '20px',
-		}
-	})
+	// 变量, demo1 可以通过API操作
+	// 获取选中值, demo1.getValue();
+	// 设置选中值, demo1.setValue([{ name: '动态值', value: 999 }])
+	// ...
 </script>
 ```

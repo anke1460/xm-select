@@ -4,7 +4,7 @@ window.data = [
 <p>xm-select始于layui, 前身formSelects, 此版本引入第三方preact库, 利用jsx渲染页面结构</p>
 <p>作者: 热爱前端的Java程序猿</p>
 <p>QQ号: 707200833</p>
-<p>QQ群: 769620939</p>
+<p>QQ群: 660408068</p>
 <a target="_blank" class="qqicon" href="https://shang.qq.com/wpa/qunwpa?idkey=9f9d4de074f2cb4d13afb3f04b874742a5f400eac2c0648fcfd20afb5413fb0a"><img border="0" src="docs/group.png" alt="技术交流群" title="技术交流群"></a>
 <div class="example">
 	<p>↓↓↓ 捐赠作者 ↓↓↓</p>
