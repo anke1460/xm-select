@@ -86,10 +86,23 @@ QQ群: 660408068
 		if(!val) return true;
 		return item[prop.name].indexOf(val) != -1;
 	},
+	//是否开启远程搜索
+	remoteSearch: false,
+	//远程搜索回调
+	remoteMethod: function(val, cb){
+		//val: 搜索的值, cb: 回调函数
+		cb([]);
+	},
 	//下拉方向
 	direction: 'auto',
 	//自定义样式
 	style: {},
+	//默认多选的高度
+	height: '200px',
+	//是否开启分页
+	paging: false,
+	//分页每页的条数
+	pageSize: 10,
 	//是否开启单选模式
 	radio: false,
 	//是否开启重复选模式
