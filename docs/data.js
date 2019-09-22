@@ -33,7 +33,15 @@ xmSelect.render({
 <p>如果有bug欢迎提issues, 或者在群内@群主进行反馈</p>
 
 <h3>更新日志</h3>
-`, js: ``, comment: `
+`, js: ``, comment: `,
+[2019-09-22] v1.0.1
+1. [新增]物理分页配置
+2. [新增]自定义搜索模式(远程搜索)
+3. [新增]下拉选高度配置
+4. [修改]调整布局为flex布局
+5. [修改]展开下拉选时, 自动聚焦搜索框
+
+
 [2019-07-29] v1.0.0.0729
 1. 更新文档显示问题
 
@@ -75,10 +83,22 @@ xmSelect.render({
 		if(!val) return true;
 		return item[prop.name].indexOf(val) != -1;
 	},
+	//是否开启自定义搜索, 必须设置 filterable: true
+	remoteSearch: false,
+	//远程搜索回调
+	remoteMethod: function(val, cb){
+		cb([]);
+	},
 	//下拉方向
 	direction: 'auto',
 	//自定义样式
 	style: {},
+	//默认多选的高度
+	height: '200px',
+	//是否开启分页
+	paging: false,
+	//分页每页的条数
+	pageSize: 10,
 	//是否开启单选模式
 	radio: false,
 	//是否开启重复选模式
@@ -642,6 +662,38 @@ var demo27 = xmSelect.render({
 	}
 })
 `, brush: 'js', title: '控制下拉框的打开与关闭'},
+
+
+{ html: `
+<h3>启用分页</h3>
+<div id="demo28"></div>
+`, js: `
+var demo28 = xmSelect.render({
+	el: '#demo28', 
+	data: ''.padEnd(100, ' ').split('').map((a, i) => ( {name: 'name' + i, value: i} )),
+	paging: true,//开启分页
+	pageSize: 10,//每页10条
+})
+`, brush: 'js', title: '启用分页'},
+
+
+{ html: `
+<h3>自定义搜索</h3>
+<div id="demo29"></div>
+`, js: `
+var demo29 = xmSelect.render({
+	el: '#demo29', 
+	data: ''.padEnd(100, ' ').split('').map((a, i) => ( {name: 'name' + i, value: i} )),
+	filterable: true,//开启搜索
+	remoteSearch: true,//自定义搜索
+	remoteMethod: function(val, cb){
+		//这里模拟2s后回调
+		setTimeout(() =>  {
+			cb([{name: 'xxx' + val, value: 1}])
+		}, 2000);
+	},
+})
+`, brush: 'js', title: '自定义搜索'},
 
 
 ];

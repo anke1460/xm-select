@@ -13,6 +13,27 @@
 	to {transform: translate3d(0, 0, 0);opacity: 1}
 }
 
+@-webkit-keyframes loader {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@keyframes loader {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
 xm-select{
 	*{
 		margin: 0; 
@@ -69,27 +90,42 @@ xm-select{
 	}
 	
 	& > .xm-label{
-		padding: 0 10px;
-		height: 100%;
-		overflow-y: hidden;
+		// padding: 0 30px 0 10px;
+		position: absolute;
+		top: 0;
+		bottom: 0px;
+		left: 10px;
+		right: 30px;
+		overflow: auto hidden;
+		
+		.scroll{
+			overflow-y: hidden;
+			
+			.label-content{
+				height: calc(100% - 20px);
+				display: flex;
+				align-items: baseline;
+				&:after{
+					content: '-';
+					opacity: 0;
+				}
+			}
+		}
 		
 		.xm-label-block{
-			display: inline-block;
+			display: flex;
 			position: relative;
 			padding: 0px 5px;
-			margin: 2px 5px 2px 0;
-			height: 22px;
-			line-height: 22px;
+			margin-right: 5px;
+			height: 26px;
+			line-height: 26px;
 			border-radius: 3px;
 			vertical-align: middle;
 			color: #FFF;
-			max-width: calc(100% - 20px);
 			
 			& > span{
-				display: inline-block;
+				display: flex;
 				color: #FFF;
-				text-overflow: ellipsis;
-				overflow: hidden;
 			}
 			
 			& > i{
@@ -97,9 +133,7 @@ xm-select{
 				margin-left: 8px;
 				font-size: 12px;
 				cursor: pointer;
-				line-height: 20px;
-				float: right;
-				margin-top: 2px;
+				display: flex;
 			}
 			
 			&.disabled{
@@ -120,8 +154,8 @@ xm-select{
 		z-index: 999;
 		width: 100%;
 		border: @border;
-		max-height: 300px;
-		overflow-y: auto;
+		// max-height: 300px;
+		// overflow-y: auto;
 		background-color: #fff;
 		border-radius: 2px;
 		box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
@@ -136,6 +170,8 @@ xm-select{
 		}
 		
 		.xm-option{
+			display: flex;
+			align-items: center;
 			position: relative;
 			padding: 0 10px;
 			cursor: pointer;
@@ -143,42 +179,34 @@ xm-select{
 			&:hover{
 				background-color: #f2f2f2;
 				
-				&>.xm-option-icon>i{
+				&>.xm-option-icon{
 					color: #f2f2f2;
 				}
 			}
 			
 			&-icon{
 				color: #FFF;
-				width: 18px;
-				height: 18px;
+				display: flex;
 				border: @border;
 				border-radius: 5px;
-				z-index: 2;
-				display: inline-block;
-				vertical-align: middle;
-				// position: absolute;
-				// top: 9px;
-				
-				& > i {
-					float: left;
+				&:before{
 					height: 18px;
-					line-height: 17px;
-					color: #FFF;
+					display: flex;
+					align-items: center;
+					margin-top: -1px;
+					margin-bottom: -1px;
 				}
 			}
 			
 			&-content{
-				display: inline-block;
+				display: flex;
 				position: relative;
-				padding: 0 15px;
+				padding-left: 15px;
 				overflow: hidden;
 				white-space: nowrap;
 				text-overflow: ellipsis;
 				color: #666;
-				line-height: 36px;
-				vertical-align: middle;
-				width: calc(100% - 18px);
+				width: 100%;
 			}
 		}
 		
@@ -191,7 +219,7 @@ xm-select{
 			cursor: no-drop;
 			&:hover{
 				background-color: #FFF;
-				&>.xm-option-icon>i{
+				&>.xm-option-icon{
 					color: #FFF !important;
 				}
 			}
@@ -202,7 +230,7 @@ xm-select{
 				color: @disabledColor !important;
 			}
 			
-			&.selected>.xm-option-icon>i{
+			&.selected>.xm-option-icon{
 				color: @disabledColor !important;
 			}
 		}
@@ -211,6 +239,7 @@ xm-select{
 			background-color: #FFF !important;
 			position: relative;
 			padding: 0 10px;
+			margin-bottom: 5px;
 			cursor: pointer;
 			
 			&>i{
@@ -222,6 +251,33 @@ xm-select{
 				border-bottom: 1px solid #E6E6E6;
 				padding-left: 27px;
 				cursor: text;
+			}
+		}
+		
+		.xm-paging{
+			padding: 0 10px;
+			display: flex;
+			
+			&>span:first-child{
+				border-radius: 2px 0 0 2px;
+			}
+			&>span:last-child{
+				border-radius: 0 2px 2px 0
+			}
+			
+			&>span{
+				display: flex;
+				flex: auto;
+				justify-content: center;
+				vertical-align: middle;
+				padding: 0 15px;
+				height: 28px;
+				line-height: 28px;
+				margin: 0 -1px 0 0;
+				background-color: #fff;
+				color: #333;
+				font-size: 12px;
+				border: 1px solid #e2e2e2;
 			}
 		}
 	}
@@ -246,4 +302,39 @@ xm-select{
 		display: none;
 	}
 	
+	.loading{
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: rgba(255,255,255,.6);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		
+		
+		
+		.loader{
+			border: .2em dotted currentcolor;
+			border-radius: 50%;
+			-webkit-animation: 1s loader linear infinite;
+			animation: 1s loader linear infinite;
+			
+			display: inline-block;
+			width: 1em;
+			height: 1em;
+			color: inherit;
+			vertical-align: middle;
+			pointer-events: none;
+		}
+	}
+	
+}
+
+xm-select[ua='win']{
+	.xm-option-icon{
+		margin-top: 0px;
+		margin-bottom: -2px;
+	}
 }

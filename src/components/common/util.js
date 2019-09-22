@@ -57,3 +57,13 @@ export function watch(data) {
 		}
 	});
 }
+
+export function checkUserAgent(){
+	const ua = navigator.userAgent;
+	if(ua.indexOf('Mac OS')){
+		return 'mac';
+	}
+	
+	
+	return 'win';
+}

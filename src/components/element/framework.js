@@ -1,4 +1,5 @@
 import { h, Component, render } from '@/components/preact'
+import { checkUserAgent } from '@/components/common/util'
 
 //渲染类
 import Tips from './tips';
@@ -22,6 +23,11 @@ class Framework extends Component{
 	reset(){
 		let selected = this.props.prop.selected;
 		this.value(this.props.initValue ? this.props.initValue : this.props.data.filter(item => item[selected]), false);
+		this.resetDate(this.props.data);
+	}
+	
+	resetDate(data = []){
+		this.setState({ data });
 	}
 	
 	value(sels, show){
@@ -36,6 +42,10 @@ class Framework extends Component{
 			direction,
 			directionVal: '',
 		})
+	}
+	
+	onReset(data){
+		this.resetDate(data);
 	}
 	
 	onClick(e){
@@ -72,11 +82,11 @@ class Framework extends Component{
 	}
 	
 	componentWillReceiveProps(props){
-		
+		this.resetDate(props.data);
 	}
 	
 	render(config, { sels, show }) {
-		const { tips, theme, data, prop, template, model, empty, style, radio, repeat, clickClose, on } = config;
+		const { tips, theme, prop, style, radio, repeat, clickClose, on } = config;
 		const borderStyle = { borderColor: theme.color };
 		//最外层边框的属性
 		const xmSelectProps = {
@@ -84,7 +94,8 @@ class Framework extends Component{
 				...style,
 				...(show ? borderStyle : {})
 			},
-			onClick: this.onClick.bind(this)
+			onClick: this.onClick.bind(this),
+			ua: checkUserAgent(),
 		}
 		//右边下拉箭头的变化class
 		const iconClass = show ? 'xm-icon xm-icon-expand' : 'xm-icon';
@@ -124,8 +135,8 @@ class Framework extends Component{
 			clickClose && !mandatoryDelete && this.onClick();
 		};
 		
-		const labelProps = {  ...config, sels, ck, title: sels.map(sel => sel[prop.name]).join(',') }
-		const bodyProps = {  ...config, sels, ck, show }
+		const labelProps = {  ...config, data: this.state.data, sels, ck, title: sels.map(sel => sel[prop.name]).join(',') }
+		const bodyProps = {  ...config, data: this.state.data, sels, ck, show, onReset: this.onReset.bind(this) }
 		//控制下拉框的显示于隐藏
 		const bodyClass = ['xm-body', this.state.directionVal, show ? '' : 'dis'].join(' ');
 		

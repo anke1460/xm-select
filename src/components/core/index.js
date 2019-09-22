@@ -49,9 +49,13 @@ class xmOptions {
 		//如果是历史渲染过的数据, 重置一下数据
 		isNew && childs[this.options.el] && childs[this.options.el].reset();
 		
+		let isRender = false;
 		const onRef = (ref) => childs[this.options.el] = ref;
+		const onReset = result => {
+			this.options.data = result;
+		}
 		
-		render(<Framework { ...this.options } onClose={ onClose } onRef={ onRef } />, dom);
+		render(<Framework { ...this.options } onReset={ onReset } onClose={ onClose } onRef={ onRef } />, dom);
 		
 		//记录数据
 		data[this.options.el] = this;

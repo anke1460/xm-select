@@ -67,7 +67,9 @@ class Label extends Component{
 		
 		return (
 			<div class="xm-label">
-				{ html }
+				<div class="scroll">
+					<div class="label-content">{ html }</div>
+				</div>
 			</div>
 		)
 	}
