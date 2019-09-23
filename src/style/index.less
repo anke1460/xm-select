@@ -44,6 +44,9 @@ xm-select{
 		color: @fontColor;
 		text-overflow: ellipsis;
 		user-select: none;
+		-ms-user-select: none;
+		-moz-user-select: none;
+		-webkit-user-select: none;
 	}
 	
 	background-color: #FFF;
@@ -120,8 +123,7 @@ xm-select{
 			height: 26px;
 			line-height: 26px;
 			border-radius: 3px;
-			vertical-align: middle;
-			color: #FFF;
+			align-items: baseline;
 			
 			& > span{
 				display: flex;
@@ -199,7 +201,7 @@ xm-select{
 				white-space: nowrap;
 				text-overflow: ellipsis;
 				color: #666;
-				width: 100%;
+				width: calc(100% - 20px);
 			}
 		}
 		
@@ -247,6 +249,7 @@ xm-select{
 		.xm-paging{
 			padding: 0 10px;
 			display: flex;
+			margin-top: 5px;
 			
 			&>span:first-child{
 				border-radius: 2px 0 0 2px;

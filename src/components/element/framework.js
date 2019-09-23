@@ -60,11 +60,24 @@ class Framework extends Component{
 			
 			let direction = this.state.direction;
 			if(direction === 'auto'){
+				
+				//用于控制js获取下拉框的高度
+				this.bodyView.style.display = 'block';
+				this.bodyView.style.visibility = 'hidden';
+				
+				//获取下拉元素的高度
+				let bodyViewRect = this.bodyView.getBoundingClientRect();
+				let bodyViewHeight = bodyViewRect.height;
+				
+				//还原控制效果
+				this.bodyView.style.display = '';
+				this.bodyView.style.visibility = '';
+				
 				//确定下拉框是朝上还是朝下
-				let bodyHeight = document.documentElement.clientHeight;
+				let clientHeight = document.documentElement.clientHeight;
 				let rect = this.base.getBoundingClientRect();
-				let diff = bodyHeight - rect.y - rect.height - 20;
-				direction = diff > 300 ? 'down' : 'up';
+				let diff = clientHeight - (rect.y || rect.top) - rect.height - 20;
+				direction = diff > bodyViewHeight || (rect.y || rect.top) < bodyViewHeight ? 'down' : 'up';
 			}
 			this.setState({ directionVal: direction })
 		}else{
@@ -72,7 +85,7 @@ class Framework extends Component{
 				return;
 			}
 			//如果产生滚动条, 关闭下拉后回到顶部
-			this.bodyView.scroll(0, 0);
+			this.bodyView.scroll && this.bodyView.scroll(0, 0);
 		}
 		
 		this.setState({ show });

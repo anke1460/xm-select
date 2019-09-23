@@ -80,12 +80,14 @@ class General extends Component{
 	}
 	
 	componentWillReceiveProps(props){
-		if(!props.show){
-			//清空输入框的值
-			this.setState({ searchVal: '' });
-		}else{
-			//聚焦输入框
-			setTimeout(() => this.focus(), 0);
+		if(this.props.show != props.show){
+			if(!props.show){
+				//清空输入框的值
+				this.setState({ searchVal: '' });
+			}else{
+				//聚焦输入框
+				setTimeout(() => this.focus(), 0);
+			}
 		}
 	}
 	
