@@ -60,10 +60,8 @@ export function watch(data) {
 
 export function checkUserAgent(){
 	const ua = navigator.userAgent;
-	if(ua.indexOf('Mac OS')){
+	if(ua.indexOf('Mac OS') != -1){
 		return 'mac';
 	}
-	
-	
 	return 'win';
 }

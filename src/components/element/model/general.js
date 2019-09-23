@@ -181,11 +181,13 @@ class General extends Component{
 		arr = arr.map(item => {
 			
 			const selected = !!sels.find(sel => sel[value] == item[value])
-			const iconStyle = { 
-				color: selected ? theme.color : '',
+			const iconStyle = selected ? {
+				color: theme.color,
+				border: 'none',
+				fontSize: '18px'
+			} : {
 				borderColor: theme.color,
-			}
-			// const className = 'xm-option' + (item.disabled ? ' disabled' : '');
+			};
 			const className = ['xm-option', (item[disabled] ? ' disabled' : ''), (selected ? ' selected' : '')].join(' ');
 			
 			return (

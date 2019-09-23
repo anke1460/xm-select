@@ -188,14 +188,11 @@ xm-select{
 				color: #FFF;
 				display: flex;
 				border: @border;
-				border-radius: 5px;
-				&:before{
-					height: 18px;
-					display: flex;
-					align-items: center;
-					margin-top: -1px;
-					margin-bottom: -1px;
-				}
+				border-radius: 3px;
+				height: 18px;
+				width: 18px;
+				justify-content: center;
+				align-items: center;
 			}
 			
 			&-content{
@@ -332,9 +329,9 @@ xm-select{
 	
 }
 
-xm-select[ua='win']{
-	.xm-option-icon{
-		margin-top: 0px;
-		margin-bottom: -2px;
-	}
-}
+// xm-select[ua='win']{
+// 	.xm-option-icon{
+// 		margin-top: 0px;
+// 		margin-bottom: -2px;
+// 	}
+// }
