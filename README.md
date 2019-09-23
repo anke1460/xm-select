@@ -5,11 +5,11 @@
 
 前身`formSelectes`, 移除了对`jquery`的依赖, 提高渲染速度
 
-[演示站点](https://maplemei.gitee.io/xm-select/)
+[xm-select演示站点](https://maplemei.gitee.io/xm-select/)
 
 > 历史版本
 
-[formSelectes](https://github.com/hnzzmsf/layui-formSelects)
+[前往formSelectes](https://github.com/hnzzmsf/layui-formSelects)
 
 > 联系方式 
 

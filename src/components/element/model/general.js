@@ -9,7 +9,8 @@ class General extends Component{
 		super(options);
 		this.searchCid = 0;
 		this.setState({ 
-			searchVal: '',
+			searchValue: '',
+			filterValue: '',
 			remote: true,
 			loading: false,
 			pageIndex: 1,
@@ -17,6 +18,7 @@ class General extends Component{
 			
 			inputOver: true,
 		});
+		
 	}
 	
 	optionClick(item, selected, disabled, e){
@@ -53,12 +55,17 @@ class General extends Component{
 	searchInput(e){
 		
 		let v = e.target.value;
+		console.log(v, this.state.searchValue)
 		
 		setTimeout(() => {
 			if(this.state.inputOver){
+				//保证输入框内的值是实时的
+				this.setState({ searchValue: v });
+				
+				//让搜索变成异步的
 				clearTimeout(this.searchCid);
 				this.searchCid = setTimeout(() => this.setState({ 
-					searchVal: v,
+					filterValue: this.state.searchValue,
 					remote: true,
 				}), this.props.delay);
 			}
@@ -66,7 +73,11 @@ class General extends Component{
 	}
 	
 	focus(){
-		this.searchInputRef.focus();
+		this.searchInputRef && this.searchInputRef.focus();
+	}
+	
+	blur(){
+		this.searchInputRef && this.searchInputRef.blur();
 	}
 	
 	handleComposition(e){
@@ -83,7 +94,7 @@ class General extends Component{
 		if(this.props.show != props.show){
 			if(!props.show){
 				//清空输入框的值
-				this.setState({ searchVal: '' });
+				this.setState({ searchValue: '', filterValue: '' });
 			}else{
 				//聚焦输入框
 				setTimeout(() => this.focus(), 0);
@@ -93,7 +104,7 @@ class General extends Component{
 	
 	render(config) {
 	
-		let { data, prop, template, theme, sels, empty, filterable, filterMethod, remoteSearch, remoteMethod, delay, searchTips } = config
+		let { data, prop, template, theme, radio, sels, empty, filterable, filterMethod, remoteSearch, remoteMethod, delay, searchTips } = config
 		
 		const { name, value, disabled } = prop;
 		
@@ -103,13 +114,18 @@ class General extends Component{
 			if(remoteSearch){//是否进行远程搜索
 				if(this.state.remote){
 					this.setState({ loading: true, remote: false });
-					remoteMethod(this.state.searchVal, result => {
+					//让输入框失去焦点
+					this.blur();
+					remoteMethod(this.state.filterValue, result => {
+						//回调后可以重新聚焦
+						this.focus();
+						
 						this.setState({ loading: false });
 						this.props.onReset(result);
 					});
 				}
 			}else{
-				arr = data.filter((item, index) => filterMethod(this.state.searchVal, item, index, prop));
+				arr = data.filter((item, index) => filterMethod(this.state.filterValue, item, index, prop));
 			}
 		}
 		
@@ -117,9 +133,8 @@ class General extends Component{
 		const search = (
 			<div class={ searchClass }>
 				<i class="xm-iconfont xm-icon-sousuo"></i>
-				<input type="text" class="xm-input xm-search-input" placeholder={ searchTips } value={ this.state.searchVal } 
+				<input type="text" class="xm-input xm-search-input" placeholder={ searchTips } value={ this.state.searchValue } 
 					ref={ (input) => { this.searchInputRef = input; } }
-					autoFocus
 					onClick={ this.blockClick.bind(this) } 
 					onInput={ this.searchInput.bind(this) } 
 					onCompositionStart={ this.handleComposition.bind(this) }
@@ -140,6 +155,11 @@ class General extends Component{
 			//如果当前页码大于总页码, 重置一下
 			if(this.state.pageIndex > size){
 				this.changePageIndex(size);
+			}
+			
+			//如有总页码>1, 但是因为搜索造成的页码=0的情况
+			if(size > 0 && this.state.pageIndex <= 0){
+				this.changePageIndex(1);
 			}
 			
 			//实现简单的物理分页
@@ -191,10 +211,11 @@ class General extends Component{
 				borderColor: theme.color,
 			};
 			const className = ['xm-option', (item[disabled] ? ' disabled' : ''), (selected ? ' selected' : '')].join(' ');
+			const iconClass = ['xm-option-icon xm-iconfont', radio ? 'xm-icon-danx' : 'xm-icon-duox'].join(' ');
 			
 			return (
 				<div class={className} value={ item[value] } onClick={ this.optionClick.bind(this, item, selected, item[disabled]) }>
-					<i class="xm-option-icon xm-iconfont xm-icon-duox" style={ iconStyle }></i>
+					<i class={ iconClass } style={ iconStyle }></i>
 					<div class='xm-option-content' dangerouslySetInnerHTML={{ __html: template({ data, item, arr: sels, name: item[name], value: item[value] }) }}></div>
 				</div>
 			)

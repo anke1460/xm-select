@@ -77,7 +77,7 @@ class Framework extends Component{
 				let clientHeight = document.documentElement.clientHeight;
 				let rect = this.base.getBoundingClientRect();
 				let diff = clientHeight - (rect.y || rect.top) - rect.height - 20;
-				direction = diff > bodyViewHeight || (rect.y || rect.top) < bodyViewHeight ? 'down' : 'up';
+				direction = diff > bodyViewHeight || (rect.y || rect.top) < diff ? 'down' : 'up';
 			}
 			this.setState({ directionVal: direction })
 		}else{

@@ -23,12 +23,13 @@
 				// 渲染的数据
 				data: ''.padEnd(11, ' ').split('').map((a, i) => ( {name: 'name' + i, value: i} )),
 				filterable: true,
-				remoteSearch: true,
-				remoteMethod: function(val, cb){
-					setTimeout(() =>  {
-						cb([{name: 'xxx' + val, value: 1}])
-					}, 2000);
-				},
+				radio: true,
+				// remoteSearch: true,
+				// remoteMethod: function(val, cb){
+				// 	setTimeout(() =>  {
+				// 		cb([{name: 'xxx' + val, value: 1}])
+				// 	}, 2000);
+				// },
 				paging: true,
 			})
 			demo1.opened()
