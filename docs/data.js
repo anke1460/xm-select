@@ -152,7 +152,7 @@ xmSelect.render({
 		
 	},
 	// 隐藏下拉框
-	hidn(){
+	hide(){
 		
 	},
 	// 模板组成, 当前option数据, 已经选中的数据, name, value  
@@ -645,7 +645,7 @@ var demo26 = xmSelect.render({
 	show: function(){
 		alert('打开了');
 	},
-	hidn: function(){
+	hide: function(){
 		alert('关闭了');
 	}
 })
@@ -663,7 +663,7 @@ var demo27 = xmSelect.render({
 		//这里也可以组件受控
 		//return false;
 	},
-	hidn: function(){
+	hide: function(){
 		var arr = demo27.getValue();
 		//如果已选择数据小于1, 则不会关闭下拉框
 		if(arr.length < 1){

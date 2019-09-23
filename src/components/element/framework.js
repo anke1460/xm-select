@@ -81,7 +81,7 @@ class Framework extends Component{
 			}
 			this.setState({ directionVal: direction })
 		}else{
-			if(this.props.hidn && this.props.hidn() == false){
+			if(this.props.hide && this.props.hide() == false){
 				return;
 			}
 			//如果产生滚动条, 关闭下拉后回到顶部

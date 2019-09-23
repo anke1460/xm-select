@@ -85,7 +85,7 @@ export default function (lan = 'zn') {
 			
 		},
 		// 隐藏下拉框
-		hidn(){
+		hide(){
 			
 		},
 		// 模板组成, 当前option数据, 已经选中的数据, name, value  
