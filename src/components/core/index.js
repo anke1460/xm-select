@@ -32,14 +32,14 @@ class xmOptions {
 		//开始渲染数据
 		this.update(options, true);
 	}
-	
+
 	/**
 	 * 更新数据 + 重新渲染
 	 */
 	update(options = {}, isNew){
 		//记录最新的配置项
 		this.options = {...this.options, ...options};
-		
+
 		//如果dom不存在, 则不进行渲染事项
 		let dom = selector(this.options.el);
 		if(!dom){
@@ -48,21 +48,21 @@ class xmOptions {
 		}
 		//如果是历史渲染过的数据, 重置一下数据
 		isNew && childs[this.options.el] && childs[this.options.el].reset();
-		
+
 		let isRender = false;
 		const onRef = (ref) => childs[this.options.el] = ref;
 		const onReset = result => {
 			this.options.data = result;
 		}
-		
+
 		render(<Framework { ...this.options } onReset={ onReset } onClose={ onClose } onRef={ onRef } />, dom);
-		
+
 		//记录数据
 		data[this.options.el] = this;
 		//返回多选对象
 		return this;
 	}
-	
+
 	/**
 	 * 重置多选, 回到初始化的状态
 	 */
@@ -76,7 +76,7 @@ class xmOptions {
 		childs[this.options.el].reset();
 		return this;
 	}
-	
+
 	/**
 	 * 主动打开多选
 	 */
@@ -94,14 +94,14 @@ class xmOptions {
 		ref.state.show && ref.onClick();
 		return this;
 	}
-	
+
 	/**
 	 * 获取多选选中的数据
 	 */
 	getValue(){
 		return safety(childs[this.options.el].state.sels);
 	}
-	
+
 	/**
 	 * 设置多选数据
 	 */
@@ -113,7 +113,7 @@ class xmOptions {
 		childs[this.options.el].value(sels, !!show);
 		return this;
 	}
-	
+
 
 }
 

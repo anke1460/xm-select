@@ -4,35 +4,37 @@ import { h, Component, render } from '@/components/preact'
  * 标签的渲染
  */
 class Label extends Component{
-	
+
 	constructor(options){
 		super(options);
 	}
-	
+
 	iconClick(item, selected, disabled, e){
 		this.props.ck(item, selected, disabled, true);
 		//阻止父组件上的事件冒泡
 		e.stopPropagation();
 	}
-	
+
 	render({ data, prop, theme, model, sels }) {
 		//获取变换属性
 		const { name, disabled } = prop;
-		
+
 		//获取配置项
 		const label = model.label;
 		const type = label.type;
 		const conf = label[type];
-		
+
 		//渲染结果
 		let html = '';
-		
+        let innerHTML = true;
+
 		if(type === 'text'){
 			html = sels.map(sel => `${conf.left}${sel[name]}${conf.right}`).join(conf.separator)
 		}else if(type === 'block'){
+            innerHTML = false;
 			//已选择的数据
 			let arr = [...sels];
-			
+
 			const style = { backgroundColor: theme.color }
 			//显示的个数
 			const count = conf.showCount <= 0 ? arr.length : conf.showCount;
@@ -47,7 +49,7 @@ class Label extends Component{
 					</div>
 				)
 			})
-			
+
 			//剩余没显示的数据
 			if(arr.length){
 				html.push(
@@ -63,12 +65,15 @@ class Label extends Component{
 				html = sels.map(sel => sel[name]).join(',')
 			}
 		}
-		
-		
+
+
 		return (
 			<div class="xm-label">
-				<div class="scroll">
-					<div class="label-content">{ html }</div>
+				<div class="scroll">    
+					{ innerHTML ?
+                        <div class="label-content" dangerouslySetInnerHTML={{__html: html}}></div> :
+                        <div class="label-content">{ html }</div>
+                    }
 				</div>
 			</div>
 		)

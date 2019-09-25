@@ -22,6 +22,5 @@ if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'objec
 	layui.define(function(exports) {
 		exports('xmSelect', xmSelect);
 	});
-} else {
-	window.xmSelect = xmSelect;
 }
+window.xmSelect = xmSelect;

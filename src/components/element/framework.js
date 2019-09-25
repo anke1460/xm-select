@@ -142,7 +142,7 @@ class Framework extends Component{
 				}
 			}
 			
-			on && on({ arr: sels, item, selected: !selected });
+			on && on({ arr: this.state.sels, item, selected: !selected });
 
 			//检查是否为选择即关闭状态, 强制删除情况下不做处理
 			clickClose && !mandatoryDelete && this.onClick();
