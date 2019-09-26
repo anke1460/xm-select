@@ -57,7 +57,7 @@ QQ群: 660408068
 
 <p>
   <a href="javascript:;">
-    <img src="docs/wx.jpg" alt="打赏" width="300">
+    <img src="docs/assets/wx.jpg" alt="打赏" width="300">
   </a>
 </p>
 
