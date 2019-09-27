@@ -36,19 +36,19 @@
 
 xm-select{
 	*{
-		margin: 0; 
-		padding: 0; 
-		box-sizing: border-box; 
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
 		font-size: 14px;
 		font-weight: 400;
-		color: @fontColor;
+		// color: @fontColor;
 		text-overflow: ellipsis;
 		user-select: none;
 		-ms-user-select: none;
 		-moz-user-select: none;
 		-webkit-user-select: none;
 	}
-	
+
 	background-color: #FFF;
 	position: relative;
 	border: @border;
@@ -58,18 +58,18 @@ xm-select{
 	display: block;
 	width: 100%;
 	cursor: pointer;
-	
+
 	&:hover{
 		border-color: #C0C4CC;
 	}
-	
-	
+
+
 	& > .xm-tips{
 		color: #999999;
 		padding: 0 10px;
 		height: 100%;
-	} 
-	
+	}
+
 	& > .xm-icon{
 		display: inline-block;
 		overflow: hidden;
@@ -86,12 +86,12 @@ xm-select{
 		transition: all .3s;
 		-webkit-transition: all .3s
 	}
-	
+
 	& > .xm-icon-expand{
 		margin-top: -9px;
 		transform: rotate(180deg);
 	}
-	
+
 	& > .xm-label{
 		// padding: 0 30px 0 10px;
 		position: absolute;
@@ -100,10 +100,10 @@ xm-select{
 		left: 10px;
 		right: 30px;
 		overflow: auto hidden;
-		
+
 		.scroll{
 			overflow-y: hidden;
-			
+
 			.label-content{
 				height: calc(100% - 20px);
 				display: flex;
@@ -114,7 +114,7 @@ xm-select{
 				}
 			}
 		}
-		
+
 		.xm-label-block{
 			display: flex;
 			position: relative;
@@ -125,13 +125,13 @@ xm-select{
 			border-radius: 3px;
 			align-items: baseline;
 			color: #FFF;
-			
+
 			& > span{
 				display: flex;
 				color: #FFF;
                 white-space: nowrap;
 			}
-			
+
 			& > i{
 				color: #FFF;
 				margin-left: 8px;
@@ -139,7 +139,7 @@ xm-select{
 				cursor: pointer;
 				display: flex;
 			}
-			
+
 			&.disabled{
 				background-color: @disabledColor !important;
 				cursor: no-drop !important;
@@ -149,7 +149,7 @@ xm-select{
 			}
 		}
 	}
-	
+
 	& > .xm-body {
 		position: absolute;
 		left: 0;
@@ -167,23 +167,38 @@ xm-select{
 		animation-name: xm-upbit;
 		animation-duration: .3s;
 		animation-fill-mode: both;
-		
+
+        .scroll-body{
+            overflow: auto;
+
+            .scrollBorder() {
+                -webkit-border-radius: 2em;
+                -moz-border-radius: 2em;
+                -ms-border-radius: 2em;
+                border-radius:2em;
+            }
+
+            &::-webkit-scrollbar{  width: 8px; }
+            &::-webkit-scrollbar-track{ .scrollBorder(); background-color: #FFF; }
+            &::-webkit-scrollbar-thumb{ .scrollBorder(); background-color: #C2C2C2; }
+        }
+
 		&.up{
 			top: auto;
 			bottom: 42px;
 		}
-		
+
 		.xm-option{
 			display: flex;
 			align-items: center;
 			position: relative;
 			padding: 0 10px;
 			cursor: pointer;
-			
+
 			&:hover{
 				background-color: #f2f2f2;
 			}
-			
+
 			&-icon{
 				color: transparent;
 				display: flex;
@@ -197,7 +212,7 @@ xm-select{
 			&-icon.xm-icon-danx{
 				border-radius: 100%;
 			}
-			
+
 			&-content{
 				display: flex;
 				position: relative;
@@ -205,16 +220,16 @@ xm-select{
 				overflow: hidden;
 				white-space: nowrap;
 				text-overflow: ellipsis;
-				color: #666;
+				color: @fontColor;
 				width: calc(100% - 20px);
 			}
 		}
-		
+
 		.xm-select-empty{
 			text-align: center;
 			color: #999;
 		}
-		
+
 		.disabled{
 			cursor: no-drop;
 			&:hover{
@@ -226,23 +241,24 @@ xm-select{
 			.xm-option-content{
 				color: @disabledColor !important;
 			}
-			
+
 			&.selected>.xm-option-icon{
 				color: @disabledColor !important;
 			}
 		}
-		
+
 		.xm-search{
 			background-color: #FFF !important;
 			position: relative;
 			padding: 0 10px;
 			margin-bottom: 5px;
 			cursor: pointer;
-			
+
 			&>i{
 				position: absolute;
+                color: @fontColor;
 			}
-			
+
 			&-input{
 				border: none;
 				border-bottom: 1px solid #E6E6E6;
@@ -250,19 +266,19 @@ xm-select{
 				cursor: text;
 			}
 		}
-		
+
 		.xm-paging{
 			padding: 0 10px;
 			display: flex;
 			margin-top: 5px;
-			
+
 			&>span:first-child{
 				border-radius: 2px 0 0 2px;
 			}
 			&>span:last-child{
 				border-radius: 0 2px 2px 0
 			}
-			
+
 			&>span{
 				display: flex;
 				flex: auto;
@@ -278,8 +294,39 @@ xm-select{
 				border: 1px solid #e2e2e2;
 			}
 		}
+
+        .xm-toolbar{
+            padding: 0 10px;
+            display: flex;
+            margin: -3px 0;
+            cursor: default;
+
+            .toolbar-tag{
+                cursor: pointer;
+                display: flex;
+                margin-right: 20px;
+                color: @fontColor;
+                align-items: baseline;
+
+                &:hover{
+                    opacity: .8;
+                }
+                &:active{
+                    opacity: 1;
+                }
+
+                &>i{
+                    margin-right: 2px;
+                    font-size: 14px;
+                }
+
+                &:last-child{
+                    margin-right: 0;
+                }
+            }
+        }
 	}
-	
+
 	.xm-input{
 		cursor: pointer;
 		border-radius: 2px;
@@ -295,11 +342,11 @@ xm-select{
 		padding-left: 10px;
 		outline: 0;
 	}
-	
+
 	.dis{
 		display: none;
 	}
-	
+
 	.loading{
 		position: absolute;
 		top: 0;
@@ -310,15 +357,15 @@ xm-select{
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		
-		
-		
+
+
+
 		.loader{
 			border: .2em dotted currentcolor;
 			border-radius: 50%;
 			-webkit-animation: 1s loader linear infinite;
 			animation: 1s loader linear infinite;
-			
+
 			display: inline-block;
 			width: 1em;
 			height: 1em;
@@ -327,7 +374,11 @@ xm-select{
 			pointer-events: none;
 		}
 	}
-	
+    
+    .xm-select-default{
+        display: none !important;
+    }
+
 }
 
 // xm-select[ua='win']{

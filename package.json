@@ -1,7 +1,7 @@
 {
 	"name": "xm-select",
-	"version": "1.0.0",
-	"description": "",
+	"version": "1.0.4",
+	"description": "始于Layui的select多选解决方案",
 	"main": "index.js",
 	"scripts": {
 		"dev": "cross-env NODE_ENV=dev node_modules/.bin/webpack-dev-server --config build/webpack.config.js",

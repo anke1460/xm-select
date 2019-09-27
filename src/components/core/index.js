@@ -1,6 +1,6 @@
 import { h, Component, render } from '@/components/preact'
 import Framework from '@/components/element/framework'
-import { selector, warn, listenerClose, watch, safety, isArray } from '@/components/common/util'
+import { selector, warn, listenerClose, watch, safety, isArray, deepMerge } from '@/components/common/util'
 import defaultOptions from '@/components/config/options'
 
 
@@ -30,15 +30,15 @@ class xmOptions {
 		//定义默认值
 		this.options = defaultOptions(options.language);
 		//开始渲染数据
-		this.update(options, true);
+		this.update(options);
 	}
 
 	/**
 	 * 更新数据 + 重新渲染
 	 */
-	update(options = {}, isNew){
+	update(options = {}){
 		//记录最新的配置项
-		this.options = {...this.options, ...options};
+		this.options = deepMerge(this.options, options);
 
 		//如果dom不存在, 则不进行渲染事项
 		let dom = selector(this.options.el);
@@ -46,16 +46,10 @@ class xmOptions {
 			warn(`没有找到渲染对象: ${options.el}, 请检查`)
 			return ;
 		}
-		//如果是历史渲染过的数据, 重置一下数据
-		isNew && childs[this.options.el] && childs[this.options.el].reset();
 
-		let isRender = false;
 		const onRef = (ref) => childs[this.options.el] = ref;
-		const onReset = result => {
-			this.options.data = result;
-		}
 
-		render(<Framework { ...this.options } onReset={ onReset } onClose={ onClose } onRef={ onRef } />, dom);
+		render(<Framework { ...this.options } onClose={ onClose } onRef={ onRef } />, dom);
 
 		//记录数据
 		data[this.options.el] = this;
@@ -98,8 +92,23 @@ class xmOptions {
 	/**
 	 * 获取多选选中的数据
 	 */
-	getValue(){
-		return safety(childs[this.options.el].state.sels);
+	getValue(type){
+		let arr = safety(childs[this.options.el].state.sels);
+        
+        if(type === 'name'){
+            return arr.map(item => item[this.options.prop.name]);
+        }else
+        if(type === 'nameStr'){
+            return arr.map(item => item[this.options.prop.name]).join(',');
+        }else
+        if(type === 'value'){
+            return arr.map(item => item[this.options.prop.value]);
+        }else
+        if(type === 'valueStr'){
+            return arr.map(item => item[this.options.prop.value]).join(',');
+        }
+        
+        return arr;
 	}
 
 	/**

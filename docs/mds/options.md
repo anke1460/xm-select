@@ -32,6 +32,10 @@
 | hide              | 隐藏下拉的回调 | function           |   -  |    -    |
 | template          | 自定义渲染选项 | function({ item, sels, name, value })  |   -  |    -    |
 | on                | 监听选中变化 | function({ arr, item, selected })  |   -  |    -    |
+| max               | 设置多选选中上限 | int  |   -  |    0    |
+| maxMethod         | 达到选中上限的回到 | function(sels, item), sels: 已选中数据, item: 当前选中的值  |   -  |    -    |
+| name              | 表单提交时的name  |  string  |   -  |    select    |
+| toolbar           | 工具条, 具体看下表  |  object  |   -  |    -    |
 
 
 ### prop
@@ -46,9 +50,10 @@
 
 ### theme
 
-| 参数              | 说明                             | 类型            | 可选值 | 默认值 |
-| ----------------- | ------------------------------  | --------------- | ------ | ------ |
-| color        | 颜色      | string     |    -    |    #009688      |
+| 参数          | 说明      | 类型            | 可选值 | 默认值 |
+| ------------ | --------- | --------------- | ------ | ------ |
+| color        | 主题颜色   | string     |    -    |    #009688  |
+| maxColor     | 选中上限闪烁边框颜色      | string     |    -    |    #e54d42  |
 
 
 ### model
@@ -90,6 +95,37 @@ model: {
 ```
 
 
+### toolbar
+
+| 参数          | 说明      | 类型            | 可选值 | 默认值 |
+| ------------ | --------- | --------------- | ------ | ------ |
+| show         | 是否展示工具条   | boolean     |    true / false    |    false  |
+| showIcon     | 是否显示工具图标 | boolean     |    true / false    |    true   |
+| list         | 工具条数组 (默认有 全选/清空, 可以自定义)     | array       |    -    |   [ "ALL", "CLEAR" ] |
+
+- 自定义方式
+
+```
+
+list: [ "ALL", "CLEAR", 
+    {
+        //显示图标, 可以是layui内置的图标, 也可以是自己引入的图标
+        //传入的icon会转化为 <i class="layui-icon layui-icon-face-smile"></i>
+        icon: 'layui-icon layui-icon-face-smile',
+        //显示名称 
+        name: 'xxx',
+        //点击时触发的回调
+        method: function(data){
+            //data 当前页面的数据
+            
+        }
+    } 
+]
+
+
+```
+
+
 ### 方法
 
 :::warning
@@ -98,10 +134,10 @@ xmSelect.render()后会返回一个xmSelect对象, 可以进行方法调用
 
 | 事件名 | 说明               | 参数 |
 | ------ | ------------------ | -------- |
-| getValue  | 获取当前选中的数据 | - |
-| setValue  | 动态设置数据 | array: 选中的数据, show: 是否展开下拉 |
+| getValue  | 获取当前选中的数据 | (type: 类型), 可选值: name, nameStr, value, valueStr |
+| setValue  | 动态设置数据 | (array: 选中的数据, show: 是否展开下拉) |
 | opened  | 主动展开下拉 | - |
 | closed  | 主动关闭下拉 | - |
-| render  | 重新渲染多选 | (options):见配置项 |
+| render  | 重新渲染多选 | (options: 见配置项) |
 | reset  | 重置为上一次的render状态 | - |
 | update  | 更新多选选中, reset不保留 | - |

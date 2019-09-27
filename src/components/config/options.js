@@ -5,10 +5,12 @@ const lanSetting = { zn, en }
 
 export default function (lan = 'zn') {
 	let setting = lanSetting[lan] || zn;
-	
+
 	return {
 		//多选数据
 		data: [],
+        //表单提交的name
+        name: 'select',
 		//默认选中数据, 优先级大于selected
 		initValue: null,
 		//默认提示
@@ -48,6 +50,15 @@ export default function (lan = 'zn') {
 		repeat: false,
 		//是否点击选项后自动关闭下拉框
 		clickClose: false,
+        //多选上限
+        max: 0,
+        maxMethod: function(sels, item){},
+        //工具条
+        toolbar: {
+            show: false,
+            showIcon: true,
+            list: [ 'ALL', 'CLEAR' ],
+        },
 		//自定义属性名称
 		prop: {
 			name: 'name',
@@ -57,7 +68,8 @@ export default function (lan = 'zn') {
 		},
 		//主题配置
 		theme: {
-			color: '#009688',
+			color: '#009688',       //默认主题颜色
+            maxColor: '#e54d42',    //多选上限边框闪烁颜色
 		},
 		//模型
 		model: {
@@ -79,22 +91,22 @@ export default function (lan = 'zn') {
 				},
 			},
 		},
-		
+
 		// 展开下拉框
 		show(){
-			
+
 		},
 		// 隐藏下拉框
 		hide(){
-			
+
 		},
-		// 模板组成, 当前option数据, 已经选中的数据, name, value  
+		// 模板组成, 当前option数据, 已经选中的数据, name, value
 		template({ item, sels, name, value }){
 			return name;
 		},
 		//监听选中事件
 		on({ arr, item, selected }){
-			
+
 		}
 	}
 }

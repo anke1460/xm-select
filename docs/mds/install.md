@@ -28,7 +28,7 @@
 [![star](https://gitee.com/maplemei/xm-select/badge/star.svg?theme=dark)](https://gitee.com/maplemei/xm-select/stargazers)
 [![fork](https://gitee.com/maplemei/xm-select/badge/fork.svg?theme=dark)](https://gitee.com/maplemei/xm-select/members)
 
-[https://gitee.com/maplemei/xm-select](https://gitee.com/maplemei/xm-select)
+[码云下载](https://gitee.com/maplemei/xm-select/releases)
 
 
 

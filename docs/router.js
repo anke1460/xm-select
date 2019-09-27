@@ -63,6 +63,17 @@ export default [{
             { path: '/example/XM15', name: '构建选项', component: importMd('/XM15') },
             { path: '/example/XM16', name: '监听选择', component: importMd('/XM16') },
             { path: '/example/XM17', name: '性能测试', component: importMd('/XM17') },
+            { path: '/example/XM18', name: '多选上限', component: importMd('/XM18') },
+            { path: '/example/XM19', name: '工具条', component: importMd('/XM19') },
+        ]
+	}, {
+		path: '/example-custom',
+		name: '进阶示例',
+		redirect: '/example-custom/ZM01',
+		component: Component,
+		children: [
+            { path: '/example-custom/ZM01', name: '赋值与取值', component: importMd('/ZM01') },
+            { path: '/example-custom/ZM02', name: '表单提交', component: importMd('/ZM02') },
         ]
 	}, {
 		path: '/question',
