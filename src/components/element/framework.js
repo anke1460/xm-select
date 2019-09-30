@@ -139,17 +139,6 @@ class Framework extends Component{
 			//如果是禁用状态, 不能进行操作
 			if(disabled) return;
 
-            //查看是否设置了多选上限
-            let maxCount = toNum(max);
-            if(maxCount > 0 && sels.length >= maxCount){
-                this.updateBorderColor(theme.maxColor);
-                //恢复正常
-                setTimeout(() => this.updateBorderColor(''), 300);
-                //查看是否需要回调
-                maxMethod && isFunction(maxMethod) && maxMethod(sels, item);
-                return ;
-            }
-
 			//如果现在是选中状态
 			if(selected && (!repeat || mandatoryDelete)){
 				let index = sels.findIndex(sel => sel[valueProp] == item[valueProp])
@@ -158,6 +147,17 @@ class Framework extends Component{
 					this.setState({ sels });
 				}
 			}else{
+                //查看是否设置了多选上限
+                let maxCount = toNum(max);
+                if(maxCount > 0 && sels.length >= maxCount){
+                    this.updateBorderColor(theme.maxColor);
+                    //恢复正常
+                    setTimeout(() => this.updateBorderColor(''), 300);
+                    //查看是否需要回调
+                    maxMethod && isFunction(maxMethod) && maxMethod(sels, item);
+                    return ;
+                }
+
 				//如果是单选模式
 				if(radio){
 					this.setState({ sels: [item] });
