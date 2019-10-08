@@ -19,7 +19,7 @@ html, body {
 
 #app {
   height: 100%;
-  
+
   &.is-component {
     overflow-y: hidden;
 
@@ -36,7 +36,7 @@ html, body {
       left: 0;
       top: 0;
       z-index: 1500;
-      
+
       .container {
         padding: 0;
       }
@@ -194,13 +194,31 @@ button, input, select, textarea {
 	border-radius: 2px;
 	cursor: pointer;
 	vertical-align: top;
-	
+
 	margin-left: 10px;
-	
+
 	&:hover{
 		opacity: .8;
 	}
 	&:active{
 		opacity: 1;
 	}
+}
+
+.demo-ZM03{
+    .layui-table-cell{
+        height: auto;
+    }
+    
+    table{
+        margin-bottom: -1px !important;
+        border-collapse: unset !important;
+        line-height: unset !important;
+        font-size: unset !important;
+        background-color: unset !important;
+
+        th, td{
+            padding: 5px 0 !important;
+        }
+    }
 }

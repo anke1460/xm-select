@@ -74,6 +74,7 @@ export default [{
 		children: [
             { path: '/example-custom/ZM01', name: '赋值与取值', component: importMd('/ZM01') },
             { path: '/example-custom/ZM02', name: '表单提交', component: importMd('/ZM02') },
+            // { path: '/example-custom/ZM03', name: '表格中多选', component: importMd('/ZM03') },
         ]
 	}, {
 		path: '/question',
