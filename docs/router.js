@@ -32,11 +32,11 @@ export default [{
 		redirect: '/component/install',
 		component: Component,
 		children: [{
-			path: 'install',
+			path: '/component/install',
 			name: '安装与使用',
 			component: importMd('/install'),
 		}, {
-			path: 'options',
+			path: '/component/options',
 			name: '配置项与方法',
 			component: importMd('/options'),
 		}]
