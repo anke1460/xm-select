@@ -15,6 +15,32 @@ class Label extends Component{
 		e.stopPropagation();
 	}
 
+    scrollFunc(e){
+        if(e.wheelDeltaX == 0){
+            let child = this.labelRef.getElementsByClassName('xm-label-block');
+            let sum   = 10;
+            for(let i = 0; i < child.length; i++){
+                sum += child[i].getBoundingClientRect().width + 5;
+            }
+            let width = this.labelRef.getBoundingClientRect().width;
+            let max   = sum > width ? sum - width : width;
+            let left  = this.labelRef.scrollLeft + e.deltaY;
+            left < 0   && (left = 0);
+            left > max && (left = max);
+            this.labelRef.scrollLeft = left;
+        }
+    }
+
+    componentDidMount(){
+        if (this.labelRef.addEventListener) {
+            this.labelRef.addEventListener('DOMMouseScroll', this.scrollFunc.bind(this), false);
+        }
+        if(this.labelRef.attachEvent){
+            this.labelRef.attachEvent('onmousewheel', this.scrollFunc.bind(this));
+        }
+        this.labelRef.onmousewheel = this.scrollFunc.bind(this);
+    }
+
 	render({ data, prop, theme, model, sels }) {
 		//获取变换属性
 		const { name, disabled } = prop;
@@ -69,7 +95,7 @@ class Label extends Component{
 
 		return (
 			<div class="xm-label">
-				<div class="scroll">    
+				<div class="scroll" ref={ ref => this.labelRef = ref }>
 					{ innerHTML ?
                         <div class="label-content" dangerouslySetInnerHTML={{__html: html}}></div> :
                         <div class="label-content">{ html }</div>

@@ -8,18 +8,18 @@ class General extends Component{
 
 	constructor(options){
 		super(options);
-		this.searchCid = 0;
+
 		this.setState({
-			searchValue: '',
 			filterValue: '',
 			remote: true,
 			loading: false,
 			pageIndex: 1,
 			pageSize: 10,
-
-			inputOver: true,
 		});
 
+        this.searchCid = 0;
+        this.inputOver = true;
+        this.__value = '';
 	}
 
 	optionClick(item, selected, disabled, e){
@@ -55,19 +55,19 @@ class General extends Component{
 
 	searchInput(e){
 		let v = e.target.value;
-        
-        if(v === this.state.searchValue){
+
+        if(v === this.__value){
             return ;
         }
 
         clearTimeout(this.searchCid);
-        if(this.state.inputOver){
+        if(this.inputOver){
             //保证输入框内的值是实时的
-            this.setState({ searchValue: v });
+            this.__value = v;
 
             //让搜索变成异步的
             this.searchCid = setTimeout(() => this.setState({
-                filterValue: this.state.searchValue,
+                filterValue: this.__value,
                 remote: true,
             }), this.props.delay);
         }
@@ -83,12 +83,12 @@ class General extends Component{
 
 	handleComposition(e){
 		let type = e.type;
-        
+
 		if(type === 'compositionstart'){
-			this.setState({ inputOver: false })
+			this.inputOver = false;
             clearTimeout(this.searchCid);
 		}else if(type === 'compositionend'){
-			this.setState({ inputOver: true })
+			this.inputOver = true;
             this.searchInput(e);
 		}
 	}
@@ -97,7 +97,9 @@ class General extends Component{
 		if(this.props.show != props.show){
 			if(!props.show){
 				//清空输入框的值
-				this.setState({ searchValue: '', filterValue: '' });
+				this.setState({ filterValue: '' });
+                this.__value = '';
+                this.searchInputRef && (this.searchInputRef.value = '');
 			}else{
 				//聚焦输入框
 				setTimeout(() => this.focus(), 0);
@@ -135,7 +137,7 @@ class General extends Component{
 		const search = (
 			<div class='xm-search'>
 				<i class="xm-iconfont xm-icon-sousuo"></i>
-				<input type="text" class="xm-input xm-search-input" placeholder={ searchTips } value={ this.state.searchValue }
+				<input type="text" class="xm-input xm-search-input" placeholder={ searchTips }
 					ref={ input => this.searchInputRef = input }
 					onClick={ this.blockClick.bind(this) }
                     onInput={ this.searchInput.bind(this) }
