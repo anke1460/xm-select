@@ -1,5 +1,5 @@
 import { h, Component, render } from '@/components/preact'
-import { checkUserAgent, isFunction, toNum } from '@/components/common/util'
+import { checkUserAgent, isFunction, toNum, filterGroupOption, findSelected, mergeArr } from '@/components/common/util'
 
 //渲染类
 import Tips from './tips';
@@ -24,9 +24,14 @@ class Framework extends Component{
         //用于多选上限的边框颜色变化
         this.updateBorderColor('');
 		this.resetDate(props.data);
-		let selected = props.prop.selected;
-		this.value(props.initValue ? props.initValue : this.state.data.filter(item => item[selected]), false);
+		this.value(props.initValue ? props.initValue : this.findValue(this.state.data), false);
 	}
+
+    findValue(data){
+        let list = [];
+        findSelected(list, data, this.props.prop);
+        return list;
+    }
 
 	resetDate(data = []){
 		this.setState({ data });
@@ -36,8 +41,11 @@ class Framework extends Component{
 		let data = this.state.data;
 		let value = this.props.prop.value;
 		let direction = this.props.direction;
+
+        let list = [];
+        filterGroupOption(list, data, this.props.prop);
 		this.setState({
-			sels: sels.map(sel => typeof sel === 'object' ? sel[value] : sel).map(val => data.find(item => item[value] == val)).filter(a => a),
+			sels: sels.map(sel => typeof sel === 'object' ? sel[value] : sel).map(val => list.find(item => item[value] == val)).filter(a => a),
 			//下拉框是否展开
 			show,
 			//下拉方向
@@ -53,7 +61,7 @@ class Framework extends Component{
 	onReset(data, type){
         //重置数据
         if(type === 'data'){
-            this.resetDate(data);
+            this.setState({ sels: mergeArr(this.findValue(data), this.state.sels, this.props.prop), data });
         }else
         //重置选中数据
         if(type === 'sels'){

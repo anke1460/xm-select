@@ -16,7 +16,7 @@
 | delay             | 搜索延迟 ms | int           |    -    |    500    |
 | filterMethod      | 搜索回调函数 | function(val, item, index, prop)  val: 当前搜索值, item: 每个option选项, index: 位置数据中的下标, prop: 定义key           |    -    |    -    |
 | remoteSearch      | 是否开启自定义搜索 (远程搜索)| boolean           |    true / false   |    false    |
-| remoteMethod      | 自定义搜索回调函数 | function(val, cb)  val: 当前搜索值, cb: 回调函数, 需要回调一个数组, 结构同data          |    -    |    -    |
+| remoteMethod      | 自定义搜索回调函数 | function(val, cb, show)  val: 当前搜索值, cb: 回调函数, 需要回调一个数组, 结构同data, show: 下拉框显示状态         |    -    |    -    |
 | direction         | 下拉方向| string           |    auto / up / down   |    auto    |
 | style             | 自定义样式| object           |    -   |    { }    |
 | height            | 默认最大高度| string           |    -   |    200px   |
@@ -36,6 +36,7 @@
 | maxMethod         | 达到选中上限的回到 | function(sels, item), sels: 已选中数据, item: 当前选中的值  |   -  |    -    |
 | name              | 表单提交时的name  |  string  |   -  |    select    |
 | toolbar           | 工具条, 具体看下表  |  object  |   -  |    -    |
+| showCount         | 展示在下拉框中的最多选项数量  |  int  |   -  |    0    |
 
 
 ### prop
@@ -45,7 +46,9 @@
 | name        | 显示名称      | string     |    -    |    name      |
 | value       | 选中值        | string     |    -    |    value     |
 | selected    | 是否选中      | string     |    -    |    selected      |
-| disabled    | 是否警用      | string     |    -    |    disabled      |
+| disabled    | 是否禁用      | string     |    -    |    disabled      |
+| children    | 分组children | string     |    -    |    children      |
+| optgroup    | 分组optgroup | string     |    -    |    optgroup      |
 
 
 ### theme

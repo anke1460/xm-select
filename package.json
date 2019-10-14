@@ -1,6 +1,6 @@
 {
 	"name": "xm-select",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"description": "始于Layui的select多选解决方案",
 	"main": "index.js",
 	"scripts": {

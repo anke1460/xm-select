@@ -53,6 +53,8 @@ export default function (lan = 'zn') {
         //多选上限
         max: 0,
         maxMethod: function(sels, item){},
+        //选项显示数量
+        showCount: 0,
         //工具条
         toolbar: {
             show: false,
@@ -65,6 +67,8 @@ export default function (lan = 'zn') {
 			value: 'value',
 			selected: 'selected',
 			disabled: 'disabled',
+            children: 'children',
+            optgroup: 'optgroup',
 		},
 		//主题配置
 		theme: {

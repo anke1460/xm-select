@@ -1,5 +1,5 @@
 import { h, Component, render } from '@/components/preact'
-import { isFunction, safety, mergeArr, IEVersion } from '@/components/common/util'
+import { isFunction, isArray, safety, mergeArr, IEVersion, filterGroupOption } from '@/components/common/util'
 
 /**
  * 普通的多选渲染
@@ -111,9 +111,9 @@ class General extends Component{
 
 		let { data, prop, template, theme, radio, sels, empty, filterable, filterMethod, remoteSearch, remoteMethod, delay, searchTips } = config
 
-		const { name, value, disabled } = prop;
+		const { name, value, disabled, children, optgroup } = prop;
 
-		let arr = data;
+		let arr = safety(data);
 		//是否开启了搜索
 		if(filterable){
 			if(remoteSearch){//是否进行远程搜索
@@ -127,10 +127,34 @@ class General extends Component{
 
 						this.setState({ loading: false });
 						this.props.onReset(result, 'data');
-					});
+					}, this.props.show);
 				}
 			}else{
-				arr = data.filter((item, index) => filterMethod(this.state.filterValue, item, index, prop));
+                const filterData = (item, index) => {
+                    const isGroup = item[optgroup];
+                    if(isGroup){
+                        return true;
+                    }
+                    const child = item[children];
+                    if(isArray(child) && child.length > 0){//分组模式
+                        item[children] = child.filter(filterData);
+                        return item[children].length != 0;
+                    }
+                    return filterMethod(this.state.filterValue, item, index, prop);
+                }
+				arr = arr.filter(filterData);
+
+                for(let i = 0; i < arr.length - 1; i++){
+                    let a = arr[i];
+                    let b = arr[i + 1];
+                    if(a[optgroup] && (b[optgroup] || isArray(b[children]))){
+                        arr[i].__del = true;
+                    }
+                }
+                if(arr.length && arr[arr.length - 1][optgroup]){
+                    arr[arr.length - 1].__del = true;
+                }
+                arr = arr.filter(item => !item.__del);
 			}
 		}
 
@@ -177,10 +201,10 @@ class General extends Component{
 			this.state.pageIndex <= 1 && (prevStyle = disabledStyle);
 			this.state.pageIndex == size && (nextStyle = disabledStyle);
 
-			const defaultCurrClass = {
-				position: 'relative',
-				borderRadius: '1px',
-			}
+			// const defaultCurrClass = {
+			// 	position: 'relative',
+			// 	borderRadius: '1px',
+			// }
 			// {
 			// 	''.padEnd(size, ' ').split('').map((s, i) => (
 			// 		<span style={
@@ -201,7 +225,12 @@ class General extends Component{
 				</div>
 			)
 
-		}
+		}else{
+            //检查是否设置了显示数量上限
+            if(config.showCount > 0){
+                arr = arr.slice(0, config.showCount);
+            }
+        }
 
         let safetyArr = safety(arr);
         //工具条操作
@@ -212,12 +241,14 @@ class General extends Component{
 
                     let info;
                     if(tool === 'ALL'){
-                        info = { icon: 'xm-iconfont xm-icon-quanxuan', name: '全选', method: (data) => {
-                            this.props.onReset(mergeArr(data, sels, prop), 'sels');
+                        info = { icon: 'xm-iconfont xm-icon-quanxuan', name: '全选', method: (pageData) => {
+                            const list = [];
+                            filterGroupOption(list, pageData, prop);
+                            this.props.onReset(mergeArr(list.filter(item => !item[prop.disabled]), sels, prop), 'sels');
                         } };
                     }else if(tool === 'CLEAR'){
-                        info = { icon: 'xm-iconfont xm-icon-qingkong', name: '清空', method: (data) => {
-                            this.props.onReset([], 'sels');
+                        info = { icon: 'xm-iconfont xm-icon-qingkong', name: '清空', method: (pageData) => {
+                            this.props.onReset(sels.filter(item => item[prop.disabled]), 'sels');
                         } };
                     }else {
                         info = tool
@@ -238,27 +269,47 @@ class General extends Component{
             </div>
         )
 
+        const renderItem = item => {
+            const selected = !!sels.find(sel => sel[value] == item[value])
+            const iconStyle = selected ? {
+            	color: theme.color,
+            	border: 'none',
+            	fontSize: '18px'
+            } : {
+            	borderColor: theme.color,
+            };
+            const className = ['xm-option', (item[disabled] ? ' disabled' : ''), (selected ? ' selected' : '')].join(' ');
+            const iconClass = ['xm-option-icon xm-iconfont', radio ? 'xm-icon-danx' : 'xm-icon-duox'].join(' ');
 
-		arr = arr.map(item => {
+            return (
+            	<div class={ className } value={ item[value] } onClick={ this.optionClick.bind(this, item, selected, item[disabled]) }>
+            		<i class={ iconClass } style={ iconStyle }></i>
+            		<div class='xm-option-content' dangerouslySetInnerHTML={{ __html: template({ data, item, arr: sels, name: item[name], value: item[value] }) }}></div>
+            	</div>
+            )
+        }
+        const renderGroup = item => {
+            const isGroup = item[optgroup];
+            if(isGroup){//分组模式
+                return (
+                    <div class="xm-group">
+                        <div class="xm-group-item">{ item[name] }</div>
+                    </div>
+                )
+            }
 
-			const selected = !!sels.find(sel => sel[value] == item[value])
-			const iconStyle = selected ? {
-				color: theme.color,
-				border: 'none',
-				fontSize: '18px'
-			} : {
-				borderColor: theme.color,
-			};
-			const className = ['xm-option', (item[disabled] ? ' disabled' : ''), (selected ? ' selected' : '')].join(' ');
-			const iconClass = ['xm-option-icon xm-iconfont', radio ? 'xm-icon-danx' : 'xm-icon-duox'].join(' ');
-
-			return (
-				<div class={className} value={ item[value] } onClick={ this.optionClick.bind(this, item, selected, item[disabled]) }>
-					<i class={ iconClass } style={ iconStyle }></i>
-					<div class='xm-option-content' dangerouslySetInnerHTML={{ __html: template({ data, item, arr: sels, name: item[name], value: item[value] }) }}></div>
-				</div>
-			)
-		})
+            const child = item[children];
+            if(isArray(child) && child.length > 0){//分组模式
+                return (
+                    <div class="xm-group">
+                        <div class="xm-group-item">{ item[name] }</div>
+                        { child.map(renderItem) }
+                    </div>
+                )
+            }
+            return renderItem(item);
+        }
+		arr = arr.map(renderGroup);
 
 		if(!arr.length){
 			arr.push(
