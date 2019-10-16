@@ -68,7 +68,7 @@ xm-select{
 	& > .xm-tips{
 		color: #999999;
 		padding: 0 10px;
-		height: 100%;
+		position: absolute;
 	}
 
 	& > .xm-icon{
@@ -116,16 +116,9 @@ xm-select{
 
 		.scroll{
 			.label-content{
-                line-height: @heightLabel;
-				height: calc(100% - 20px);
 				display: flex;
-				align-items: baseline;
-                white-space: pre;
+                line-height: @heightLabel;
                 padding: 3px 30px 3px 10px;
-				&:after{
-					content: '-';
-					opacity: 0;
-				}
 			}
 		}
 

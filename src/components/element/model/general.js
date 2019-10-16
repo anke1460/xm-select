@@ -1,5 +1,5 @@
 import { h, Component, render } from '@/components/preact'
-import { isFunction, isArray, safety, mergeArr, IEVersion, filterGroupOption } from '@/components/common/util'
+import { isFunction, isArray, safety, deepMerge, mergeArr, IEVersion, filterGroupOption, addGroupLabel } from '@/components/common/util'
 
 /**
  * 普通的多选渲染
@@ -27,6 +27,21 @@ class General extends Component{
 		//阻止父组件上的事件冒泡
 		this.blockClick(e);
 	}
+
+    groupClick(item, e){
+        let m = item[this.props.prop.click];
+        if(m === 'SELECT'){
+            this.props.onReset(item.__value, 'append');
+        }else if(m === 'CLEAR'){
+            this.props.onReset(item.__value, 'delete');
+        }else if(m === 'AUTO'){
+            this.props.onReset(item.__value, 'auto');
+        }else if(isFunction(m)){
+            m(item);
+        }
+        //阻止父组件上的事件冒泡
+        this.blockClick(e);
+    }
 
 	blockClick(e){
 		e.stopPropagation();
@@ -69,6 +84,7 @@ class General extends Component{
             this.searchCid = setTimeout(() => this.setState({
                 filterValue: this.__value,
                 remote: true,
+                callback: true,
             }), this.props.delay);
         }
 	}
@@ -107,13 +123,24 @@ class General extends Component{
 		}
 	}
 
+    componentDidUpdate(){
+        if(this.state.callback){
+            this.setState({ callback: false });
+            
+            let done = this.props.filterDone;
+            if(isFunction(done)){
+                done(this.state.filterValue);
+            }
+        }
+    }
+
 	render(config) {
 
 		let { data, prop, template, theme, radio, sels, empty, filterable, filterMethod, remoteSearch, remoteMethod, delay, searchTips } = config
 
 		const { name, value, disabled, children, optgroup } = prop;
 
-		let arr = safety(data);
+		let arr = deepMerge([], data);
 		//是否开启了搜索
 		if(filterable){
 			if(remoteSearch){//是否进行远程搜索
@@ -232,7 +259,8 @@ class General extends Component{
             }
         }
 
-        let safetyArr = safety(arr);
+        let safetyArr = deepMerge([], arr);
+
         //工具条操作
         const toolbar = (
             <div class='xm-toolbar'>
@@ -294,28 +322,28 @@ class General extends Component{
             	</div>
             )
         }
+
         const renderGroup = item => {
             const isGroup = item[optgroup];
             if(isGroup){//分组模式
                 return (
                     <div class="xm-group">
-                        <div class="xm-group-item">{ item[name] }</div>
+                        <div class="xm-group-item" onClick={ this.groupClick.bind(this, item) }>{ item[name] }</div>
                     </div>
                 )
             }
-
             const child = item[children];
             if(isArray(child) && child.length > 0){//分组模式
                 return (
                     <div class="xm-group">
-                        <div class="xm-group-item">{ item[name] }</div>
+                        <div class="xm-group-item" onClick={ this.groupClick.bind(this, item) }>{ item[name] }</div>
                         { child.map(renderItem) }
                     </div>
                 )
             }
             return renderItem(item);
         }
-		arr = arr.map(renderGroup);
+		arr = addGroupLabel(arr, prop).map(renderGroup);
 
 		if(!arr.length){
 			arr.push(

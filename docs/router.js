@@ -78,7 +78,10 @@ export default [{
 		children: [
             { path: '/example-custom/ZM01', name: '赋值与取值', component: importMd('/ZM01') },
             { path: '/example-custom/ZM02', name: '表单提交', component: importMd('/ZM02') },
-            // { path: '/example-custom/ZM03', name: '表格中多选', component: importMd('/ZM03') },
+            { path: '/example-custom/ZM03', name: '表格中多选', component: importMd('/ZM03') },
+            { path: '/example-custom/ZM04', name: '远程搜索', component: importMd('/ZM04') },
+            { path: '/example-custom/ZM05', name: '动态数据', component: importMd('/ZM05') },
+            { path: '/example-custom/ZM06', name: '弹框中的多选', component: importMd('/ZM06') },
             // { path: '/example-custom/ZTEST', name: '测试', component: importMd('/ZTEST') },
         ]
 	}, {

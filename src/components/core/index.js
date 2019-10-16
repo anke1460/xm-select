@@ -94,7 +94,7 @@ class xmOptions {
 	 */
 	getValue(type){
 		let arr = safety(childs[this.options.el].state.sels);
-        
+
         if(type === 'name'){
             return arr.map(item => item[this.options.prop.name]);
         }else
@@ -107,7 +107,7 @@ class xmOptions {
         if(type === 'valueStr'){
             return arr.map(item => item[this.options.prop.value]).join(',');
         }
-        
+
         return arr;
 	}
 
@@ -119,10 +119,33 @@ class xmOptions {
 			warn('请传入数组结构...')
 			return ;
 		}
-		childs[this.options.el].value(sels, !!show);
+		childs[this.options.el].value(sels, show);
 		return this;
 	}
 
+    /**
+     * 追加赋值
+     */
+    append(sels){
+        if(!isArray(sels)){
+        	warn('请传入数组结构...')
+        	return ;
+        }
+        childs[this.options.el].append(sels);
+        return this;
+    }
+    
+    /**
+     * 删除赋值
+     */
+    delete(sels){
+        if(!isArray(sels)){
+        	warn('请传入数组结构...')
+        	return ;
+        }
+        childs[this.options.el].del(sels);
+        return this;
+    }
 
 }
 

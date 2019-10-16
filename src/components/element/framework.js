@@ -24,7 +24,7 @@ class Framework extends Component{
         //用于多选上限的边框颜色变化
         this.updateBorderColor('');
 		this.resetDate(props.data);
-		this.value(props.initValue ? props.initValue : this.findValue(this.state.data), false);
+		this.value(props.initValue ? props.initValue : this.findValue(this.state.data), !!this.state.show);
 	}
 
     findValue(data){
@@ -33,22 +33,58 @@ class Framework extends Component{
         return list;
     }
 
+    resetSelectValue(sels = [], change = [], isAdd){
+        let on = this.props.on;
+        if(isFunction(on)){
+            on({ arr: sels, change, isAdd });
+        }
+        this.setState({ sels });
+    }
+
 	resetDate(data = []){
 		this.setState({ data });
 	}
 
 	value(sels, show){
-		let data = this.state.data;
-		let value = this.props.prop.value;
+        if(show !== false && show !== true){
+            show = this.state.show;
+        }
+        let changeData = this.exchangeValue(sels);
+        this.resetSelectValue(changeData, changeData, true);
+		this.setState({ show })
+	}
 
+    exchangeValue(sels){
+        let data = this.state.data;
+        let value = this.props.prop.value;
         let list = [];
         filterGroupOption(list, data, this.props.prop);
-		this.setState({
-			sels: sels.map(sel => typeof sel === 'object' ? sel[value] : sel).map(val => list.find(item => item[value] == val)).filter(a => a),
-			//下拉框是否展开
-			show,
-		})
-	}
+        return sels.map(sel => typeof sel === 'object' ? sel[value] : sel).map(val => list.find(item => item[value] == val)).filter(a => a);
+    }
+
+    append(arr){
+        let changeData = this.exchangeValue(arr);
+        this.resetSelectValue(mergeArr(changeData, this.state.sels, this.props.prop), changeData, true);
+    }
+
+    del(arr){
+        let value = this.props.prop.value;
+        let sels = this.state.sels;
+        arr = this.exchangeValue(arr);
+        arr.forEach(v => {
+            let index = sels.findIndex(item => item[value] === v[value]);
+            if(index != -1){
+                sels.splice(index, 1);
+            }
+        });
+        this.resetSelectValue(sels, arr, false);
+    }
+
+    auto(arr){
+        let value = this.props.prop.value;
+        let sels = arr.filter(v => this.state.sels.findIndex(item => item[value] === v) != -1);
+        sels.length == arr.length ? this.del(arr) : this.append(arr);
+    }
 
     updateBorderColor(tmpColor){
         this.setState({ tmpColor });
@@ -57,11 +93,25 @@ class Framework extends Component{
 	onReset(data, type){
         //重置数据
         if(type === 'data'){
-            this.setState({ sels: mergeArr(this.findValue(data), this.state.sels, this.props.prop), data });
+            let changeData = this.findValue(data);
+            this.resetSelectValue(mergeArr(changeData, this.state.sels, this.props.prop), changeData, true);
+            this.setState({ data });
         }else
         //重置选中数据
         if(type === 'sels'){
-            this.setState({ sels: data });
+            this.resetSelectValue(data, data, true);
+        }else
+        //追加数据
+        if(type === 'append'){
+            this.append(data);
+        }else
+        //清理数据
+        if(type === 'delete'){
+            this.del(data);
+        }else
+        //自动判断模式
+        if(type === 'auto'){
+            this.auto(data);
         }
 	}
 
@@ -157,7 +207,7 @@ class Framework extends Component{
 				let index = sels.findIndex(sel => sel[valueProp] == item[valueProp])
 				if(index != -1){
 					sels.splice(index, 1);
-					this.setState({ sels });
+					this.resetSelectValue(sels, [item], !selected);
 				}
 			}else{
                 //查看是否设置了多选上限
@@ -173,13 +223,11 @@ class Framework extends Component{
 
 				//如果是单选模式
 				if(radio){
-					this.setState({ sels: [item] });
+					this.resetSelectValue([item], [item], !selected);
 				}else{
-					this.setState({ sels: [...sels, item] });
+					this.resetSelectValue([...sels, item], [item], !selected);
 				}
 			}
-
-			on && on({ arr: this.state.sels, item, selected: !selected });
 
 			//检查是否为选择即关闭状态, 强制删除情况下不做处理
 			clickClose && !mandatoryDelete && this.onClick();

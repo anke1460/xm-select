@@ -71,6 +71,7 @@ export default function (lan = 'zn') {
 			disabled: 'disabled',
             children: 'children',
             optgroup: 'optgroup',
+            click: 'click',
 		},
 		//主题配置
 		theme: {

@@ -169,3 +169,27 @@ export function findSelected(arr, data, prop){
         }
     });
 }
+
+export function addGroupLabel(arr, prop){
+    const { disabled, children, optgroup, value } = prop;
+    let group;
+    for(let i = 0; i < arr.length; i++){
+        let item = arr[i];
+        if(item[optgroup]){
+            group = item;
+            group.__value = [];
+            continue;
+        }
+        let child = item[children];
+        if(child && child.length > 0){
+            group = null;
+            item.__value = child.filter(c => !c[disabled]).map(c => c[value]);
+            continue;
+        }
+        if(!group || item[disabled]){
+            continue;
+        }
+        group.__value.push(item[value]);
+    }
+    return arr;
+}
