@@ -3,6 +3,7 @@
 @disabledColor: #C2C2C2;
 @border: 1px solid @defaultBorderColor;
 @height: 36px;
+@heightLabel: 30px;
 
 @-webkit-keyframes xm-upbit {
 	from {-webkit-transform: translate3d(0, 30px, 0);opacity: .3}
@@ -53,8 +54,8 @@ xm-select{
 	position: relative;
 	border: @border;
 	border-radius: 2px;
-	height: @height;
-	line-height: @height;
+	min-height: @height;
+    line-height: @height;
 	display: block;
 	width: 100%;
 	cursor: pointer;
@@ -93,22 +94,34 @@ xm-select{
 	}
 
 	& > .xm-label{
-		// padding: 0 30px 0 10px;
-		position: absolute;
-		top: 0;
-		bottom: 0px;
-		left: 10px;
-		right: 30px;
-		overflow: auto hidden;
+        &.single-row{
+            position: absolute;
+            top: 0;
+            bottom: 0px;
+            left: 0px;
+            right: 30px;
+            overflow: auto hidden;
+            .scroll{
+                overflow-y: hidden;
+            }
+            .label-content{
+                flex-wrap: nowrap;
+            }
+        }
+        &.auto-row{
+            .label-content{
+                flex-wrap: wrap;
+            }
+        }
 
 		.scroll{
-			overflow-y: hidden;
-
 			.label-content{
+                line-height: @heightLabel;
 				height: calc(100% - 20px);
 				display: flex;
 				align-items: baseline;
                 white-space: pre;
+                padding: 3px 30px 3px 10px;
 				&:after{
 					content: '-';
 					opacity: 0;
@@ -120,7 +133,7 @@ xm-select{
 			display: flex;
 			position: relative;
 			padding: 0px 5px;
-			margin-right: 5px;
+			margin: 2px 5px 2px 0;
 			height: 26px;
 			line-height: 26px;
 			border-radius: 3px;
@@ -208,7 +221,6 @@ xm-select{
 			&:hover{
 				background-color: #f2f2f2;
 			}
-
 			&-icon{
 				color: transparent;
 				display: flex;
@@ -222,7 +234,6 @@ xm-select{
 			&-icon.xm-icon-danx{
 				border-radius: 100%;
 			}
-
 			&-content{
 				display: flex;
 				position: relative;
@@ -233,6 +244,13 @@ xm-select{
 				color: @fontColor;
 				width: calc(100% - 20px);
 			}
+
+            &.hide-icon .xm-option-content{
+                padding-left: 0;
+            }
+            &.selected.hide-icon .xm-option-content{
+                color: #FFF !important;
+            }
 		}
 
 		.xm-select-empty{
@@ -391,9 +409,9 @@ xm-select{
 
 }
 
-// xm-select[ua='win']{
-// 	.xm-option-icon{
-// 		margin-top: 0px;
-// 		margin-bottom: -2px;
-// 	}
-// }
+//layui的一些样式兼容
+.layui-form-pane{
+    xm-select{
+        margin: -1px -1px -1px 0;
+    }
+}

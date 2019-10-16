@@ -40,7 +40,6 @@ class Framework extends Component{
 	value(sels, show){
 		let data = this.state.data;
 		let value = this.props.prop.value;
-		let direction = this.props.direction;
 
         let list = [];
         filterGroupOption(list, data, this.props.prop);
@@ -48,9 +47,6 @@ class Framework extends Component{
 			sels: sels.map(sel => typeof sel === 'object' ? sel[value] : sel).map(val => list.find(item => item[value] == val)).filter(a => a),
 			//下拉框是否展开
 			show,
-			//下拉方向
-			direction,
-			directionVal: '',
 		})
 	}
 
@@ -79,28 +75,6 @@ class Framework extends Component{
 			//事件互斥原则, 打开一个多选, 关闭其他所有多选
 			this.props.onClose(this.props.el);
 
-			let direction = this.state.direction;
-			if(direction === 'auto'){
-
-				//用于控制js获取下拉框的高度
-				this.bodyView.style.display = 'block';
-				this.bodyView.style.visibility = 'hidden';
-
-				//获取下拉元素的高度
-				let bodyViewRect = this.bodyView.getBoundingClientRect();
-				let bodyViewHeight = bodyViewRect.height;
-
-				//还原控制效果
-				this.bodyView.style.display = '';
-				this.bodyView.style.visibility = '';
-
-				//确定下拉框是朝上还是朝下
-				let clientHeight = document.documentElement.clientHeight;
-				let rect = this.base.getBoundingClientRect();
-				let diff = clientHeight - (rect.y || rect.top) - rect.height - 20;
-				direction = diff > bodyViewHeight || (rect.y || rect.top) < diff ? 'down' : 'up';
-			}
-			this.setState({ directionVal: direction })
 		}else{
 			if(this.props.hide && this.props.hide() == false){
 				return;
@@ -118,6 +92,37 @@ class Framework extends Component{
 	componentWillReceiveProps(props){
         this.reset(props)
 	}
+
+    componentDidUpdate(){
+        let direction = this.props.direction;
+        let rect = this.base.getBoundingClientRect();
+        if(direction === 'auto'){
+        	//用于控制js获取下拉框的高度
+        	this.bodyView.style.display = 'block';
+        	this.bodyView.style.visibility = 'hidden';
+
+            //获取下拉元素的高度
+            let bodyViewRect = this.bodyView.getBoundingClientRect();
+            let bodyViewHeight = bodyViewRect.height;
+
+        	//还原控制效果
+        	this.bodyView.style.display = '';
+        	this.bodyView.style.visibility = '';
+
+        	//确定下拉框是朝上还是朝下
+        	let clientHeight = document.documentElement.clientHeight;
+        	let diff = clientHeight - (rect.y || rect.top) - rect.height - 20;
+        	direction = diff > bodyViewHeight || (rect.y || rect.top) < diff ? 'down' : 'up';
+        }
+
+        if(direction == 'down'){
+            this.bodyView.style.top = rect.height + 4 + 'px';
+            this.bodyView.style.bottom = 'auto';
+        }else{
+            this.bodyView.style.top = 'auto';
+            this.bodyView.style.bottom = rect.height + 4 + 'px';
+        }
+    }
 
 	render(config, { sels, show }) {
 		const { tips, theme, prop, style, radio, repeat, clickClose, on, max, maxMethod } = config;
@@ -187,7 +192,7 @@ class Framework extends Component{
 		const labelProps = {  ...config, data: this.state.data, sels, ck, title: sels.map(sel => sel[prop.name]).join(',') }
 		const bodyProps = {  ...config, data: this.state.data, sels, ck, show, onReset: this.onReset.bind(this) }
 		//控制下拉框的显示于隐藏
-		const bodyClass = ['xm-body', this.state.directionVal, show ? '' : 'dis'].join(' ');
+		const bodyClass = ['xm-body', show ? '' : 'dis'].join(' ');
 
 		return (
 			<xm-select { ...xmSelectProps } >

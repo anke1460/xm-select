@@ -40,6 +40,8 @@ export default function (lan = 'zn') {
 		style: {},
 		//默认多选的高度
 		height: '200px',
+        //已选中数据是否自动换行显示
+        autoRow: false,
 		//是否开启分页
 		paging: false,
 		//分页每页的条数
@@ -94,6 +96,7 @@ export default function (lan = 'zn') {
 					}
 				},
 			},
+            icon: 'show',
 		},
 
 		// 展开下拉框

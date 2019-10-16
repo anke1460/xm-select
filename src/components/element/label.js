@@ -41,8 +41,8 @@ class Label extends Component{
         this.labelRef.onmousewheel = this.scrollFunc.bind(this);
     }
 
-	render({ data, prop, theme, model, sels }) {
-		//获取变换属性
+	render(config) {
+		const { data, prop, theme, model, sels, autoRow } = config;
 		const { name, disabled } = prop;
 
 		//获取配置项
@@ -92,9 +92,9 @@ class Label extends Component{
 			}
 		}
 
-
+        const className = ['xm-label', autoRow ? 'auto-row' : 'single-row'].join(' ');
 		return (
-			<div class="xm-label">
+			<div class={ className }>
 				<div class="scroll" ref={ ref => this.labelRef = ref }>
 					{ innerHTML ?
                         <div class="label-content" dangerouslySetInnerHTML={{__html: html}}></div> :

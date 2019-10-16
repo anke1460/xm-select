@@ -67,6 +67,8 @@ export default [{
             { path: '/example/XM19', name: 'Toolbar 工具条', component: importMd('/XM19') },
             { path: '/example/XM20', name: 'ShowCount 选项数量', component: importMd('/XM20') },
             { path: '/example/XM21', name: 'Optgroup 分组', component: importMd('/XM21') },
+            { path: '/example/XM22', name: 'AutoRow 自动换行', component: importMd('/XM22') },
+            { path: '/example/XM23', name: 'HiddenIcon 隐藏图标', component: importMd('/XM23') },
         ]
 	}, {
 		path: '/example-custom',

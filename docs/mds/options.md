@@ -37,6 +37,7 @@
 | name              | 表单提交时的name  |  string  |   -  |    select    |
 | toolbar           | 工具条, 具体看下表  |  object  |   -  |    -    |
 | showCount         | 展示在下拉框中的最多选项数量  |  int  |   -  |    0    |
+| autoRow           | 是否开启自动换行(选项过多时)  |  boolean  |   -  |    false    |
 
 
 ### prop
@@ -65,6 +66,8 @@
 
 ```
 model: {
+    //是否展示复选框或者单选框图标 show, hidden:变换背景色
+    icon: 'show',
     label: {
         //使用方式
         type: 'block',

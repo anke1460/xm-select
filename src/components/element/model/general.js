@@ -269,6 +269,7 @@ class General extends Component{
             </div>
         )
 
+        const showIcon = config.model.icon != 'hidden';
         const renderItem = item => {
             const selected = !!sels.find(sel => sel[value] == item[value])
             const iconStyle = selected ? {
@@ -278,12 +279,17 @@ class General extends Component{
             } : {
             	borderColor: theme.color,
             };
-            const className = ['xm-option', (item[disabled] ? ' disabled' : ''), (selected ? ' selected' : '')].join(' ');
+            const itemStyle = {}
+            if(!showIcon && selected){
+                itemStyle.backgroundColor = theme.color;
+                item[disabled] && (itemStyle.backgroundColor = '#C2C2C2');
+            }
+            const className = ['xm-option', (item[disabled] ? ' disabled' : ''), (selected ? ' selected' : ''), (showIcon ? 'show-icon' : 'hide-icon') ].join(' ');
             const iconClass = ['xm-option-icon xm-iconfont', radio ? 'xm-icon-danx' : 'xm-icon-duox'].join(' ');
 
             return (
-            	<div class={ className } value={ item[value] } onClick={ this.optionClick.bind(this, item, selected, item[disabled]) }>
-            		<i class={ iconClass } style={ iconStyle }></i>
+            	<div class={ className } style={ itemStyle } value={ item[value] } onClick={ this.optionClick.bind(this, item, selected, item[disabled]) }>
+            		{ showIcon && <i class={ iconClass } style={ iconStyle }></i> }
             		<div class='xm-option-content' dangerouslySetInnerHTML={{ __html: template({ data, item, arr: sels, name: item[name], value: item[value] }) }}></div>
             	</div>
             )

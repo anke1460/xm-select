@@ -14,6 +14,10 @@ var demo1 = xmSelect.render({
         show: true
     },
     height: '500px',
+    model: {
+        icon: 'hidden',
+    },
+    autoRow: true,
     data: [
         {name: '城市', optgroup: true},
         {name: '北京13', value: 1},
