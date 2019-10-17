@@ -176,7 +176,7 @@ class Framework extends Component{
 
 	render(config, { sels, show }) {
 		const { tips, theme, prop, style, radio, repeat, clickClose, on, max, maxMethod } = config;
-		const borderStyle = { borderColor: this.state.tmpColor || theme.color };
+		const borderStyle = { borderColor: theme.color };
 		//最外层边框的属性
 		const xmSelectProps = {
 			style: {
@@ -185,7 +185,16 @@ class Framework extends Component{
 			},
 			onClick: this.onClick.bind(this),
 			ua: checkUserAgent(),
+            size: config.size,
 		}
+        if(this.state.tmpColor){
+            xmSelectProps.style.borderColor = this.state.tmpColor;
+            setTimeout(() => {
+                xmSelectProps.style.borderColor = '';
+                this.updateBorderColor('')
+            }, 300);
+        }
+        
 		//右边下拉箭头的变化class
 		const iconClass = show ? 'xm-icon xm-icon-expand' : 'xm-icon';
 		//提示信息的属性
@@ -214,8 +223,6 @@ class Framework extends Component{
                 let maxCount = toNum(max);
                 if(maxCount > 0 && sels.length >= maxCount){
                     this.updateBorderColor(theme.maxColor);
-                    //恢复正常
-                    setTimeout(() => this.updateBorderColor(''), 300);
                     //查看是否需要回调
                     maxMethod && isFunction(maxMethod) && maxMethod(sels, item);
                     return ;

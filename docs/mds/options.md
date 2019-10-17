@@ -15,7 +15,7 @@
 | searchTips        | 搜索提示 | string           |    -    |    请选择    |
 | delay             | 搜索延迟 ms | int           |    -    |    500    |
 | filterMethod      | 搜索回调函数 | function(val, item, index, prop)  val: 当前搜索值, item: 每个option选项, index: 位置数据中的下标, prop: 定义key           |    -    |    -    |
-| filterDone        | 搜索完成函数 | function(val)  val: 当前搜索值           |    -    |    -    |
+| filterDone        | 搜索完成函数 | function(val, list)  val: 当前搜索值, list: 过滤后的数据           |    -    |    -    |
 | remoteSearch      | 是否开启自定义搜索 (远程搜索)| boolean           |    true / false   |    false    |
 | remoteMethod      | 自定义搜索回调函数 | function(val, cb, show)  val: 当前搜索值, cb: 回调函数, 需要回调一个数组, 结构同data, show: 下拉框显示状态         |    -    |    -    |
 | direction         | 下拉方向| string           |    auto / up / down   |    auto    |
@@ -39,6 +39,7 @@
 | toolbar           | 工具条, 具体看下表  |  object  |   -  |    -    |
 | showCount         | 展示在下拉框中的最多选项数量  |  int  |   -  |    0    |
 | autoRow           | 是否开启自动换行(选项过多时)  |  boolean  |   -  |    false    |
+| size              | 尺寸  |  string  |  large / medium / small / mini  |    medium    |
 
 
 ### prop
@@ -177,3 +178,4 @@ xmSelect.render()后会返回一个xmSelect对象, 可以进行方法调用
 | closed  | 主动关闭下拉 | - |
 | reset  | 重置为上一次的render状态 | - |
 | update  | 更新多选选中, reset不保留 | (options: 见配置项) |
+| warning  | 警告 | (color: 默认同theme.maxColor) |

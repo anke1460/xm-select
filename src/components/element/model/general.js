@@ -81,11 +81,10 @@ class General extends Component{
             this.__value = v;
 
             //让搜索变成异步的
-            this.searchCid = setTimeout(() => this.setState({
-                filterValue: this.__value,
-                remote: true,
-                callback: true,
-            }), this.props.delay);
+            this.searchCid = setTimeout(() => {
+                this.callback = true;
+                this.setState({ filterValue: this.__value, remote: true })
+            }, this.props.delay);
         }
 	}
 
@@ -124,12 +123,12 @@ class General extends Component{
 	}
 
     componentDidUpdate(){
-        if(this.state.callback){
-            this.setState({ callback: false });
-            
+        if(this.callback){
+            this.callback = false;
+
             let done = this.props.filterDone;
             if(isFunction(done)){
-                done(this.state.filterValue);
+                done(this.state.filterValue, this.tempData || []);
             }
         }
     }
@@ -145,6 +144,7 @@ class General extends Component{
 		if(filterable){
 			if(remoteSearch){//是否进行远程搜索
 				if(this.state.remote){
+                    this.callback = false;
 					this.setState({ loading: true, remote: false });
 					//让输入框失去焦点
 					this.blur();
@@ -152,6 +152,7 @@ class General extends Component{
 						//回调后可以重新聚焦
 						this.focus();
 
+                        this.callback = true;
 						this.setState({ loading: false });
 						this.props.onReset(result, 'data');
 					}, this.props.show);
@@ -260,6 +261,7 @@ class General extends Component{
         }
 
         let safetyArr = deepMerge([], arr);
+        this.tempData = safetyArr;
 
         //工具条操作
         const toolbar = (
@@ -302,8 +304,7 @@ class General extends Component{
             const selected = !!sels.find(sel => sel[value] == item[value])
             const iconStyle = selected ? {
             	color: theme.color,
-            	border: 'none',
-            	fontSize: '18px'
+            	border: 'none'
             } : {
             	borderColor: theme.color,
             };

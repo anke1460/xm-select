@@ -69,6 +69,8 @@ export default [{
             { path: '/example/XM21', name: 'Optgroup 分组', component: importMd('/XM21') },
             { path: '/example/XM22', name: 'AutoRow 自动换行', component: importMd('/XM22') },
             { path: '/example/XM23', name: 'HiddenIcon 隐藏图标', component: importMd('/XM23') },
+            { path: '/example/XM24', name: 'Size 尺寸', component: importMd('/XM24') },
+            { path: '/example/XM25', name: 'Warning 警告', component: importMd('/XM25') },
         ]
 	}, {
 		path: '/example-custom',

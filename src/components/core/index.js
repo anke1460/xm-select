@@ -146,6 +146,14 @@ class xmOptions {
         childs[this.options.el].del(sels);
         return this;
     }
+    
+    /**
+     * 闪烁警告边框
+     */
+    warning(color){
+        childs[this.options.el].updateBorderColor(color || this.options.theme.maxColor);
+        return this;
+    }
 
 }
 

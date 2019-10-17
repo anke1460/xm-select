@@ -11,6 +11,8 @@ export default function (lan = 'zn') {
 		data: [],
         //表单提交的name
         name: 'select',
+        //尺寸
+        size: 'medium',
 		//默认选中数据, 优先级大于selected
 		initValue: null,
 		//默认提示

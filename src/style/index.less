@@ -2,8 +2,6 @@
 @defaultBorderColor: #E6E6E6;
 @disabledColor: #C2C2C2;
 @border: 1px solid @defaultBorderColor;
-@height: 36px;
-@heightLabel: 30px;
 
 @-webkit-keyframes xm-upbit {
 	from {-webkit-transform: translate3d(0, 30px, 0);opacity: .3}
@@ -54,8 +52,6 @@ xm-select{
 	position: relative;
 	border: @border;
 	border-radius: 2px;
-	min-height: @height;
-    line-height: @height;
 	display: block;
 	width: 100%;
 	cursor: pointer;
@@ -117,7 +113,6 @@ xm-select{
 		.scroll{
 			.label-content{
 				display: flex;
-                line-height: @heightLabel;
                 padding: 3px 30px 3px 10px;
 			}
 		}
@@ -127,8 +122,6 @@ xm-select{
 			position: relative;
 			padding: 0px 5px;
 			margin: 2px 5px 2px 0;
-			height: 26px;
-			line-height: 26px;
 			border-radius: 3px;
 			align-items: baseline;
 			color: #FFF;
@@ -196,8 +189,10 @@ xm-select{
 		}
 
         .xm-group{
+            cursor: default;
             &-item{
-                cursor: default;
+                display: inline-block;
+                cursor: pointer;
                 padding: 0 10px;
                 color: #999;
                 font-size: 12px;
@@ -219,8 +214,6 @@ xm-select{
 				display: flex;
 				border: @border;
 				border-radius: 3px;
-				height: 18px;
-				width: 18px;
 				justify-content: center;
 				align-items: center;
 			}
@@ -306,8 +299,6 @@ xm-select{
 				justify-content: center;
 				vertical-align: middle;
 				padding: 0 15px;
-				height: 28px;
-				line-height: 28px;
 				margin: 0 -1px 0 0;
 				background-color: #fff;
 				color: #333;
@@ -358,7 +349,6 @@ xm-select{
 		width: 100%;
 		box-sizing: border-box;
 		background-color: #FFF;
-		height: 36px;
 		line-height: 1.3;
 		padding-left: 10px;
 		outline: 0;
@@ -401,6 +391,51 @@ xm-select{
     }
 
 }
+
+//不同尺寸下的数据调整
+.mixin(@size){
+    @height: @size;
+    @heightLabel: @height - 6px;
+    @heightItem: @heightLabel - 4px;
+    @iconSize: @size / 2;
+
+    min-height: @height;
+    line-height: @height;
+    .xm-input{
+        height: @height;
+    }
+    .xm-label{
+        .scroll .label-content{
+            line-height: @heightLabel;
+        }
+        .xm-label-block{
+            height: @heightItem;
+            line-height: @heightItem;
+        }
+    }
+    .xm-body .xm-option .xm-option-icon{
+        height: @iconSize;
+        width: @iconSize;
+        font-size: @iconSize;
+    }
+    .xm-paging>span{
+        height: @heightLabel;
+        line-height: @heightLabel;
+    }
+}
+xm-select[size='large']{
+    .mixin(40px)
+}
+xm-select{//[size='medium']
+    .mixin(36px)
+}
+xm-select[size='small']{
+    .mixin(32px)
+}
+xm-select[size='mini']{
+    .mixin(28px)
+}
+
 
 //layui的一些样式兼容
 .layui-form-pane{
