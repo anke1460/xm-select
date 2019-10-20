@@ -60,11 +60,13 @@ xm-select{
 		border-color: #C0C4CC;
 	}
 
-
 	& > .xm-tips{
 		color: #999999;
 		padding: 0 10px;
-		position: absolute;
+        position: absolute;
+		display: flex;
+        height: 100%;
+        align-items: center;
 	}
 
 	& > .xm-icon{
@@ -335,6 +337,15 @@ xm-select{
                 &:last-child{
                     margin-right: 0;
                 }
+            }
+        }
+
+        .xm-body-custom{
+            line-height: initial;
+            cursor: default;
+
+            *{
+                box-sizing: initial;
             }
         }
 	}

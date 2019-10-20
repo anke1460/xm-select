@@ -1,5 +1,5 @@
 import { h, Component, render } from '@/components/preact'
-import { isFunction, isArray, safety, deepMerge, mergeArr, IEVersion, filterGroupOption, addGroupLabel } from '@/components/common/util'
+import { isFunction, isArray, safety, deepMerge, mergeArr, IEVersion } from '@/components/common/util'
 
 /**
  * 普通的多选渲染
@@ -29,13 +29,15 @@ class General extends Component{
 	}
 
     groupClick(item, e){
-        let m = item[this.props.prop.click];
+        const { click, children, disabled } = this.props.prop;
+        let m = item[click], arr = item[children].filter(opt => !opt[disabled]);
+
         if(m === 'SELECT'){
-            this.props.onReset(item.__value, 'append');
+            this.props.onReset(arr, 'append');
         }else if(m === 'CLEAR'){
-            this.props.onReset(item.__value, 'delete');
+            this.props.onReset(arr, 'delete');
         }else if(m === 'AUTO'){
-            this.props.onReset(item.__value, 'auto');
+            this.props.onReset(arr, 'auto');
         }else if(isFunction(m)){
             m(item);
         }
@@ -161,12 +163,8 @@ class General extends Component{
                 const filterData = (item, index) => {
                     const isGroup = item[optgroup];
                     if(isGroup){
+                        delete item.__del;
                         return true;
-                    }
-                    const child = item[children];
-                    if(isArray(child) && child.length > 0){//分组模式
-                        item[children] = child.filter(filterData);
-                        return item[children].length != 0;
                     }
                     return filterMethod(this.state.filterValue, item, index, prop);
                 }
@@ -175,7 +173,7 @@ class General extends Component{
                 for(let i = 0; i < arr.length - 1; i++){
                     let a = arr[i];
                     let b = arr[i + 1];
-                    if(a[optgroup] && (b[optgroup] || isArray(b[children]))){
+                    if(a[optgroup] && b[optgroup]){
                         arr[i].__del = true;
                     }
                 }
@@ -200,11 +198,15 @@ class General extends Component{
 			</div>
 		);
 
+        //如果是分组模式, 要分页先去除分组, 然后在计算分页, 最后再加上分组
+        let groups = [], groupInfo = {};
+        groups = arr.filter(item => item[optgroup]).forEach(g => {
+            g[children].forEach(item => groupInfo[item[value]] = g);
+        });
+        arr = arr.filter(item => !item[optgroup]);
 
 		let paging = '';
-
 		if(config.paging){
-
 			//计算当前分页的总页码
 			const size = Math.floor((arr.length - 1) / config.pageSize) + 1;
 
@@ -260,6 +262,17 @@ class General extends Component{
             }
         }
 
+        let newArr = [], group;
+        arr.forEach(item => {
+            let g = groupInfo[item[value]];
+            if(g != group){
+                group = g;
+                newArr.push(group);
+            }
+            newArr.push(item);
+        });
+        arr = newArr;
+
         let safetyArr = deepMerge([], arr);
         this.tempData = safetyArr;
 
@@ -272,9 +285,9 @@ class General extends Component{
                     let info;
                     if(tool === 'ALL'){
                         info = { icon: 'xm-iconfont xm-icon-quanxuan', name: '全选', method: (pageData) => {
-                            const list = [];
-                            filterGroupOption(list, pageData, prop);
-                            this.props.onReset(mergeArr(list.filter(item => !item[prop.disabled]), sels, prop), 'sels');
+                            const { optgroup, disabled } = prop;
+                            const list = pageData.filter(item => !item[optgroup]).filter(item => !item[disabled])
+                            this.props.onReset(mergeArr(list, sels, prop), 'sels');
                         } };
                     }else if(tool === 'CLEAR'){
                         info = { icon: 'xm-iconfont xm-icon-qingkong', name: '清空', method: (pageData) => {
@@ -333,18 +346,10 @@ class General extends Component{
                     </div>
                 )
             }
-            const child = item[children];
-            if(isArray(child) && child.length > 0){//分组模式
-                return (
-                    <div class="xm-group">
-                        <div class="xm-group-item" onClick={ this.groupClick.bind(this, item) }>{ item[name] }</div>
-                        { child.map(renderItem) }
-                    </div>
-                )
-            }
             return renderItem(item);
         }
-		arr = addGroupLabel(arr, prop).map(renderGroup);
+
+		arr = arr.map(renderGroup);
 
 		if(!arr.length){
 			arr.push(

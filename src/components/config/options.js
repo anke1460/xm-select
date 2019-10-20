@@ -9,6 +9,8 @@ export default function (lan = 'zn') {
 	return {
 		//多选数据
 		data: [],
+        //自定义数据
+        content: '',
         //表单提交的name
         name: 'select',
         //尺寸

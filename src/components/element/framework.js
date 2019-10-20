@@ -1,10 +1,11 @@
 import { h, Component, render } from '@/components/preact'
-import { checkUserAgent, isFunction, toNum, filterGroupOption, findSelected, mergeArr } from '@/components/common/util'
+import { checkUserAgent, isFunction, toNum, mergeArr } from '@/components/common/util'
 
 //渲染类
 import Tips from './tips';
 import Label from './label';
 import General from './model/general';
+import Custom from './model/custom';
 
 /**
  * 框架渲染类, 渲染基础的外边框 + 属性变化监听
@@ -28,14 +29,13 @@ class Framework extends Component{
 	}
 
     findValue(data){
-        let list = [];
-        findSelected(list, data, this.props.prop);
-        return list;
+        const { selected } = this.props.prop;
+        return data.filter(item => item[selected] === true);
     }
 
-    resetSelectValue(sels = [], change = [], isAdd){
+    resetSelectValue(sels = [], change = [], isAdd, listenOn = true){
         let on = this.props.on;
-        if(isFunction(on)){
+        if(isFunction(on) && this.prepare && listenOn){
             on({ arr: sels, change, isAdd });
         }
         this.setState({ sels });
@@ -45,20 +45,19 @@ class Framework extends Component{
 		this.setState({ data });
 	}
 
-	value(sels, show){
+	value(sels, show, listenOn){
         if(show !== false && show !== true){
             show = this.state.show;
         }
         let changeData = this.exchangeValue(sels);
-        this.resetSelectValue(changeData, changeData, true);
+        this.resetSelectValue(changeData, changeData, true, listenOn);
 		this.setState({ show })
 	}
 
     exchangeValue(sels){
+        const { optgroup, value } = this.props.prop;
         let data = this.state.data;
-        let value = this.props.prop.value;
-        let list = [];
-        filterGroupOption(list, data, this.props.prop);
+        let list = data.filter(item => !item[optgroup]);
         return sels.map(sel => typeof sel === 'object' ? sel[value] : sel).map(val => list.find(item => item[value] == val)).filter(a => a);
     }
 
@@ -82,7 +81,7 @@ class Framework extends Component{
 
     auto(arr){
         let value = this.props.prop.value;
-        let sels = arr.filter(v => this.state.sels.findIndex(item => item[value] === v) != -1);
+        let sels = arr.filter(v => this.state.sels.findIndex(item => item[value] === v[value]) != -1);
         sels.length == arr.length ? this.del(arr) : this.append(arr);
     }
 
@@ -174,6 +173,10 @@ class Framework extends Component{
         }
     }
 
+    componentDidMount(){
+        this.prepare = true;
+    }
+
 	render(config, { sels, show }) {
 		const { tips, theme, prop, style, radio, repeat, clickClose, on, max, maxMethod } = config;
 		const borderStyle = { borderColor: theme.color };
@@ -194,7 +197,7 @@ class Framework extends Component{
                 this.updateBorderColor('')
             }, 300);
         }
-        
+
 		//右边下拉箭头的变化class
 		const iconClass = show ? 'xm-icon xm-icon-expand' : 'xm-icon';
 		//提示信息的属性
@@ -256,7 +259,11 @@ class Framework extends Component{
 				<Tips { ...tipsProps } />
 				<Label { ...labelProps } />
 				<div class={ bodyClass } ref={ ref => this.bodyView = ref}>
-					<General { ...bodyProps } />
+					{ config.content ? (
+                        <Custom content={ config.content } />
+                    ) : (
+                        <General { ...bodyProps } />
+                    ) }
 				</div>
 			</xm-select>
 		);

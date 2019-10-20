@@ -8,6 +8,7 @@
 | el                | 渲染对象, css选择器      | string          |    -    |    -      |
 | language          | 语言选择              | string           |    zn / en    |    zn    |
 | data              | 显示的数据              | array           |    -    |    [ ]    |
+| content           | 自定义下拉框html              | string           |    -    |    -    |
 | initValue         | 初始化选中的数据, 需要在data中存在 | array           |    -    |    null    |
 | tips              | 默认提示, 类似于placeholder | string           |    -    |    请选择    |
 | empty             | 空数据提示 | string           |    -    |    暂无数据    |
@@ -38,7 +39,7 @@
 | name              | 表单提交时的name  |  string  |   -  |    select    |
 | toolbar           | 工具条, 具体看下表  |  object  |   -  |    -    |
 | showCount         | 展示在下拉框中的最多选项数量  |  int  |   -  |    0    |
-| autoRow           | 是否开启自动换行(选项过多时)  |  boolean  |   -  |    false    |
+| autoRow           | 是否开启自动换行(选项过多时)  |  boolean  |   true / false  |    false    |
 | size              | 尺寸  |  string  |  large / medium / small / mini  |    medium    |
 
 
@@ -171,7 +172,7 @@ xmSelect.render()后会返回一个xmSelect对象, 可以进行方法调用
 | 事件名 | 说明               | 参数 |
 | ------ | ------------------ | -------- |
 | getValue  | 获取当前选中的数据 | (type: 类型), 可选值: name, nameStr, value, valueStr |
-| setValue  | 动态设置数据 | (array: 选中的数据, show: 是否展开下拉, 不传默认当前显示状态, 取值: true/false) |
+| setValue  | 动态设置数据 | (array: 选中的数据, show: 是否展开下拉,不传默认当前显示状态,取值: true/false, listenOn: 是否触发on的监听, 默认false) |
 | append  | 追加赋值 | (array: 追加的数据) |
 | delete  | 删除赋值 | (array: 删除的数据) |
 | opened  | 主动展开下拉 | - |

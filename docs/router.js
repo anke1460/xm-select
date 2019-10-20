@@ -1,4 +1,5 @@
 import Component from './components/component.vue';
+import { version } from '../package.json'
 
 function importVue(path) {
 	return r => require.ensure([], () => r(require(`./pages${path}.vue`)));
@@ -20,7 +21,7 @@ export default [{
 		redirect: '/component',
 	}, {
 		path: '/changelog',
-		name: '更新日志',
+		name: '更新日志 v' + version,
 		component: importVue('/changelog'),
 	}, {
 		path: '/add',
@@ -84,12 +85,25 @@ export default [{
             { path: '/example-custom/ZM04', name: '远程搜索', component: importMd('/ZM04') },
             { path: '/example-custom/ZM05', name: '动态数据', component: importMd('/ZM05') },
             { path: '/example-custom/ZM06', name: '弹框中的多选', component: importMd('/ZM06') },
-            // { path: '/example-custom/ZTEST', name: '测试', component: importMd('/ZTEST') },
+        ]
+	}, {
+		path: '/example-plugin',
+		name: '拓展中心',
+		redirect: '/example-plugin/ZP01',
+		component: Component,
+		children: [
+            { path: '/example-plugin/ZP01', name: '下拉自定义', component: importMd('/ZP01') },
+            { path: '/example-plugin/ZP02', name: '下拉树', component: importMd('/ZP02') },
         ]
 	}, {
 		path: '/question',
 		name: '常见问题',
 		component: importMd('/question'),
-	},
+	}, {
+        path: '/test',
+        name: '测试',
+        hidden: true,
+        component: importMd('/ZTEST'),
+    },
 
 ];

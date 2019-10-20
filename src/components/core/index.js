@@ -1,6 +1,6 @@
 import { h, Component, render } from '@/components/preact'
 import Framework from '@/components/element/framework'
-import { selector, warn, listenerClose, watch, safety, isArray, deepMerge } from '@/components/common/util'
+import { selector, warn, listenerClose, isArray, deepMerge, exchangeOptionsData } from '@/components/common/util'
 import defaultOptions from '@/components/config/options'
 
 
@@ -46,6 +46,18 @@ class xmOptions {
 			warn(`没有找到渲染对象: ${options.el}, 请检查`)
 			return ;
 		}
+        //判断data的数据类型
+        let optionsData = this.options.data || [];
+        if(typeof(optionsData) === 'function'){
+            optionsData = optionsData();
+            this.options.data = optionsData;
+        }
+        if(!isArray(optionsData)){
+            warn(`data数据必须为数组类型, 不能是${ typeof(data) }类型`)
+            return ;
+        }
+        //调整数据结构
+        this.options.data = exchangeOptionsData(optionsData, this.options);
 
 		const onRef = (ref) => childs[this.options.el] = ref;
 
@@ -93,7 +105,7 @@ class xmOptions {
 	 * 获取多选选中的数据
 	 */
 	getValue(type){
-		let arr = safety(childs[this.options.el].state.sels);
+		let arr = deepMerge([], childs[this.options.el].state.sels);
 
         if(type === 'name'){
             return arr.map(item => item[this.options.prop.name]);
@@ -114,12 +126,12 @@ class xmOptions {
 	/**
 	 * 设置多选数据
 	 */
-	setValue(sels, show){
+	setValue(sels, show, listenOn = false){
 		if(!isArray(sels)){
 			warn('请传入数组结构...')
 			return ;
 		}
-		childs[this.options.el].value(sels, show);
+		childs[this.options.el].value(sels, show, listenOn);
 		return this;
 	}
 
@@ -134,7 +146,7 @@ class xmOptions {
         childs[this.options.el].append(sels);
         return this;
     }
-    
+
     /**
      * 删除赋值
      */
@@ -146,7 +158,7 @@ class xmOptions {
         childs[this.options.el].del(sels);
         return this;
     }
-    
+
     /**
      * 闪烁警告边框
      */

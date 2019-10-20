@@ -146,50 +146,27 @@ export function IEVersion() {
     }
 }
 
-export function filterGroupOption(arr, data, prop){
-    const { children, optgroup } = prop;
-    data.filter(item => !item[optgroup]).forEach(item => {
-        let child = item[children];
-        if(isArray(child)){
-            filterGroupOption(arr, child, children, optgroup);
-        }else{
-            arr.push(item);
-        }
-    });
-}
-
-export function findSelected(arr, data, prop){
-    const { selected, children, optgroup } = prop;
-    data.filter(item => !item[optgroup]).forEach(item => {
-        let child = item[children];
-        if(isArray(child)){
-            findSelected(arr, child, prop);
-        }else{
-            item[selected] && (arr.push(item));
-        }
-    });
-}
-
-export function addGroupLabel(arr, prop){
-    const { disabled, children, optgroup, value } = prop;
-    let group;
-    for(let i = 0; i < arr.length; i++){
-        let item = arr[i];
-        if(item[optgroup]){
-            group = item;
-            group.__value = [];
-            continue;
-        }
-        let child = item[children];
-        if(child && child.length > 0){
-            group = null;
-            item.__value = child.filter(c => !c[disabled]).map(c => c[value]);
-            continue;
-        }
-        if(!group || item[disabled]){
-            continue;
-        }
-        group.__value.push(item[value]);
-    }
-    return arr;
+export function exchangeOptionsData(arr, { prop }){
+	let { disabled, children, optgroup, value } = prop;
+	let newArr = [], group;
+	for(let i = 0; i < arr.length; i++){
+	    let item = arr[i];
+		newArr.push(item);
+	    if(item[optgroup]){
+			group = item;
+			item[children] = [];
+	        continue;
+	    }
+	    let child = item[children];
+	    if(isArray(child)){
+	        group = null;
+			item[optgroup] = true;
+            child.forEach(c => newArr.push(c));
+	        continue;
+	    }
+		if(group){
+			group[children].push(item);
+		}
+	}
+	return newArr;
 }
