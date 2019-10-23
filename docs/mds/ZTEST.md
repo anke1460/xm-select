@@ -10,8 +10,15 @@
 //先渲染多选
 var demo1 = xmSelect.render({
     el: '#demo1', 
-    paging: true,
-    pageSize: 2,
+    autoRow: true,
+    filterable: true,
+    create: val => {
+        console.log(val)
+        return {
+            name: val,
+            value: val,
+        }
+    },
     data(){
         return [
             {name: '销售员', children: [

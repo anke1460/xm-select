@@ -15,8 +15,12 @@ export default function (lan = 'zn') {
         name: 'select',
         //尺寸
         size: 'medium',
+        //是否禁用多选
+        disabled: false,
 		//默认选中数据, 优先级大于selected
 		initValue: null,
+        //创建条目
+        create: null,
 		//默认提示
 		tips: setting.tips,
 		//空数据提示

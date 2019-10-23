@@ -24,8 +24,9 @@ class Framework extends Component{
 	reset(props){
         //用于多选上限的边框颜色变化
         this.updateBorderColor('');
+        let old = this.state.data;
 		this.resetDate(props.data);
-		this.value(props.initValue ? props.initValue : this.findValue(this.state.data), !!this.state.show);
+		JSON.stringify(props.data) !== JSON.stringify(old) && this.value(props.initValue ? props.initValue : this.findValue(this.state.data), !!this.state.show);
 	}
 
     findValue(data){
@@ -115,6 +116,11 @@ class Framework extends Component{
 	}
 
 	onClick(e){
+        if(this.props.disabled){
+            this.state.show !== false && this.setState({ show: false });
+            return ;
+        }
+
 		let show = !this.state.show;
 
 		if(show){
@@ -197,6 +203,9 @@ class Framework extends Component{
                 this.updateBorderColor('')
             }, 300);
         }
+        if(config.disabled){
+            show = false;
+        }
 
 		//右边下拉箭头的变化class
 		const iconClass = show ? 'xm-icon xm-icon-expand' : 'xm-icon';
@@ -265,6 +274,7 @@ class Framework extends Component{
                         <General { ...bodyProps } />
                     ) }
 				</div>
+                { config.disabled && <div class="xm-select-disabled"></div> }
 			</xm-select>
 		);
 	}

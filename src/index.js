@@ -3,14 +3,46 @@ import '@/components/common/expand'
 import Core from '@/components/core'
 import '@/style/index.less'
 import '@/style/iconfont.less'
+import { selector, warn } from '@/components/common/util'
 
-
+const object = {}
 const xmSelect = {
 	name,
 	version,
 	render(options) {
-		return new Core(options);
-	}
+		let instance = new Core(options);
+        if(instance){
+            let { el } = options;
+            let select = object[el];
+            select !== undefined && (delete object[el]);
+            object[el] = instance;
+        }
+        return instance;
+	},
+    get(filter){
+        let type = Object.prototype.toString.call(filter);
+        let method;
+        switch (type){
+            case '[object String]':
+                filter && (method = item => item === filter);
+                break;
+            case '[object RegExp]':
+                method = item => filter.test(item);
+                break;
+            case '[object Function]':
+                method = filter;
+                break;
+            default:
+                break;
+        }
+        let keys = Object.keys(object)
+        return (method ? keys.filter(method) : keys).map(key => object[key]).filter(instance => selector(instance.options.el));
+    },
+    batch(filter, method){
+        let args = [ ...arguments ];
+        args.splice(0, 2);
+        return this.get(filter).map(instance => instance[method](...args));
+    }
 }
 
 

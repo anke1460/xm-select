@@ -162,10 +162,17 @@ class xmOptions {
     /**
      * 闪烁警告边框
      */
-    warning(color){
-        childs[this.options.el].updateBorderColor(color || this.options.theme.maxColor);
+    warning(color, sustain = false){
+        let showColor = color || this.options.theme.maxColor;
+
+        sustain === true ? (
+            childs[this.options.el].base.style.borderColor = showColor
+        ) : (
+            childs[this.options.el].updateBorderColor(showColor)
+        )
         return this;
     }
+
 
 }
 

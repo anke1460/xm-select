@@ -14,11 +14,11 @@ class Custom extends Component{
     }
 
     shouldComponentUpdate(){
-        return !this.already;
+        return !this.prepare;
     }
 
 	render(config) {
-        this.already = true;
+        this.prepare = true;
 		return (
 			<div onClick={ this.blockClick } class="xm-body-custom" dangerouslySetInnerHTML={{ __html: config.content }}>
 

@@ -27,3 +27,34 @@
 ### 4.占位标签为什么是div
 
 演示中使用的是div, 不限制标签, 但是不建议使用`select`, 因为`layui`会渲染`select`标签
+
+
+### 5.动态数据渲染报错
+
+![](../assets/dataNotArray.png)
+
+检查设置的data数据是否为数组类型
+
+```
+var demo1 = xmSelect.render({
+    el: '#demo1', 
+    data: []
+})
+
+//....N多操作以后
+var arr = data;//这里的data可能是ajax返回的数据
+
+//这里必须是 [object Array]
+console.log(Object.prototype.toString.call(arr));
+//如果是 [object String]
+//1. JSON数据
+arr = JSON.parse(arr);
+//2. 类似JSON的数据
+arr = eval('(' + arr + ')');
+
+demo1.update({
+    data: arr,
+})
+
+
+```

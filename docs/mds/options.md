@@ -41,6 +41,8 @@
 | showCount         | 展示在下拉框中的最多选项数量  |  int  |   -  |    0    |
 | autoRow           | 是否开启自动换行(选项过多时)  |  boolean  |   true / false  |    false    |
 | size              | 尺寸  |  string  |  large / medium / small / mini  |    medium    |
+| disabled          | 是否禁用多选  |  boolean           |    true / false   |    false    |
+| create            | 创建条目  |  function(val), val: 搜索的数据           |    -   |    null    |
 
 
 ### prop
@@ -163,7 +165,38 @@ list: [ "ALL", "CLEAR",
 ```
 
 
-### 方法
+### 全局方法
+
+
+| 事件名  | 说明                | 参数 | 返回值 |
+| ------ | ------------------ | -------- | -------- |
+| render | 渲染多选                 | (options: 配置项) | 实例对象 |
+| get    | 获取页面中已经渲染的多选    | (filter: 过滤`el`) | 符合条件的实例数组 |
+| batch  | 批量操作已渲染的多选       | (filter: 过滤`el`, method: 方法, ...方法参数) | 符合条件的实例数组 |
+
+```
+//render 使用方式
+xmSelect.render(OPTIONS);
+
+//get 使用方式
+xmSelect.get('#demo1');     //指定某一个获取
+xmSelect.get(/.*demo1.*/);  //正则获取
+//自定义方法获取
+xmSelect.get(function(el){
+    return el == '#demo1' || el == '#demo2';
+});  
+
+//batch 使用方式
+//批量执行禁用
+xmSelect.batch(/.*demo/, 'update', {
+    disabled: true,
+});   
+//批量执行warning
+xmSelect.batch(/.*demo/, 'warning', '#F00', true);   
+```
+
+
+### 实例方法
 
 :::warning
 xmSelect.render()后会返回一个xmSelect对象, 可以进行方法调用
@@ -179,4 +212,4 @@ xmSelect.render()后会返回一个xmSelect对象, 可以进行方法调用
 | closed  | 主动关闭下拉 | - |
 | reset  | 重置为上一次的render状态 | - |
 | update  | 更新多选选中, reset不保留 | (options: 见配置项) |
-| warning  | 警告 | (color: 默认同theme.maxColor) |
+| warning  | 警告 | (color: 默认同theme.maxColor, sustain: 是否持续显示) |

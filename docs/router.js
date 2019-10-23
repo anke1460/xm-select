@@ -72,6 +72,8 @@ export default [{
             { path: '/example/XM23', name: 'HiddenIcon 隐藏图标', component: importMd('/XM23') },
             { path: '/example/XM24', name: 'Size 尺寸', component: importMd('/XM24') },
             { path: '/example/XM25', name: 'Warning 警告', component: importMd('/XM25') },
+            { path: '/example/XM26', name: 'Disabled 禁用', component: importMd('/XM26') },
+            { path: '/example/XM27', name: 'Create 创建条目', component: importMd('/XM27') },
         ]
 	}, {
 		path: '/example-custom',
@@ -85,6 +87,8 @@ export default [{
             { path: '/example-custom/ZM04', name: '远程搜索', component: importMd('/ZM04') },
             { path: '/example-custom/ZM05', name: '动态数据', component: importMd('/ZM05') },
             { path: '/example-custom/ZM06', name: '弹框中的多选', component: importMd('/ZM06') },
+            { path: '/example-custom/ZM07', name: '获取实例对象', component: importMd('/ZM07') },
+            { path: '/example-custom/ZM08', name: '批量操作', component: importMd('/ZM08') },
         ]
 	}, {
 		path: '/example-plugin',

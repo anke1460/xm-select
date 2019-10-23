@@ -137,11 +137,11 @@ class General extends Component{
 
 	render(config) {
 
-		let { data, prop, template, theme, radio, sels, empty, filterable, filterMethod, remoteSearch, remoteMethod, delay, searchTips } = config
+		let { data, prop, template, theme, radio, sels, empty, filterable, filterMethod, remoteSearch, remoteMethod, delay, searchTips, create } = config
 
 		const { name, value, disabled, children, optgroup } = prop;
 
-		let arr = deepMerge([], data);
+		let arr = deepMerge([], data), creator;
 		//是否开启了搜索
 		if(filterable){
 			if(remoteSearch){//是否进行远程搜索
@@ -181,6 +181,8 @@ class General extends Component{
                     arr[arr.length - 1].__del = true;
                 }
                 arr = arr.filter(item => !item.__del);
+                //创建条目
+                creator = this.state.filterValue && isFunction(create) && create(this.state.filterValue);
 			}
 		}
 
@@ -352,9 +354,9 @@ class General extends Component{
 		arr = arr.map(renderGroup);
 
 		if(!arr.length){
-			arr.push(
-				<div class="xm-select-empty">{ empty }</div>
-			)
+			arr.push( creator ? renderItem(creator) : (
+                <div class="xm-select-empty">{ empty }</div>
+            ))
 		}
 
 		return (
