@@ -12,8 +12,10 @@ var demo1 = xmSelect.render({
     el: '#demo1', 
     autoRow: true,
     filterable: true,
-    create: val => {
-        console.log(val)
+    toolbar: {show: true},
+    paging: true,
+    create: (val, data) => {
+        console.log(val, data)
         return {
             name: val,
             value: val,

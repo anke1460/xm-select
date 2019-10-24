@@ -20,6 +20,7 @@ class General extends Component{
         this.searchCid = 0;
         this.inputOver = true;
         this.__value = '';
+        this.dynamicInput = false;
 	}
 
 	optionClick(item, selected, disabled, e){
@@ -182,7 +183,7 @@ class General extends Component{
                 }
                 arr = arr.filter(item => !item.__del);
                 //创建条目
-                creator = this.state.filterValue && isFunction(create) && create(this.state.filterValue);
+                creator = this.state.filterValue && isFunction(create);
 			}
 		}
 
@@ -209,29 +210,32 @@ class General extends Component{
 
 		let paging = '';
 		if(config.paging){
-			//计算当前分页的总页码
-			const size = Math.floor((arr.length - 1) / config.pageSize) + 1;
+            //计算当前分页的总页码
+            let size = Math.floor((arr.length - 1) / config.pageSize) + 1;
+            size <= 0 && (size = 1);
+
+            let pageIndex = this.state.pageIndex;
 
 			//如果当前页码大于总页码, 重置一下
-			if(this.state.pageIndex > size){
-				this.changePageIndex(size);
+			if(pageIndex > size){
+                pageIndex = size;
 			}
 
 			//如有总页码>1, 但是因为搜索造成的页码=0的情况
-			if(size > 0 && this.state.pageIndex <= 0){
-				this.changePageIndex(1);
+			if(size > 0 && pageIndex <= 0){
+                pageIndex = 1;
 			}
 
 			//实现简单的物理分页
-			let start = (this.state.pageIndex - 1) * config.pageSize;
+			let start = (pageIndex - 1) * config.pageSize;
 			let end = start + config.pageSize;
 			arr = arr.slice(start, end);
 
 			const disabledStyle = {cursor: 'no-drop', color: '#d2d2d2'};
 
 			let prevStyle = {}, nextStyle = {};
-			this.state.pageIndex <= 1 && (prevStyle = disabledStyle);
-			this.state.pageIndex == size && (nextStyle = disabledStyle);
+			pageIndex <= 1 && (prevStyle = disabledStyle);
+			pageIndex == size && (nextStyle = disabledStyle);
 
 			// const defaultCurrClass = {
 			// 	position: 'relative',
@@ -249,6 +253,9 @@ class General extends Component{
 			// 		}>{ i + 1 }</span>
 			// 	))
 			// }
+
+            this.state.pageIndex !== pageIndex && this.changePageIndex(pageIndex);
+
 			paging = (
 				<div class='xm-paging'>
 					<span style={ prevStyle } onClick={ this.pagePrevClick.bind(this) }>上一页</span>
@@ -256,7 +263,6 @@ class General extends Component{
 					<span style={ nextStyle } onClick={ e => this.pageNextClick.bind(this, e, size)() }>下一页</span>
 				</div>
 			)
-
 		}else{
             //检查是否设置了显示数量上限
             if(config.showCount > 0){
@@ -275,6 +281,12 @@ class General extends Component{
         });
         arr = newArr;
 
+        //查看是否创建了条目
+        if(creator){
+            creator = create(this.state.filterValue, deepMerge([], arr));
+            creator && arr.splice(0, 0, creator);
+        }
+
         let safetyArr = deepMerge([], arr);
         this.tempData = safetyArr;
 
@@ -283,17 +295,39 @@ class General extends Component{
             <div class='xm-toolbar'>
                 { config.toolbar.list.map(tool => {
                     const toolClass = 'toolbar-tag';
+                    const toolStyle = {};
 
-                    let info;
+                    let info, name = config.languageProp.toolbar[tool];
                     if(tool === 'ALL'){
-                        info = { icon: 'xm-iconfont xm-icon-quanxuan', name: '全选', method: (pageData) => {
+                        info = { icon: 'xm-iconfont xm-icon-quanxuan', name, method: (pageData) => {
                             const { optgroup, disabled } = prop;
                             const list = pageData.filter(item => !item[optgroup]).filter(item => !item[disabled])
                             this.props.onReset(mergeArr(list, sels, prop), 'sels');
                         } };
                     }else if(tool === 'CLEAR'){
-                        info = { icon: 'xm-iconfont xm-icon-qingkong', name: '清空', method: (pageData) => {
+                        info = { icon: 'xm-iconfont xm-icon-qingkong', name, method: (pageData) => {
                             this.props.onReset(sels.filter(item => item[prop.disabled]), 'sels');
+                        } };
+                    }else if(tool === 'REVERSE'){
+                        info = { icon: 'xm-iconfont xm-icon-fanxuan', name, method: (pageData) => {
+                            const { optgroup, disabled } = prop;
+                            const list = pageData.filter(item => !item[optgroup]).filter(item => !item[disabled])
+
+                            let selectedList = [];
+                            sels.forEach(item => {
+                                let index = list.findIndex(pageItem => pageItem[value] === item[value]);
+                                if(index == -1){
+                                    selectedList.push(item);
+                                }else{
+                                    list.splice(index, 1);
+                                }
+                            })
+                            this.props.onReset(mergeArr(list, selectedList, prop), 'sels');
+                        } };
+                    }else if(tool === 'SEARCH'){
+                        toolStyle.color = theme.color;
+                        info = { icon: 'xm-iconfont xm-icon-sousuo', name, method: (pageData) => {
+                            
                         } };
                     }else {
                         info = tool
@@ -304,7 +338,7 @@ class General extends Component{
                         if(e.type === 'mouseleave') e.target.style.color = '';
                     }
 
-                    return (<div class={ toolClass } onClick={ () => {
+                    return (<div class={ toolClass } style={ toolStyle } onClick={ () => {
                         isFunction(info.method) && info.method(safetyArr)
                     } } onMouseEnter={ hoverChange } onMouseLeave={ hoverChange }>
                         { config.toolbar.showIcon && <i class={ info.icon }></i> }
@@ -354,9 +388,9 @@ class General extends Component{
 		arr = arr.map(renderGroup);
 
 		if(!arr.length){
-			arr.push( creator ? renderItem(creator) : (
-                <div class="xm-select-empty">{ empty }</div>
-            ))
+            //查看无数据情况下是否显示分页
+            !config.pageEmptyShow && (paging = '');
+			arr.push(<div class="xm-select-empty">{ empty }</div>)
 		}
 
 		return (

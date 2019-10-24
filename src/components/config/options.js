@@ -7,6 +7,10 @@ export default function (lan = 'zn') {
 	let setting = lanSetting[lan] || zn;
 
 	return {
+        //配置语言
+        language: lan,
+        //所有的语言配置
+        languageProp: setting,
 		//多选数据
 		data: [],
         //自定义数据
@@ -54,6 +58,8 @@ export default function (lan = 'zn') {
 		paging: false,
 		//分页每页的条数
 		pageSize: 10,
+        //分页无数据是否展示分页
+        pageEmptyShow: true,
 		//是否开启单选模式
 		radio: false,
 		//是否开启重复选模式
