@@ -24,6 +24,7 @@
 | height            | 默认最大高度| string           |    -   |    200px   |
 | paging            | 是否开启自定义分页 | boolean           |    true / false   |    false    |
 | pageSize          | 分页条数 | int           |    -   |    10    |
+| pageEmptyShow     | 分页无数据是否显示 | boolean           |    true / false   |    true    |
 | radio             | 是否开启单选模式 | boolean           |    true / false   |    false    |
 | repeat            | 是否开启重复性模式 | boolean           |    true / false   |    false    |
 | clickClose        | 是否点击选项后自动关闭下拉框 | boolean           |    true / false   |    false    |
@@ -42,7 +43,7 @@
 | autoRow           | 是否开启自动换行(选项过多时)  |  boolean  |   true / false  |    false    |
 | size              | 尺寸  |  string  |  large / medium / small / mini  |    medium    |
 | disabled          | 是否禁用多选  |  boolean           |    true / false   |    false    |
-| create            | 创建条目  |  function(val), val: 搜索的数据           |    -   |    null    |
+| create            | 创建条目  |  function(val, data), val: 搜索的数据, data: 当前下拉数据           |    -   |    null    |
 
 
 ### prop
@@ -140,7 +141,7 @@ model: {
 | ------------ | --------- | --------------- | ------ | ------ |
 | show         | 是否展示工具条   | boolean     |    true / false    |    false  |
 | showIcon     | 是否显示工具图标 | boolean     |    true / false    |    true   |
-| list         | 工具条数组 (默认有 全选/清空, 可以自定义)     | array       |    -    |   [ "ALL", "CLEAR" ] |
+| list         | 工具条数组 (默认有 全选/清空, 可以自定义), 还有 REVERSE:反选     | array       |    -    |   [ "ALL", "CLEAR" ] |
 
 > 自定义方式
 
