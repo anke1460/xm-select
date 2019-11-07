@@ -19,7 +19,7 @@ const xmSelect = {
         }
         return instance;
 	},
-    get(filter){
+    get(filter, single){
         let type = Object.prototype.toString.call(filter);
         let method;
         switch (type){
@@ -36,7 +36,8 @@ const xmSelect = {
                 break;
         }
         let keys = Object.keys(object)
-        return (method ? keys.filter(method) : keys).map(key => object[key]).filter(instance => selector(instance.options.el));
+        let list = (method ? keys.filter(method) : keys).map(key => object[key]).filter(instance => selector(instance.options.el));
+        return single ? list[0] : list;
     },
     batch(filter, method){
         let args = [ ...arguments ];

@@ -79,7 +79,7 @@ class xmOptions {
 		//更新渲染
 		this.update({ ...initData[initVal.el]});
 		//子组件初始化
-		childs[this.options.el].reset();
+		childs[this.options.el].reset(this.options, true);
 		return this;
 	}
 

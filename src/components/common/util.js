@@ -77,7 +77,7 @@ export function deepMerge(obj1, obj2) {
 export function mergeArr(arr1, arr2, prop) {
     let value = prop.value;
     let result = [...arr2];
-    for (let i in arr1) {
+    for (let i = 0; i <  arr1.length; i++) {
         let item = arr1[i];
         if (!arr2.find(a => a[value] == item[value])) {
             result.push(item);

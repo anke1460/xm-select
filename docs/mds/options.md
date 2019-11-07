@@ -172,7 +172,7 @@ list: [ "ALL", "CLEAR",
 | 事件名  | 说明                | 参数 | 返回值 |
 | ------ | ------------------ | -------- | -------- |
 | render | 渲染多选                 | (options: 配置项) | 实例对象 |
-| get    | 获取页面中已经渲染的多选    | (filter: 过滤`el`) | 符合条件的实例数组 |
+| get    | 获取页面中已经渲染的多选    | (filter: 过滤`el`, single: 是否返回单实例) | 符合条件的实例数组 |
 | batch  | 批量操作已渲染的多选       | (filter: 过滤`el`, method: 方法, ...方法参数) | 符合条件的实例数组 |
 
 ```
@@ -186,6 +186,8 @@ xmSelect.get(/.*demo1.*/);  //正则获取
 xmSelect.get(function(el){
     return el == '#demo1' || el == '#demo2';
 });  
+//单实例
+xmSelect.get('#demo2', true);
 
 //batch 使用方式
 //批量执行禁用

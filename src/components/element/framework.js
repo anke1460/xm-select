@@ -21,12 +21,12 @@ class Framework extends Component{
 		this.bodyView = null;
 	}
 
-	reset(props){
+	reset(props, refresh = false){
         //用于多选上限的边框颜色变化
         this.updateBorderColor('');
         let old = this.state.data;
 		this.resetDate(props.data);
-		JSON.stringify(props.data) !== JSON.stringify(old) && this.value(props.initValue ? props.initValue : this.findValue(this.state.data), !!this.state.show);
+		(JSON.stringify(props.data) !== JSON.stringify(old) || refresh) && this.value(props.initValue ? props.initValue : this.findValue(this.state.data), !!this.state.show);
 	}
 
     findValue(data){
