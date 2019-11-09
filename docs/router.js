@@ -104,6 +104,10 @@ export default [{
 		name: '常见问题',
 		component: importMd('/question'),
 	}, {
+		path: '/es6',
+		name: 'es6语法说明',
+		component: importMd('/es6'),
+	}, {
         path: '/test',
         name: '测试',
         hidden: true,
