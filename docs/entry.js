@@ -22,6 +22,12 @@ const router = new VueRouter({
 	routes
 });
 
+router.beforeEach((to, from, next) => {
+    if (to.path) {
+        _hmt.push(['_trackPageview', to.fullPath]);
+    }
+    next();
+});
 
 router.afterEach(route => {
 	Vue.nextTick(() => {

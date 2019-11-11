@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?758a90d7d534804ddd66137da7c9ee69";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
 	<% for (var chunk in htmlWebpackPlugin.files.css) { %>
 		<link rel="preload" href="<%= htmlWebpackPlugin.files.css[chunk] %>"  as="style">
 	<% } %>

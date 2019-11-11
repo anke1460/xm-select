@@ -97,7 +97,8 @@ export default [{
 		component: Component,
 		children: [
             { path: '/example-plugin/ZP01', name: '下拉自定义', component: importMd('/ZP01') },
-            { path: '/example-plugin/ZP02', name: '下拉树', component: importMd('/ZP02') },
+            { path: '/example-plugin/ZP02', name: '下拉树 EleTree', component: importMd('/ZP02') },
+            // { path: '/example-plugin/ZP03', name: '下拉树 LayuiTree', component: importMd('/ZP03') },
         ]
 	}, {
 		path: '/question',

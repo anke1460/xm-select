@@ -269,7 +269,7 @@ class Framework extends Component{
 				<Label { ...labelProps } />
 				<div class={ bodyClass } ref={ ref => this.bodyView = ref}>
 					{ config.content ? (
-                        <Custom content={ config.content } />
+                        <Custom content={ config.content } height={ config.height } />
                     ) : (
                         <General { ...bodyProps } />
                     ) }

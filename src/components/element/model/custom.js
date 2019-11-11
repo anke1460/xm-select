@@ -20,8 +20,10 @@ class Custom extends Component{
 	render(config) {
         this.prepare = true;
 		return (
-			<div onClick={ this.blockClick } class="xm-body-custom" dangerouslySetInnerHTML={{ __html: config.content }}>
-
+			<div onClick={ this.blockClick } class="xm-body-custom" >
+                <div class="scroll-body" style={ {maxHeight: config.height} }>
+                    <div style="margin: 5px 0" dangerouslySetInnerHTML={{ __html: config.content }}></div>
+                </div>
             </div>
 		)
 	}
