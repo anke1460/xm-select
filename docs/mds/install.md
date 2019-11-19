@@ -16,9 +16,9 @@
 > 作者: maplemei, 热爱前端的Java程序猿, 如果喜欢作者的插件, 可以请作者吃雪糕 ^_^
 
 <p>
-  <a href="javascript:;">
-    <img src="../assets/wx.jpg" alt="打赏" width="300">
-  </a>
+	<a href="javascript:;">
+		<img src="../assets/wx.jpg" alt="打赏" width="300">
+	</a>
 </p>
 
 
@@ -52,19 +52,19 @@ $ npm install && npm run dev
 
 <script>
 var demo1 = xmSelect.render({
-    el: '#demo1', 
-    language: 'zn',
-    data: [
-        {name: '张三', value: 1},
-        {name: '李四', value: 2},
-        {name: '王五', value: 3},
-    ]
+	el: '#demo1', 
+	language: 'zn',
+	data: [
+		{name: '张三', value: 1},
+		{name: '李四', value: 2},
+		{name: '王五', value: 3},
+	]
 })
 
 document.getElementById('demo1-getValue').onclick = function(){
-    //获取当前多选选中的值
-    var selectArr = demo1.getValue();
-    document.getElementById('demo1-value').innerHTML = JSON.stringify(selectArr, null, 2);
+	//获取当前多选选中的值
+	var selectArr = demo1.getValue();
+	document.getElementById('demo1-value').innerHTML = JSON.stringify(selectArr, null, 2);
 }
 </script>
 

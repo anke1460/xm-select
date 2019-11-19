@@ -21,8 +21,8 @@
 //lES6 新增了let命令，用来声明变量。它的用法类似于var，但是所声明的变量，只在let命令所在的代码块内有效。
 
 {
-    let a = 10;
-    var b = 1;
+	let a = 10;
+	var b = 1;
 }
 
 a // ReferenceError: a is not defined.
@@ -66,10 +66,10 @@ let name = "Bob", time = "today";
 var name = 'zs';
 
 var obj = {
-    name: name,
-    run: function(){
-        console.log('haha');
-    }
+	name: name,
+	run: function(){
+		console.log('haha');
+	}
 }
 
 
@@ -77,10 +77,10 @@ var obj = {
 let name = 'zs';
 
 let obj = {
-    name,
-    run(){
-        console.log('haha');
-    }
+	name,
+	run(){
+		console.log('haha');
+	}
 }
 ```
 
@@ -90,12 +90,12 @@ let obj = {
 ```
 //常规写法
 setTimeout(function(){
-    //...
+	//...
 }, 1000);
 
 //简写
 setTimeout(() => {
-    //...
+	//...
 }, 1000);
 ```
 
@@ -105,9 +105,9 @@ setTimeout(() => {
 ```
 //假如现在有一个对象
 let obj = {
-    name: 'zs',
-    age: 18,
-    address: 'beijing',
+	name: 'zs',
+	age: 18,
+	address: 'beijing',
 }
 
 //正常获取name
@@ -127,19 +127,19 @@ obj.status = '1';
 
 //对象属性合并
 var newObj = {
-    ...obj,
-    status: '1'
+	...obj,
+	status: '1'
 }
 
 //方法传参
 function calc(data){
-    var a = data.a;
-    var b = data.b;
-    return a + b;
+	var a = data.a;
+	var b = data.b;
+	return a + b;
 }
 //解构传参
 function calc({ a, b }){
-    return a + b;
+	return a + b;
 }
 ```
 

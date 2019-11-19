@@ -74,11 +74,11 @@ function genInlineComponentText(template, script) {
 	  }
     }
   })()`;
-  
+
   // console.log('\n\n\n=================\n\n\n')
   // console.log(demoComponentContent);
   // console.log('\n\n\n=================\n\n\n')
-  
+
 	return demoComponentContent;
 }
 

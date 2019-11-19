@@ -97,8 +97,8 @@ export default [{
 		component: Component,
 		children: [
             { path: '/example-plugin/ZP01', name: '下拉自定义', component: importMd('/ZP01') },
-            { path: '/example-plugin/ZP02', name: '下拉树 EleTree', component: importMd('/ZP02') },
-            // { path: '/example-plugin/ZP03', name: '下拉树 LayuiTree', component: importMd('/ZP03') },
+            { path: '/example-plugin/ZP02', name: '下拉树 Tree', component: importMd('/ZP02') },
+            { path: '/example-plugin/ZP03', name: '下拉日期多选', component: importMd('/ZP03') },
         ]
 	}, {
 		path: '/question',
@@ -112,6 +112,7 @@ export default [{
         path: '/test',
         name: '测试',
         hidden: true,
+        // hidden: false,
         component: importMd('/ZTEST'),
     },
 

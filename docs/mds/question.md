@@ -37,8 +37,8 @@
 
 ```
 var demo1 = xmSelect.render({
-    el: '#demo1', 
-    data: []
+	el: '#demo1', 
+	data: []
 })
 
 //....N多操作以后
@@ -53,7 +53,7 @@ arr = JSON.parse(arr);
 arr = eval('(' + arr + ')');
 
 demo1.update({
-    data: arr,
+	data: arr,
 })
 
 

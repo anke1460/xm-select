@@ -10,7 +10,7 @@ const isProd = process.env.NODE_ENV === 'prod';
 
 const webpackConfig = {
 	entry: {
-		'xm-select': "./src/index.js",
+		'xm-select': "./src/main.js",
 		'static/docs': "./docs/entry.js",
 	},
 	output: {
