@@ -33,31 +33,52 @@ class Framework extends Component{
 	}
 
 	init(props, refresh){
-		let { data } = props;
+		let { data } = props, sels;
 
 		//如果新数据和旧数据不同 或者 强制刷新 才进行数据处理
 		if(refresh){
 			let dataObj = {};
 			let flatData = [];
 			this.load(data, dataObj, flatData);
-			let sels = props.initValue ? this.exchangeValue(props.initValue) : Object.values(dataObj).filter(item => item[props.prop.selected] === true).filter(item => item[this.props.prop.optgroup] !== true)
+			sels = props.initValue ? this.exchangeValue(props.initValue) : Object.values(dataObj).filter(item => item[props.prop.selected] === true).filter(item => item[this.props.prop.optgroup] !== true)
 			this.setState({ sels, dataObj, flatData });
 		}
 
 		this.setState({ data });
+
+		return sels;
 	}
 
-	exchangeValue(arr){
-		return arr.map(sel => typeof sel === 'object' ? sel : this.state.dataObj[sel]).filter(a => a).filter(item => item[this.props.prop.optgroup] !== true)
+	exchangeValue(arr, filterGroup = true){
+		let list = arr.map(sel => typeof sel === 'object' ? sel : this.state.dataObj[sel]).filter(a => a)
+		filterGroup && (list = list.filter(item => item[this.props.prop.optgroup] !== true))
+		return list;
 	}
 
 	value(sels, show, listenOn){
 		if(show !== false && show !== true){
 			show = this.state.show;
 		}
-		let changeData = this.exchangeValue(sels);
+
+		const { prop, tree } = this.props;
+		let changeData = this.exchangeValue(sels, !tree.show);
+		if(tree.show){
+			let data = this.state.data;
+			this.clearAndReset(data, changeData);
+			changeData = this.init({ data, prop }, true);
+		}
+
 		this.resetSelectValue(changeData, changeData, true, listenOn);
 		this.setState({ show })
+	}
+
+	clearAndReset(data, changeData){
+		const { selected, children, value } = this.props.prop;
+		data.forEach(item => {
+			item[selected] = changeData.findIndex(c => c[value] === item[value]) != -1;
+			let child = item[children];
+			child && isArray(child) && this.clearAndReset(child, changeData)
+		})
 	}
 
 	load(data, dataObj, flatData, parent){
@@ -70,20 +91,21 @@ class Framework extends Component{
 			//遍历子级数据
 			let child = item[children];
 			if(child && isArray(child)){
-				item[optgroup] = true;
-				this.load(child, dataObj, flatData, item);
-
-				if(item[selected] === true){
-					delete item[selected]
-					child.forEach(c => c[selected] = true)
-				}
-				if(item[disabled] === true){
-					delete item[disabled]
-					child.forEach(c => c[disabled] = true)
-				}
-
 				let len = child.length;
 				if(len > 0){
+					this.load(child, dataObj, flatData, item);
+
+					//严格的父子结构
+					item[optgroup] = true;
+					if(item[selected] === true){
+						delete item[selected]
+						child.forEach(c => c[selected] = true)
+					}
+					if(item[disabled] === true){
+						delete item[disabled]
+						child.forEach(c => c[disabled] = true)
+					}
+
 					//检查子节点的数据是否都被选中
 					let slen = child.filter(i => i[selected] === true || i.__node.selected === true).length;
 					item.__node.selected = slen === len;

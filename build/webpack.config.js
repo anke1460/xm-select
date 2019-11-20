@@ -1,3 +1,4 @@
+const pkg = require('../package.json');
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -7,6 +8,14 @@ const {
 } = require('clean-webpack-plugin');
 
 const isProd = process.env.NODE_ENV === 'prod';
+
+const banner =
+`@Title: ${pkg.name}
+@Version: ${pkg.version}
+@Description：基于layui的多选解决方案
+@Site: https://gitee.com/maplemei/xm-select
+@Author: maplemei
+@License：Apache License 2.0`;
 
 const webpackConfig = {
 	entry: {
@@ -82,6 +91,7 @@ const webpackConfig = {
 				collapseWhitespace: true
 			}
 		}),
+		new webpack.BannerPlugin(banner),
 		new VueLoaderPlugin(),
 	],
 	devServer: {
