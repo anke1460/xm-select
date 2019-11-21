@@ -84,7 +84,11 @@ class xmOptions {
 	 * 获取多选选中的数据
 	 */
 	getValue(type){
-		let arr = deepMerge([], childData[this.options.el].state.sels);
+		let arr = childData[this.options.el].state.sels.map(item => {
+			item = { ...item };
+			delete item.__node;
+			return item;
+		});
 
 		if(type === 'name'){
 			return arr.map(item => item[this.options.prop.name]);

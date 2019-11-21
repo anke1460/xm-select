@@ -61,7 +61,7 @@ class Framework extends Component{
 
 		const { prop, tree } = this.props;
 		let changeData = this.exchangeValue(sels, !tree.show);
-		if(tree.show){
+		if(tree.show && tree.strict){
 			let data = this.state.data;
 			this.clearAndReset(data, changeData);
 			changeData = this.init({ data, prop }, true);
@@ -81,7 +81,8 @@ class Framework extends Component{
 	}
 
 	load(data, dataObj, flatData, parent){
-		const { children, optgroup, value, selected, disabled } = this.props.prop;
+		const { prop, tree } = this.props;
+		const { children, optgroup, value, selected, disabled } = prop;
 		data.forEach(item => {
 			//数据提取/处理
 			item.__node = { parent }
@@ -94,15 +95,18 @@ class Framework extends Component{
 				if(len > 0){
 					this.load(child, dataObj, flatData, item);
 
-					//严格的父子结构
+					//是否包含子节点
 					item[optgroup] = true;
-					if(item[selected] === true){
-						delete item[selected]
-						child.forEach(c => c[selected] = true)
-					}
-					if(item[disabled] === true){
-						delete item[disabled]
-						child.forEach(c => c[disabled] = true)
+					//严格的父子结构
+					if(tree.strict){
+						if(item[selected] === true){
+							delete item[selected]
+							child.forEach(c => c[selected] = true)
+						}
+						if(item[disabled] === true){
+							delete item[disabled]
+							child.forEach(c => c[disabled] = true)
+						}
 					}
 
 					//检查子节点的数据是否都被选中
@@ -158,20 +162,25 @@ class Framework extends Component{
 	//选项, 选中状态, 禁用状态, 是否强制删除:在label上点击删除
 	itemClick(item, itemSelected, itemDisabled, mandatoryDelete){
 
-		const { theme, prop, radio, repeat, clickClose, max, maxMethod } = this.props
+		const { theme, prop, radio, repeat, clickClose, max, maxMethod, tree } = this.props
 		let { sels } = this.state
 		const { value, selected, disabled, children, optgroup } = prop
 
 		//如果是禁用状态, 不能进行操作
 		if(itemDisabled) return;
 
-		if(item[optgroup]){
+		if(item[optgroup] && tree.strict){
 			let child = item[children], change = [], isAdd = true;
 			if(item.__node.selected){
 				this.treeHandler(sels, item, change, 'del');
 				isAdd = false;
 			}else if(item.__node.half){
 				this.treeHandler(sels, item, change, 'half');
+				//无法操作禁用状态, 变成取消操作
+				if(change.length === 0){
+					this.treeHandler(sels, item, change, 'del');
+					isAdd = false;
+				}
 			}else{
 				this.treeHandler(sels, item, change, 'add');
 			}

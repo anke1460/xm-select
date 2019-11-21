@@ -77,12 +77,20 @@ export default function (lan = 'zn') {
 			showIcon: true,
 			list: [ 'ALL', 'CLEAR' ],
 		},
+		//树状结构
 		tree: {
+			//是否展示树
 			show: false,
+			//是否展示三角图标
 			showFolderIcon: true,
+			//是否展示连接线
 			showLine: true,
+			//间距
 			indent: 20,
+			//默认展开的节点数组
 			expandedKeys: [],
+			//是否严格遵守父子模式
+			strict: true,
 		},
 		//自定义属性名称
 		prop: {
@@ -111,6 +119,7 @@ export default function (lan = 'zn') {
 				block: {
 					showCount: 0,
 					showIcon: true,
+					template: null,
 				},
 				count: {
 					template(data, sels){

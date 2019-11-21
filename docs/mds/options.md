@@ -116,6 +116,8 @@ model: {
 			showCount: 0,
 			//是否显示删除图标
 			showIcon: true,
+			//自定义渲染label, 默认渲染name, 回调参数(item, sels)
+			template: null,
 		},
 		//自定义文字
 		count: {
@@ -170,6 +172,7 @@ list: [ "ALL", "CLEAR",
 | showLine	 | 是否显示虚线 | boolean	 |	true / false	|	true   |
 | indent	   | 间距	 | int	   |	-   |   20 |
 | expandedKeys | 默认展开的节点数组	 | array	   |	-	|   [ ] |
+| strict | 是否遵循严格父子结构	 | boolean	 |	true / false	|	true   |
 
 
 ### 全局方法

@@ -62,10 +62,20 @@ class Tree extends Component{
 
 		const showIcon = config.model.icon != 'hidden';
 		const renderItem = (item, indent, expand) => {
-			const half = item.__node.half === true;
-			const selected = !!sels.find(sel => sel[value] == item[value]) || half || item.__node.selected
-			const dis = item[disabled] || item.__node.disabled;
-			const iconStyle = selected || half ? {
+			//是否被选中
+			let selected = !!sels.find(sel => sel[value] == item[value]);
+			//是否禁用
+			let dis = item[disabled]
+			// 是否半选
+			let half = item.__node.half === true;
+			
+			//tree是否遵义严格父子结构
+			if(tree.strict){
+				selected = selected || half || item.__node.selected
+				dis = dis || item.__node.disabled;
+			}
+			
+			const iconStyle = selected ? {
 				color: theme.color,
 				border: 'none'
 			} : {
@@ -77,7 +87,7 @@ class Tree extends Component{
 				dis && (itemStyle.backgroundColor = '#C2C2C2');
 			}
 			const className = ['xm-option', (dis ? ' disabled' : ''), (selected ? ' selected' : ''), (showIcon ? 'show-icon' : 'hide-icon') ].join(' ');
-			const iconClass = ['xm-option-icon xm-iconfont', radio ? 'xm-icon-danx' : half ? 'xm-icon-banxuan' : 'xm-icon-duox'].join(' ');
+			const iconClass = ['xm-option-icon xm-iconfont', radio ? 'xm-icon-danx' : tree.strict && half ? 'xm-icon-banxuan' : 'xm-icon-duox'].join(' ');
 			const treeIconClass = ['xm-tree-icon', expand ? 'expand':'', item[children] && item[children].length > 0 ? 'visible':'hidden'].join(' ');
 
 			return (

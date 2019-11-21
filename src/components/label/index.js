@@ -1,4 +1,5 @@
 import { h, Component, render } from 'preact'
+import { isFunction } from '@/common/util'
 
 /**
  * 标签的渲染
@@ -70,7 +71,11 @@ class Label extends Component{
 				const className = ['xm-label-block', sel[disabled] ? 'disabled':''].join(' ');
 				return (
 					<div class={className} style={ style }>
-						<span style={ styleProps }>{ sel[name] }</span>
+						{ conf.template && isFunction(conf.template) ? (
+							<span style={ styleProps } dangerouslySetInnerHTML={{ __html: conf.template(sel, arr) }}></span>
+						) : (
+							<span style={ styleProps }>{ sel[name] }</span>
+						) }
 						{ conf.showIcon && <i class="xm-iconfont xm-icon-close" onClick={ this.iconClick.bind(this, sel, true, sel[disabled]) }></i> }
 					</div>
 				)
