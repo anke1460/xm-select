@@ -19,8 +19,8 @@
                         <router-link active-class="active" :to="`/`">使用手册</router-link>
                     </li>
                     <li class="nav-item">
-                        <a href='https://gitee.com/maplemei/xm-select' target="_blank" style="opacity: 1; display: flex; margin-top: 20px;">
-                            <img src='https://gitee.com/maplemei/xm-select/widgets/widget_6.svg' alt='Fork me on Gitee'></img>
+                        <a href='https://gitee.com/maplemei/xm-select' target="_blank" style="opacity: 1; display: flex; margin-top: 30px;">
+                            <img src='https://gitee.com/maplemei/xm-select/widgets/widget_3.svg' alt='Fork me on Gitee' style="width: 60px;"></img>
                         </a>
                     </li>
                 </ul>

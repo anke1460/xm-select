@@ -10,7 +10,11 @@
 					<div class="page-component__content">
 						<router-view class="content"></router-view>
 					</div>
-					<el-backtop target=".page-component__scroll .el-scrollbar__wrap" :right="100" :bottom="150"></el-backtop>
+					<el-backtop target=".page-component__scroll .el-scrollbar__wrap" :right="10" :bottom="150">
+						<div class="base-backtop">
+							<i class="layui-icon layui-icon-top" style="font-size: 40px;"></i>
+						</div>
+					</el-backtop>
 				</div>
 			</el-scrollbar>
 		</div>
@@ -129,6 +133,16 @@
 		&>.el-scrollbar__wrap {
 			overflow-x: auto;
 		}
+	}
+
+	.base-backtop{
+		height: 100%;
+		width: 100%;
+		box-shadow: 0 0 6px rgba(0,0,0, .12);
+		text-align: center;
+		background-color: rgb(0, 150, 136);
+		line-height: 40px;
+		color: #FFF;
 	}
 
 	.page-component {
