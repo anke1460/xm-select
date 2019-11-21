@@ -92,7 +92,7 @@ button, input, select, textarea {
 .page-container {
 	padding-top: 55px;
 
-	h2 {
+	h2:not(.layui-colla-title) {
 		font-size: 28px;
 		color: #1f2d3d;
 		margin: 0;
@@ -244,11 +244,20 @@ button, input, select, textarea {
     }
 }
 
-.demo-ZP03{
-	.layui-laydate-footer{
-		padding: 0;
-	}
+.demo-ZP03, .demo-ZP04{
 	xm-select .scroll-body{
-		text-align: center;
+		margin-top: -5px;
+	}
+	xm-select .xm-body{
+		padding: 0;
+		border: none;
+		background-color: usnet;
+		box-shadow: none;
+	}
+}
+.demo-ZP05{
+	xm-select .scroll-body{
+		padding-left: 10px;
+		overflow: hidden;
 	}
 }

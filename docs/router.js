@@ -99,6 +99,8 @@ export default [{
             { path: '/example-plugin/ZP01', name: '下拉自定义', component: importMd('/ZP01') },
             { path: '/example-plugin/ZP02', name: '下拉树 Tree', component: importMd('/ZP02') },
             { path: '/example-plugin/ZP03', name: '下拉日期多选', component: importMd('/ZP03') },
+            { path: '/example-plugin/ZP04', name: '下拉折叠面板', component: importMd('/ZP04') },
+            { path: '/example-plugin/ZP05', name: '下拉穿梭框', component: importMd('/ZP05') },
         ]
 	}, {
 		path: '/question',

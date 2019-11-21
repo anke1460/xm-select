@@ -34,13 +34,12 @@ class Framework extends Component{
 
 	init(props, refresh){
 		let { data } = props, sels;
-
 		//如果新数据和旧数据不同 或者 强制刷新 才进行数据处理
 		if(refresh){
 			let dataObj = {};
 			let flatData = [];
 			this.load(data, dataObj, flatData);
-			sels = props.initValue ? this.exchangeValue(props.initValue) : Object.values(dataObj).filter(item => item[props.prop.selected] === true).filter(item => item[this.props.prop.optgroup] !== true)
+			sels = props.initValue ? this.exchangeValue(props.initValue, true, dataObj) : Object.values(dataObj).filter(item => item[props.prop.selected] === true).filter(item => item[this.props.prop.optgroup] !== true)
 			this.setState({ sels, dataObj, flatData });
 		}
 
@@ -49,8 +48,8 @@ class Framework extends Component{
 		return sels;
 	}
 
-	exchangeValue(arr, filterGroup = true){
-		let list = arr.map(sel => typeof sel === 'object' ? sel : this.state.dataObj[sel]).filter(a => a)
+	exchangeValue(arr, filterGroup = true, dataObj = this.state.dataObj){
+		let list = arr.map(sel => typeof sel === 'object' ? sel : dataObj[sel]).filter(a => a)
 		filterGroup && (list = list.filter(item => item[this.props.prop.optgroup] !== true))
 		return list;
 	}
