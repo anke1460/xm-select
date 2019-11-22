@@ -14,7 +14,7 @@ class General extends Component{
 			remote: true,
 			loading: false,
 			pageIndex: 1,
-			pageSize: 10,
+			totalSize: 0,
 		});
 
 		this.searchCid = 0;
@@ -56,6 +56,7 @@ class General extends Component{
 			return ;
 		}
 		this.changePageIndex(index - 1);
+		this.props.pageRemote && this.postData(index - 1, true);
 	}
 	pageNextClick(e, size){
 		let index = this.state.pageIndex;
@@ -63,6 +64,7 @@ class General extends Component{
 			return ;
 		}
 		this.changePageIndex(index + 1);
+		this.props.pageRemote && this.postData(index + 1, true);
 	}
 
 	changePageIndex(index){
@@ -111,6 +113,24 @@ class General extends Component{
 		}
 	}
 
+	postData(pageIndex = this.state.pageIndex, mandatory = false){
+		if(this.state.remote || mandatory){
+			this.callback = false;
+			this.setState({ loading: true, remote: false });
+			//让输入框失去焦点
+			this.blur();
+			this.props.remoteMethod(this.state.filterValue, (result, totalSize) => {
+				//回调后可以重新聚焦
+				this.focus();
+
+				this.callback = true;
+				this.setState({ loading: false, totalSize });
+				this.props.onReset(result, 'data');
+			}, this.props.show, pageIndex);
+		}
+	}
+
+	//组件将要接收新属性
 	componentWillReceiveProps(props){
 		if(this.props.show != props.show){
 			if(!props.show){
@@ -125,20 +145,8 @@ class General extends Component{
 		}
 	}
 
-	componentDidUpdate(){
-		if(this.callback){
-			this.callback = false;
-
-			let done = this.props.filterDone;
-			if(isFunction(done)){
-				done(this.state.filterValue, this.tempData || []);
-			}
-		}
-	}
-
 	render(config) {
-
-		let { data, flatData, prop, template, theme, radio, sels, empty, filterable, filterMethod, remoteSearch, remoteMethod, delay, searchTips, create } = config
+		let { data, flatData, prop, template, theme, radio, sels, empty, filterable, filterMethod, remoteSearch, remoteMethod, delay, searchTips, create, pageRemote } = config
 
 		const { name, value, disabled, children, optgroup } = prop;
 
@@ -146,20 +154,7 @@ class General extends Component{
 		//是否开启了搜索
 		if(filterable){
 			if(remoteSearch){//是否进行远程搜索
-				if(this.state.remote){
-					this.callback = false;
-					this.setState({ loading: true, remote: false });
-					//让输入框失去焦点
-					this.blur();
-					remoteMethod(this.state.filterValue, result => {
-						//回调后可以重新聚焦
-						this.focus();
-
-						this.callback = true;
-						this.setState({ loading: false });
-						this.props.onReset(result, 'data');
-					}, this.props.show);
-				}
+				this.postData();
 			}else{
 				const filterData = (item, index) => {
 					const isGroup = item[optgroup];
@@ -187,17 +182,15 @@ class General extends Component{
 			}
 		}
 
+		//远程分页
+		if(pageRemote){
+			this.postData();
+		}
+
 		const search = (
 			<div class='xm-search'>
 				<i class="xm-iconfont xm-icon-sousuo"></i>
-				<input type="text" class="xm-input xm-search-input" placeholder={ searchTips }
-					ref={ input => this.searchInputRef = input }
-					onClick={ this.blockClick.bind(this) }
-					onInput={ this.searchInput.bind(this) }
-					onCompositionStart={ this.handleComposition.bind(this) }
-					onCompositionUpdate={ this.handleComposition.bind(this) }
-					onCompositionEnd={ this.handleComposition.bind(this) }
-				/>
+				<input class="xm-input xm-search-input" placeholder={ searchTips } />
 			</div>
 		);
 
@@ -211,7 +204,7 @@ class General extends Component{
 		let paging = '';
 		if(config.paging){
 			//计算当前分页的总页码
-			let size = Math.floor((arr.length - 1) / config.pageSize) + 1;
+			let size = pageRemote ? this.state.totalSize : Math.floor((arr.length - 1) / config.pageSize) + 1;
 			size <= 0 && (size = 1);
 
 			let pageIndex = this.state.pageIndex;
@@ -226,33 +219,18 @@ class General extends Component{
 				pageIndex = 1;
 			}
 
-			//实现简单的物理分页
-			let start = (pageIndex - 1) * config.pageSize;
-			let end = start + config.pageSize;
-			arr = arr.slice(start, end);
+			if(!pageRemote){
+				//实现简单的物理分页
+				let start = (pageIndex - 1) * config.pageSize;
+				let end = start + config.pageSize;
+				arr = arr.slice(start, end);
+			}
 
 			const disabledStyle = {cursor: 'no-drop', color: '#d2d2d2'};
 
 			let prevStyle = {}, nextStyle = {};
 			pageIndex <= 1 && (prevStyle = disabledStyle);
 			pageIndex == size && (nextStyle = disabledStyle);
-
-			// const defaultCurrClass = {
-			// 	position: 'relative',
-			// 	borderRadius: '1px',
-			// }
-			// {
-			// 	''.padEnd(size, ' ').split('').map((s, i) => (
-			// 		<span style={
-			// 			this.state.pageIndex == i + 1 ? {
-			// 				...defaultCurrClass,
-			// 				backgroundColor: theme.color,
-			// 				borderColor: theme.color,
-			// 				color: '#FFF',
-			// 			} : defaultCurrClass
-			// 		}>{ i + 1 }</span>
-			// 	))
-			// }
 
 			this.state.pageIndex !== pageIndex && this.changePageIndex(pageIndex);
 
@@ -323,11 +301,6 @@ class General extends Component{
 								}
 							})
 							this.props.onReset(mergeArr(list, selectedList, prop), 'sels');
-						} };
-					}else if(tool === 'SEARCH'){
-						toolStyle.color = theme.color;
-						info = { icon: 'xm-iconfont xm-icon-sousuo', name, method: (pageData) => {
-
 						} };
 					}else {
 						info = tool
@@ -407,6 +380,31 @@ class General extends Component{
 			</div>
 		)
 	}
+
+	//组件完成挂载
+	componentDidMount(){
+		let input = this.base.querySelector('.xm-search-input');
+		if(input){
+			input.addEventListener('compositionstart', this.handleComposition.bind(this));
+			input.addEventListener('compositionupdate', this.handleComposition.bind(this));
+			input.addEventListener('compositionend', this.handleComposition.bind(this));
+			input.addEventListener('input', this.searchInput.bind(this));
+			this.searchInputRef = input;
+		}
+	}
+
+	//此时页面又被重新渲染了
+	componentDidUpdate(){
+		if(this.callback){
+			this.callback = false;
+
+			let done = this.props.filterDone;
+			if(isFunction(done)){
+				done(this.state.filterValue, this.tempData || []);
+			}
+		}
+	}
+
 }
 
 export default General;

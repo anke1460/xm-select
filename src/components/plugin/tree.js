@@ -34,11 +34,28 @@ class Tree extends Component{
 
 	optionClick(item, selected, disabled, type, e){
 		if(type === 'line'){
+			if(item.__node.loading === true){
+				return;
+			}
+
 			let val = item[this.props.prop.value];
 			let expandedKeys = this.state.expandedKeys;
 			let index = expandedKeys.findIndex(v => v === val);
 			index === -1 ? expandedKeys.push(val) : expandedKeys.splice(index, 1);
 			this.setState({ expandedKeys });
+
+			//是否需要懒加载
+			const { tree, prop, sels } = this.props;
+			let child = item[prop.children];
+			if(tree.lazy && child && child.length === 0 && item.__node.loading !== false){
+				item.__node.loading = true;
+				tree.load(item, (result) => {
+					item.__node.loading = false;
+					item[prop.children] = result;
+					item[prop.selected] = sels.findIndex(i => i[prop.value] === item[prop.value]) != -1
+					this.props.onReset(item, 'treeData');
+				});
+			}
 		}else if(type === 'checkbox'){
 			this.props.ck(item, selected, disabled);
 		}
@@ -68,13 +85,13 @@ class Tree extends Component{
 			let dis = item[disabled]
 			// 是否半选
 			let half = item.__node.half === true;
-			
+
 			//tree是否遵义严格父子结构
 			if(tree.strict){
 				selected = selected || half || item.__node.selected
 				dis = dis || item.__node.disabled;
 			}
-			
+
 			const iconStyle = selected ? {
 				color: theme.color,
 				border: 'none'
@@ -88,12 +105,14 @@ class Tree extends Component{
 			}
 			const className = ['xm-option', (dis ? ' disabled' : ''), (selected ? ' selected' : ''), (showIcon ? 'show-icon' : 'hide-icon') ].join(' ');
 			const iconClass = ['xm-option-icon xm-iconfont', radio ? 'xm-icon-danx' : tree.strict && half ? 'xm-icon-banxuan' : 'xm-icon-duox'].join(' ');
-			const treeIconClass = ['xm-tree-icon', expand ? 'expand':'', item[children] && item[children].length > 0 ? 'visible':'hidden'].join(' ');
+			const treeIconClass = ['xm-tree-icon', expand ? 'expand':'', item[children] && (item[children].length > 0 || tree.lazy) ? 'visible':'hidden'].join(' ');
 
 			return (
 				<div class={ className } style={ itemStyle } value={ item[value] } onClick={ this.optionClick.bind(this, item, selected, item[disabled], 'line') }>
 					{ tree.showFolderIcon && <i class={ treeIconClass }></i> }
 					{ tree.showFolderIcon && tree.showLine && <i class={ expand ? 'top-line expand' : 'top-line' } style={ { left: indent - tree.indent + 3 + 'px', width: tree.indent + (expand === 0 ? 10 : -2) + 'px' } }></i> }
+					{ tree.showFolderIcon && tree.showLine && <i class={ expand ? 'left-line expand' : 'left-line' } style={ {left: indent - tree.indent + 3 + 'px'} }></i> }
+					{ item.__node.loading && <span class="loader"></span> }
 					{ showIcon && <i class={ iconClass } style={ iconStyle } onClick={ this.optionClick.bind(this, item, selected, item[disabled], 'checkbox') }></i> }
 					<div class='xm-option-content' dangerouslySetInnerHTML={{ __html: template({ data, item, arr: sels, name: item[name], value: item[value] }) }}></div>
 				</div>
@@ -103,11 +122,12 @@ class Tree extends Component{
 		const renderGroup = (item, indent) => {
 			const child = item[children];
 			indent = indent + tree.indent
-			if(child && child.length > 0){//分组模式
+			if(child){//分组模式
 				let expand = this.state.expandedKeys.findIndex(k => item[value] === k) !== -1;
+				child.length === 0 && (expand = false)
 				return (
 					<div class="xm-tree">
-						{ tree.showFolderIcon && tree.showLine && <i class={ expand ? 'left-line expand' : 'left-line' } style={ {left: indent + 3 + 'px'} }></i> }
+						{ tree.showFolderIcon && tree.showLine && expand && <i class='left-line left-line-group' style={ {left: indent + 3 + 'px'} }></i> }
 						{ renderItem(item, indent, expand) }
 						{ expand && <div class="xm-tree-box">{ child.map(c => renderGroup(c, indent)) }</div> }
 					</div>

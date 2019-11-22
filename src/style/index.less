@@ -243,6 +243,13 @@ xm-select{
 			&.selected.hide-icon .xm-option-content{
 				color: #FFF !important;
 			}
+
+			.loader{
+				width: 0.8em;
+				height: 0.8em;
+				margin-right: 6px;
+				color: #C2C2C2;
+			}
 		}
 
 		.xm-select-empty{
@@ -392,10 +399,8 @@ xm-select{
 				z-index: 1;
 				border-top: 1px dotted #c0c4cc !important;
 			}
-			&-box{
-				&.dis{
-
-				}
+			.xm-tree-icon+.top-line{
+				margin-left: 1px;
 			}
 		}
 		.scroll-body>.xm-tree>.xm-option>.top-line{
@@ -434,22 +439,20 @@ xm-select{
 		display: flex;
 		align-items: center;
 		justify-content: center;
+	}
 
+	.loader{
+		border: .2em dotted currentcolor;
+		border-radius: 50%;
+		-webkit-animation: 1s loader linear infinite;
+		animation: 1s loader linear infinite;
 
-
-		.loader{
-			border: .2em dotted currentcolor;
-			border-radius: 50%;
-			-webkit-animation: 1s loader linear infinite;
-			animation: 1s loader linear infinite;
-
-			display: inline-block;
-			width: 1em;
-			height: 1em;
-			color: inherit;
-			vertical-align: middle;
-			pointer-events: none;
-		}
+		display: inline-block;
+		width: 1em;
+		height: 1em;
+		color: inherit;
+		vertical-align: middle;
+		pointer-events: none;
 	}
 
 	.xm-select-default{
@@ -502,24 +505,14 @@ xm-select{
 	}
 	.xm-tree{
 		.left-line{
-			height: calc(100% - @size);
-			top: @size / 2;
+			height: 100%;
 			bottom: @size / 2;
-			&.expand{
-				height: 100%;
-				bottom: 0;
-			}
 		}
-		&:last-child{
-			.left-line{
-				height: calc(100% - @size);
-			}
+		.left-line-group{
+			height: calc(100% - @size);
 		}
 		.xm-tree-icon.hidden+.top-line{
 			top: @size / 2 - 1px;
-		}
-		.xm-tree-icon+.top-line{
-			margin-left: 1px;
 		}
 	}
 }

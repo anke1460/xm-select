@@ -33,13 +33,13 @@ class Framework extends Component{
 	}
 
 	init(props, refresh){
-		let { data } = props, sels;
+		let { data, prop, initValue } = props, sels;
 		//如果新数据和旧数据不同 或者 强制刷新 才进行数据处理
 		if(refresh){
 			let dataObj = {};
 			let flatData = [];
 			this.load(data, dataObj, flatData);
-			sels = props.initValue ? this.exchangeValue(props.initValue, true, dataObj) : Object.values(dataObj).filter(item => item[props.prop.selected] === true).filter(item => item[this.props.prop.optgroup] !== true)
+			sels = initValue ? this.exchangeValue(initValue, true, dataObj) : Object.values(dataObj).filter(item => item[prop.selected] === true).filter(item => item[prop.optgroup] !== true)
 			this.setState({ sels, dataObj, flatData });
 		}
 
@@ -85,7 +85,8 @@ class Framework extends Component{
 		const { children, optgroup, value, selected, disabled } = prop;
 		data.forEach(item => {
 			//数据提取/处理
-			item.__node = { parent }
+			item.__node = { parent, loading: item.__node && item.__node.loading }
+
 			dataObj[item[value]] = item;
 			flatData.push(item);
 			//遍历子级数据
@@ -212,20 +213,19 @@ class Framework extends Component{
 				}
 				this.resetSelectValue(sels, [item], !itemSelected);
 			}
-			let parent = item.__node.parent;
-			if(parent){
-				while(parent){
-					let child = parent[children], len = child.length;
-					let slen = child.filter(i => sels.findIndex(sel => sel[value] === i[value]) !== -1 || i.__node.selected === true).length;
-					parent.__node.selected = slen === len;
-					parent.__node.half = slen > 0 && slen < len;
-					parent = parent.__node.parent;
-				}
-				this.setState({ data: this.state.data })
-			}
 		}
 
-
+		let parent = item.__node.parent;
+		if(parent){
+			while(parent){
+				let child = parent[children], len = child.length;
+				let slen = child.filter(i => sels.findIndex(sel => sel[value] === i[value]) !== -1 || i.__node.selected === true).length;
+				parent.__node.selected = slen === len;
+				parent.__node.half = (slen > 0 && slen < len) || child.filter(i => i.__node.half === true).length > 0;
+				parent = parent.__node.parent;
+			}
+			this.setState({ data: this.state.data })
+		}
 
 		//检查是否为选择即关闭状态, 强制删除情况下不做处理
 		clickClose && !mandatoryDelete && this.onClick();
@@ -265,8 +265,7 @@ class Framework extends Component{
 			let changeData = data.filter(item => item[this.props.prop.selected] === true);
 			this.resetSelectValue(mergeArr(changeData, this.state.sels, this.props.prop), changeData, true);
 
-			let dataObj = {};
-			let flatData = [];
+			let dataObj = {}, flatData = [];
 			this.load(data, dataObj, flatData);
 			this.setState({ data, flatData });
 		}else
@@ -285,6 +284,10 @@ class Framework extends Component{
 		//自动判断模式
 		if(type === 'auto'){
 			this.auto(data);
+		}else
+		//树状结构数据更新
+		if(type === 'treeData'){
+			this.value(this.state.sels, null, true)
 		}
 	}
 
@@ -323,7 +326,6 @@ class Framework extends Component{
 	}
 
 	render(config, state) {
-
 		const { theme, prop, radio, repeat, clickClose, on, max, maxMethod, content, disabled, tree } = config;
 		const borderStyle = { borderColor: theme.color };
 		let { data, dataObj, flatData, sels, show, tmpColor } = state;
@@ -355,7 +357,6 @@ class Framework extends Component{
 
 		//渲染组件
 		let Body = content ? <Custom { ...bodyProps } /> : tree.show ? <Tree { ...bodyProps } /> : <General { ...bodyProps } />;
-
 
 		return (
 			<xm-select { ...xmSelectProps } >

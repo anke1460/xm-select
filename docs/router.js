@@ -113,8 +113,8 @@ export default [{
 	}, {
         path: '/test',
         name: '测试',
-        hidden: true,
-        // hidden: false,
+        // hidden: true,
+        hidden: false,
         component: importMd('/ZTEST'),
     },
 

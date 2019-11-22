@@ -52,8 +52,9 @@ class Label extends Component{
 		const conf = label[type];
 
 		//渲染结果
-		let html = '';
-		let innerHTML = true;
+		let html = '', innerHTML = true;
+		//悬浮显示已选择
+		let title = sels.map(item => item[name]).join(',')
 
 		if(type === 'text'){
 			html = sels.map(sel => `${conf.left}${sel[name]}${conf.right}`).join(conf.separator)
@@ -103,7 +104,7 @@ class Label extends Component{
 				<div class="scroll" ref={ ref => this.labelRef = ref }>
 					{ innerHTML ?
 						<div class="label-content" dangerouslySetInnerHTML={{__html: html}}></div> :
-						<div class="label-content">{ html }</div>
+						<div class="label-content" title={ title }>{ html }</div>
 					}
 				</div>
 			</div>

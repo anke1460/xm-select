@@ -18,13 +18,14 @@
 | filterMethod	  | 搜索回调函数 | function(val, item, index, prop)  val: 当前搜索值, item: 每个option选项, index: 位置数据中的下标, prop: 定义key		   |	-	|	-	|
 | filterDone		| 搜索完成函数 | function(val, list)  val: 当前搜索值, list: 过滤后的数据		   |	-	|	-	|
 | remoteSearch	  | 是否开启自定义搜索 (远程搜索)| boolean		   |	true / false   |	false	|
-| remoteMethod	  | 自定义搜索回调函数 | function(val, cb, show)  val: 当前搜索值, cb: 回调函数, 需要回调一个数组, 结构同data, show: 下拉框显示状态		 |	-	|	-	|
+| remoteMethod	  | 自定义搜索回调函数 | function(val, cb, show, pageIndex)  val: 当前搜索值, cb(arr, totalPage): 回调函数, 需要回调一个数组, 结构同data, 远程分页需要第二个参数: 总页码, show: 下拉框显示状态, pageIndex: 分页下当前页码		 |	-	|	-	|
 | direction		 | 下拉方向| string		   |	auto / up / down   |	auto	|
 | style			 | 自定义样式| object		   |	-   |	{ }	|
 | height			| 默认最大高度| string		   |	-   |	200px   |
 | paging			| 是否开启自定义分页 | boolean		   |	true / false   |	false	|
 | pageSize		  | 分页条数 | int		   |	-   |	10	|
 | pageEmptyShow	 | 分页无数据是否显示 | boolean		   |	true / false   |	true	|
+| pageRemote	 | 是否开启远程分页 | boolean		   |	true / false   |	true	|
 | radio			 | 是否开启单选模式 | boolean		   |	true / false   |	false	|
 | repeat			| 是否开启重复性模式 | boolean		   |	true / false   |	false	|
 | clickClose		| 是否点击选项后自动关闭下拉框 | boolean		   |	true / false   |	false	|

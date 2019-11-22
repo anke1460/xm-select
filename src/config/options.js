@@ -60,6 +60,8 @@ export default function (lan = 'zn') {
 		pageSize: 10,
 		//分页无数据是否展示分页
 		pageEmptyShow: true,
+		//是否开启远程分页
+		pageRemote: false,
 		//是否开启单选模式
 		radio: false,
 		//是否开启重复选模式
@@ -91,6 +93,10 @@ export default function (lan = 'zn') {
 			expandedKeys: [],
 			//是否严格遵守父子模式
 			strict: true,
+			//是否懒加载
+			lazy: false,
+			//懒加载回调
+			load: null,
 		},
 		//自定义属性名称
 		prop: {
