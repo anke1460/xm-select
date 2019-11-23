@@ -17,6 +17,10 @@ export default function (lan = 'zn') {
 		content: '',
 		//表单提交的name
 		name: 'select',
+		//表单验证
+		layVerify: '',
+		//验证类型
+		layVerType: '',
 		//尺寸
 		size: 'medium',
 		//是否禁用多选

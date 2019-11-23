@@ -124,7 +124,10 @@ class Framework extends Component{
 	resetSelectValue(sels = [], change = [], isAdd, listenOn = true){
 		let on = this.props.on;
 		if(isFunction(on) && this.prepare && listenOn){
-			on({ arr: sels, change, isAdd });
+			let listenResult = on({ arr: sels, change, isAdd });
+			if(isArray(listenResult)){
+				return this.value(listenResult, null, false);
+			}
 		}
 		this.setState({ sels });
 	}
@@ -360,7 +363,7 @@ class Framework extends Component{
 
 		return (
 			<xm-select { ...xmSelectProps } >
-				<input class="xm-select-default" name={ config.name } value={ sels.map(item => item[prop.value]).join(',') }></input>
+				<input class="xm-select-default" lay-verify={ config.layVerify } lay-verType={ config.layVerType } name={ config.name } value={ sels.map(item => item[prop.value]).join(',') }></input>
 				<i class={ show ? 'xm-icon xm-icon-expand' : 'xm-icon' } />
 				{ sels.length === 0 && <div class="xm-tips">{ config.tips }</div> }
 				<Label { ...labelProps } />

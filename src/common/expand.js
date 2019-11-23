@@ -97,3 +97,12 @@ if (!Array.prototype.findIndex) {
 		return -1;
 	};
 }
+
+//拓展Object values方法
+if (!Object.values) {
+	Object.prototype.values = function(obj) {
+		return Object.keys(obj).map(function(e) {
+			return obj[e];
+		});
+	};
+}

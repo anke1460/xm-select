@@ -105,7 +105,7 @@ class Tree extends Component{
 			}
 			const className = ['xm-option', (dis ? ' disabled' : ''), (selected ? ' selected' : ''), (showIcon ? 'show-icon' : 'hide-icon') ].join(' ');
 			const iconClass = ['xm-option-icon xm-iconfont', radio ? 'xm-icon-danx' : tree.strict && half ? 'xm-icon-banxuan' : 'xm-icon-duox'].join(' ');
-			const treeIconClass = ['xm-tree-icon', expand ? 'expand':'', item[children] && (item[children].length > 0 || tree.lazy) ? 'visible':'hidden'].join(' ');
+			const treeIconClass = ['xm-tree-icon', expand ? 'expand':'', item[children] && (item[children].length > 0 || (tree.lazy && item.__node.loading !== false)) ? 'visible':'hidden'].join(' ');
 
 			return (
 				<div class={ className } style={ itemStyle } value={ item[value] } onClick={ this.optionClick.bind(this, item, selected, item[disabled], 'line') }>
@@ -128,7 +128,7 @@ class Tree extends Component{
 				return (
 					<div class="xm-tree">
 						{ tree.showFolderIcon && tree.showLine && expand && <i class='left-line left-line-group' style={ {left: indent + 3 + 'px'} }></i> }
-						{ renderItem(item, indent, expand) }
+						{ renderItem(item, indent, child.length === 0 && item.__node.loading === false ? 0 : expand) }
 						{ expand && <div class="xm-tree-box">{ child.map(c => renderGroup(c, indent)) }</div> }
 					</div>
 				)
