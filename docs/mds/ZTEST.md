@@ -8,7 +8,9 @@
 var demo1 = xmSelect.render({
 	el: '#demo1', 
 	autoRow: true,
+	filterable: true,
 	tree: {
+		strict: false,
 		show: true,
 		showFolderIcon: true,
 		showLine: true,

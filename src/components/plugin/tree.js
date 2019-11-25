@@ -7,7 +7,12 @@ class Tree extends Component{
 
 		this.state = {
 			expandedKeys: [],
+			filterValue: '',
 		}
+
+		this.searchCid = 0;
+		this.inputOver = true;
+		this.__value = '';
 	}
 
 	init(props){
@@ -34,8 +39,16 @@ class Tree extends Component{
 
 	optionClick(item, selected, disabled, type, e){
 		if(type === 'line'){
+			//加载中的不需要进行处理
 			if(item.__node.loading === true){
 				return;
+			}
+
+			const { tree, prop, sels } = this.props;
+
+			//不是父节点的不需要处理
+			if(!tree.lazy && !item[prop.optgroup]){
+				return
 			}
 
 			let val = item[this.props.prop.value];
@@ -45,13 +58,12 @@ class Tree extends Component{
 			this.setState({ expandedKeys });
 
 			//是否需要懒加载
-			const { tree, prop, sels } = this.props;
 			let child = item[prop.children];
 			if(tree.lazy && child && child.length === 0 && item.__node.loading !== false){
 				item.__node.loading = true;
 				tree.load(item, (result) => {
 					item.__node.loading = false;
-					item[prop.children] = result;
+					item[prop.children] = this.handlerData(result, prop.children);
 					item[prop.selected] = sels.findIndex(i => i[prop.value] === item[prop.value]) != -1
 					this.props.onReset(item, 'treeData');
 				});
@@ -63,9 +75,93 @@ class Tree extends Component{
 		this.blockClick(e);
 	}
 
+	handlerData(data, children){
+		return data.map(item => {
+			item.__node = {};
+			if(item[children]){
+				item[children] = this.handlerData(item[children], children);
+			}
+			return item;
+		})
+	}
+
+	searchInput(e){
+		let v = e.target.value;
+
+		if(v === this.__value){
+			return ;
+		}
+
+		clearTimeout(this.searchCid);
+		if(this.inputOver){
+			//保证输入框内的值是实时的
+			this.__value = v;
+
+			//让搜索变成异步的
+			this.searchCid = setTimeout(() => {
+				this.callback = true;
+				this.setState({ filterValue: this.__value })
+			}, this.props.delay);
+		}
+	}
+
+	focus(){
+		this.searchInputRef && this.searchInputRef.focus();
+	}
+
+	blur(){
+		this.searchInputRef && this.searchInputRef.blur();
+	}
+
+	handleComposition(e){
+		let type = e.type;
+
+		if(type === 'compositionstart'){
+			this.inputOver = false;
+			clearTimeout(this.searchCid);
+		}else if(type === 'compositionend'){
+			this.inputOver = true;
+			this.searchInput(e);
+		}
+	}
+
+	filterData(data, val){
+		const { prop, filterMethod, tree } = this.props;
+		const { children, optgroup, name, value } = prop;
+		data.forEach((item, index) => {
+			if(item[optgroup]){
+				let child = this.filterData(item[children], val);
+				item.__node.hidn = val ? child.filter(c => !c.__node.hidn).length === 0 : false;
+				if(!item.__node.hidn){
+					let keys = this.state.expandedKeys;
+					if(val && keys.findIndex(key => key === item[value]) === -1){
+						keys.push(item[value]);
+						this.setState({ expandedKeys: keys })
+					}
+					return
+				}
+				if(tree.strict){
+					return
+				}
+			}
+			item.__node.hidn = val ? !filterMethod(val, item, index, prop) : false;
+		});
+		return data;
+	}
+
 	//组件将要接收新属性
 	componentWillReceiveProps(props){
-		// this.init(props);
+		if(this.props.show != props.show){
+			if(!props.show){
+				//清空输入框的值
+				this.setState({ filterValue: '' });
+				this.__value = '';
+				this.searchInputRef && (this.searchInputRef.value = '');
+			}else{
+				//聚焦输入框
+				setTimeout(() => this.focus(), 0);
+			}
+		}
 	}
 
 	//组件将要被挂载
@@ -74,7 +170,7 @@ class Tree extends Component{
 	}
 
 	render(config, { expandedKeys }) {
-		let { prop, empty, sels, theme, radio, template, data, tree } = config;
+		let { prop, empty, sels, theme, radio, template, data, tree, filterable, searchTips } = config;
 		let { name, value, disabled, children } = prop;
 
 		const showIcon = config.model.icon != 'hidden';
@@ -120,6 +216,10 @@ class Tree extends Component{
 		}
 
 		const renderGroup = (item, indent) => {
+			if(item.__node.hidn){
+				return;
+			}
+
 			const child = item[children];
 			indent = indent + tree.indent
 			if(child){//分组模式
@@ -136,19 +236,45 @@ class Tree extends Component{
 			return renderItem(item, indent, 0);
 		}
 
-		let arr = data.map(item => renderGroup(item, 10 - tree.indent));
+		//这里处理过滤数据
+		if(filterable){
+			this.filterData(data, this.state.filterValue);
+		}
+
+		let arr = data.map(item => renderGroup(item, 10 - tree.indent)).filter(a => a);
 
 		if(!arr.length){
 			//查看无数据情况下是否显示分页
 			arr.push(<div class="xm-select-empty">{ empty }</div>)
 		}
 
+		const search = (
+			<div class='xm-search'>
+				<i class="xm-iconfont xm-icon-sousuo"></i>
+				<input class="xm-input xm-search-input" placeholder={ searchTips } />
+			</div>
+		);
+
 		return (
 			<div onClick={ this.blockClick } class="xm-body-tree" >
+				{ filterable && search }
 				<div class="scroll-body" style={ {maxHeight: config.height} }>{ arr }</div>
 			</div>
 		)
 	}
+
+	//组件完成挂载
+	componentDidMount(){
+		let input = this.base.querySelector('.xm-search-input');
+		if(input){
+			input.addEventListener('compositionstart', this.handleComposition.bind(this));
+			input.addEventListener('compositionupdate', this.handleComposition.bind(this));
+			input.addEventListener('compositionend', this.handleComposition.bind(this));
+			input.addEventListener('input', this.searchInput.bind(this));
+			this.searchInputRef = input;
+		}
+	}
+
 }
 
 export default Tree;

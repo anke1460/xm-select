@@ -2,8 +2,11 @@ import "babel-polyfill"
 import Vue from 'vue';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+
 import hljs from 'highlight.js';
-import 'highlight.js/styles/color-brewer.css'
+// import 'highlight.js/styles/color-brewer.css'
+import 'highlight.js/styles/monokai-sublime.css'
+
 import VueRouter from 'vue-router';
 import routes from './router';
 import App from './App.vue';

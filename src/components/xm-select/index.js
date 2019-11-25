@@ -156,7 +156,6 @@ class xmOptions {
 		return this;
 	}
 
-
 }
 
 export default xmOptions;

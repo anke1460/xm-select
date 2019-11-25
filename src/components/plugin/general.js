@@ -20,7 +20,6 @@ class General extends Component{
 		this.searchCid = 0;
 		this.inputOver = true;
 		this.__value = '';
-		this.dynamicInput = false;
 	}
 
 	optionClick(item, selected, disabled, e){
