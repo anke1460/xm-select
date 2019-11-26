@@ -298,6 +298,10 @@ class Framework extends Component{
 		//树状结构数据更新
 		if(type === 'treeData'){
 			this.value(this.state.sels, null, true)
+		}else
+		//树状结构数据更新
+		if(type === 'close'){
+			this.onClick();
 		}
 	}
 
@@ -351,6 +355,7 @@ class Framework extends Component{
 			onClick: this.onClick.bind(this),
 			ua: checkUserAgent(),
 			size: config.size,
+			tabindex: 1,
 		}
 		if(tmpColor){
 			xmSelectProps.style.borderColor = tmpColor;
@@ -385,6 +390,13 @@ class Framework extends Component{
 	//组件完成挂载
 	componentDidMount(){
 		this.prepare = true;
+
+		this.base.addEventListener('keydown', e => {
+			let keyCode = e.keyCode;
+			if(keyCode === 13){
+				this.onClick()
+			}
+		});
 	}
 
 	//此时页面又被重新渲染了

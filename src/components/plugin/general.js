@@ -24,6 +24,7 @@ class General extends Component{
 		this.inputOver = true;
 		this.__value = '';
 		this.tempData = [];
+		this.size = 0;
 	}
 
 	optionClick(item, selected, disabled, e){
@@ -46,6 +47,7 @@ class General extends Component{
 		}else if(isFunction(m)){
 			m(item);
 		}
+		this.focus();
 		//阻止父组件上的事件冒泡
 		this.blockClick(e);
 	}
@@ -54,7 +56,7 @@ class General extends Component{
 		e.stopPropagation();
 	}
 
-	pagePrevClick(e){
+	pagePrevClick(size = this.size){
 		let index = this.state.pageIndex;
 		if(index <= 1){
 			return ;
@@ -62,7 +64,7 @@ class General extends Component{
 		this.changePageIndex(index - 1);
 		this.props.pageRemote && this.postData(index - 1, true);
 	}
-	pageNextClick(e, size){
+	pageNextClick(size = this.size){
 		let index = this.state.pageIndex;
 		if(index >= size){
 			return ;
@@ -135,8 +137,23 @@ class General extends Component{
 	}
 
 	//键盘事件
-	keydown(e){
+	keydown(type, e){
 		let keyCode = e.keyCode;
+
+		if(type === 'div'){
+			//Esc, Tab
+			if(keyCode === 27 || keyCode === 9){
+				this.props.onReset(false, 'close');
+			}else
+			//Left
+			if(keyCode === 37){
+				this.pagePrevClick();
+			}else
+			//Right 键
+			if(keyCode === 39){
+				this.pageNextClick();
+			}
+		}
 
 		const { value, optgroup, disabled } = this.props.prop;
 		let data = this.tempData.filter(item => !item[optgroup] && !item[disabled]);
@@ -186,7 +203,13 @@ class General extends Component{
 				this.searchInputRef && (this.searchInputRef.value = '');
 			}else{
 				//聚焦输入框
-				setTimeout(() => this.focus(), 0);
+				setTimeout(() => {
+					if(props.filterable){
+						this.focus()
+					}else{
+						this.base.focus()
+					}
+				}, 0);
 			}
 		}
 	}
@@ -280,12 +303,13 @@ class General extends Component{
 			pageIndex == size && (nextStyle = disabledStyle);
 
 			this.state.pageIndex !== pageIndex && this.changePageIndex(pageIndex);
+			this.size = size;
 
 			paging = (
 				<div class='xm-paging'>
-					<span style={ prevStyle } onClick={ this.pagePrevClick.bind(this) }>上一页</span>
+					<span style={ prevStyle } onClick={ this.pagePrevClick.bind(this, size) }>上一页</span>
 					<span>{ this.state.pageIndex } / { size }</span>
-					<span style={ nextStyle } onClick={ e => this.pageNextClick.bind(this, e, size)() }>下一页</span>
+					<span style={ nextStyle } onClick={ this.pageNextClick.bind(this, size) }>下一页</span>
 				</div>
 			)
 		}else{
@@ -364,6 +388,7 @@ class General extends Component{
 
 					return (<div class={ toolClass } style={ toolStyle } onClick={ () => {
 						isFunction(info.method) && info.method(safetyArr)
+						this.focus()
 					} } onMouseEnter={ hoverChange } onMouseLeave={ hoverChange }>
 						{ config.toolbar.showIcon && <i class={ info.icon }></i> }
 						<span>{ info.name }</span>
@@ -386,14 +411,26 @@ class General extends Component{
 				itemStyle.backgroundColor = theme.color;
 				item[disabled] && (itemStyle.backgroundColor = '#C2C2C2');
 			}
-			if(item[value] === this.state.val){
-				itemStyle.backgroundColor = '#f2f2f2'
-			}
 			const className = ['xm-option', (item[disabled] ? ' disabled' : ''), (selected ? ' selected' : ''), (showIcon ? 'show-icon' : 'hide-icon') ].join(' ');
 			const iconClass = ['xm-option-icon xm-iconfont', radio ? 'xm-icon-danx' : 'xm-icon-duox'].join(' ');
 
+			//处理键盘的选择背景色
+			if(item[value] === this.state.val){
+				itemStyle.backgroundColor = theme.hover
+			}
+			//处理鼠标选择的背景色
+			const hoverChange = e => {
+				if(e.type === 'mouseenter'){
+					if(!item[disabled]){
+						this.setState({ val: item[value] })
+					}
+				}
+			}
+
 			return (
-				<div class={ className } style={ itemStyle } value={ item[value] } onClick={ this.optionClick.bind(this, item, selected, item[disabled]) }>
+				<div class={ className } style={ itemStyle } value={ item[value] } onClick={
+					this.optionClick.bind(this, item, selected, item[disabled])
+				} onMouseEnter={ hoverChange } onMouseLeave={ hoverChange }>
 					{ showIcon && <i class={ iconClass } style={ iconStyle }></i> }
 					<div class='xm-option-content' dangerouslySetInnerHTML={{ __html: template({ data, item, arr: sels, name: item[name], value: item[value] }) }}></div>
 				</div>
@@ -424,7 +461,7 @@ class General extends Component{
 		}
 
 		return (
-			<div onClick={ this.blockClick }>
+			<div onClick={ this.blockClick } tabindex="1" style="outline: none;">
 				<div>
 					{ config.toolbar.show && toolbar }
 					{ filterable && search }
@@ -445,10 +482,10 @@ class General extends Component{
 			input.addEventListener('compositionstart', this.handleComposition.bind(this));
 			input.addEventListener('compositionupdate', this.handleComposition.bind(this));
 			input.addEventListener('compositionend', this.handleComposition.bind(this));
-			input.addEventListener('input', this.searchInput.bind(this));
-			input.addEventListener('keydown', this.keydown.bind(this));
+			input.addEventListener('input', this.searchInput.bind(this, 'input'));
 			this.searchInputRef = input;
 		}
+		this.base.addEventListener('keydown', this.keydown.bind(this, 'div'));
 	}
 
 	//此时页面又被重新渲染了

@@ -6,7 +6,7 @@
 
 #### 新增
 
-- 键盘操作，up，down，enter
+- 键盘操作，up(上)，down(下)，Left(上一页)，Right(下一页)，enter(选中、取消)
 
 #### Bug fixes
 

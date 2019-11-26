@@ -298,7 +298,7 @@ class Tree extends Component{
 
 		return (
 			<div onClick={ this.blockClick } class="xm-body-tree" >
-				{ config.toolbar.show && toolbar }
+				// { config.toolbar.show && toolbar }
 				{ filterable && search }
 				<div class="scroll-body" style={ {maxHeight: config.height} }>{ arr }</div>
 			</div>
