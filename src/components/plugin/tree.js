@@ -296,9 +296,9 @@ class Tree extends Component{
 			arr.push(<div class="xm-select-empty">{ empty }</div>)
 		}
 
+		// { config.toolbar.show && toolbar }
 		return (
 			<div onClick={ this.blockClick } class="xm-body-tree" >
-				// { config.toolbar.show && toolbar }
 				{ filterable && search }
 				<div class="scroll-body" style={ {maxHeight: config.height} }>{ arr }</div>
 			</div>
