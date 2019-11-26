@@ -59,7 +59,6 @@ xm-select{
 	display: block;
 	width: 100%;
 	cursor: pointer;
-	outline: none;
 
 	&:hover{
 		border-color: #C0C4CC;
@@ -213,9 +212,9 @@ xm-select{
 			padding: 0 10px;
 			cursor: pointer;
 
-			// &:hover{
-			// 	background-color: #f2f2f2;
-			// }
+			&:hover{
+				background-color: #f2f2f2;
+			}
 			&-icon{
 				color: transparent;
 				display: flex;
@@ -306,6 +305,7 @@ xm-select{
 			&>span:last-child{
 				border-radius: 0 2px 2px 0
 			}
+
 			&>span{
 				display: flex;
 				flex: auto;

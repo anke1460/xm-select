@@ -8,8 +8,7 @@
 var demo1 = xmSelect.render({
 	el: '#demo1', 
 	autoRow: true,
-	paging: true,
-	pageSize: 2,
+	filterable: true,
 	tree: {
 		strict: true,
 		show: false,
