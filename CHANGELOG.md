@@ -1,5 +1,19 @@
 ## 更新日志
 
+### 1.1.1
+
+*2019-11-26*
+
+#### 新增
+
+- 键盘操作，up，down，enter
+
+#### Bug fixes
+
+- 修改分组模式下第一级数据中children为空数组报错
+- 修改tree模式+radio模式无法选中父节点的bug
+
+
 ### 1.1.0
 
 *2019-11-25*
@@ -132,7 +146,7 @@
 #### 新增
 
 - 新增`disabled`配置, 可以禁用多选
-- 新增`create`配置, 可以创建条目, 具体见 [创建条目](https://maplemei.gitee.io/xm-select/#/example/XM27)
+- 新增`create`配置, 可以创建条目, 具体见 [创建条目](https://maplemei.gitee.io/xm-select/#/basic/create)
 - 方法`warning`新增参数`sustain`, 可以配置是否持续显示
 - 新增全局`get`方法, 可以获取多选渲染后的对象
 - 新增全局`batch`方法, 可以批量给渲染后的多选执行方法
@@ -149,7 +163,7 @@
 
 #### 新增
 
-- 新增`content`配置, 可自定义下拉框HTML, 具体见 [下拉自定义](https://maplemei.gitee.io/xm-select/#/example-plugin/ZP01)
+- 新增`content`配置, 可自定义下拉框HTML, 具体见 [下拉自定义](https://maplemei.gitee.io/xm-select/#/plugin/customer)
 - 方法`setValue`新增参数`listenOn`, 可以设置是否通过`on`监听
 
 #### Bug fixes

@@ -475,6 +475,12 @@ xm-select{
 		background-color: #FFF;
 	}
 
+	.item--divided{
+		border-top: 1px solid #ebeef5;
+		width: calc(100% - 20px);
+		cursor: initial;
+	}
+
 }
 
 //不同尺寸下的数据调整
@@ -518,6 +524,9 @@ xm-select{
 		.xm-tree-icon.hidden+.top-line{
 			top: @size / 2 - 1px;
 		}
+	}
+	.item--divided{
+		margin: @size / 4;
 	}
 }
 xm-select[size='large']{

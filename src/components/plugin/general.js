@@ -1,6 +1,8 @@
 import { h, Component, render } from 'preact'
 import { isFunction, isArray, safety, deepMerge, mergeArr, IEVersion } from '@/common/util'
 
+const emptyVal = {};
+
 /**
  * 普通的多选渲染
  */
@@ -15,15 +17,18 @@ class General extends Component{
 			loading: false,
 			pageIndex: 1,
 			totalSize: 0,
+			val: emptyVal,
 		});
 
 		this.searchCid = 0;
 		this.inputOver = true;
 		this.__value = '';
+		this.tempData = [];
 	}
 
 	optionClick(item, selected, disabled, e){
 		this.props.ck(item, selected, disabled);
+		this.focus();
 		//阻止父组件上的事件冒泡
 		this.blockClick(e);
 	}
@@ -129,12 +134,54 @@ class General extends Component{
 		}
 	}
 
+	//键盘事件
+	keydown(e){
+		let keyCode = e.keyCode;
+
+		const { value, optgroup, disabled } = this.props.prop;
+		let data = this.tempData.filter(item => !item[optgroup] && !item[disabled]);
+		let len = data.length - 1;
+		if(len === -1){
+			return ;
+		}
+
+		let index = data.findIndex(item => item[value] === this.state.val);
+		//Up 键
+		if(keyCode === 38){
+			if(index <= 0){
+				index = len
+			}else if(index > 0){
+				index -= 1;
+			}
+			let val = data[index][value];
+			this.setState({ val })
+		}else
+		//Down 键
+		if(keyCode === 40){
+			if(index === -1 || index === len){
+				index = 0
+			}else if(index < len){
+				index += 1;
+			}
+			let val = data[index][value];
+			this.setState({ val })
+		}else
+		//Enter 键
+		if(keyCode === 13){
+			if(this.state.val != emptyVal){
+				let option = data[index];
+				this.optionClick(option, this.props.sels.findIndex(item => item[value] === this.state.val) != -1, option[disabled], e)
+			}
+		}
+
+	}
+
 	//组件将要接收新属性
 	componentWillReceiveProps(props){
 		if(this.props.show != props.show){
 			if(!props.show){
 				//清空输入框的值
-				this.setState({ filterValue: '' });
+				this.setState({ filterValue: '', val: emptyVal });
 				this.__value = '';
 				this.searchInputRef && (this.searchInputRef.value = '');
 			}else{
@@ -150,6 +197,7 @@ class General extends Component{
 		const { name, value, disabled, children, optgroup } = prop;
 
 		let arr = deepMerge([], flatData), creator;
+
 		//是否开启了搜索
 		if(filterable){
 			if(remoteSearch){//是否进行远程搜索
@@ -194,8 +242,8 @@ class General extends Component{
 		);
 
 		//如果是分组模式, 要分页先去除分组, 然后在计算分页, 最后再加上分组
-		let groups = [], groupInfo = {};
-		groups = arr.filter(item => item[optgroup]).forEach(g => {
+		let groupInfo = {};
+		arr.filter(item => item[optgroup]).forEach(g => {
 			g[children].forEach(item => groupInfo[item[value]] = g);
 		});
 		arr = arr.filter(item => !item[optgroup]);
@@ -247,12 +295,16 @@ class General extends Component{
 			}
 		}
 
-		let newArr = [], group;
+		let newArr = [], group, tmpGroup = { __tmp: true };
+		tmpGroup[optgroup] = true;
 		arr.forEach(item => {
 			let g = groupInfo[item[value]];
+			if(group && !g){
+				g = tmpGroup
+			}
 			if(g != group){
 				group = g;
-				newArr.push(group);
+				g && newArr.push(group);
 			}
 			newArr.push(item);
 		});
@@ -334,6 +386,9 @@ class General extends Component{
 				itemStyle.backgroundColor = theme.color;
 				item[disabled] && (itemStyle.backgroundColor = '#C2C2C2');
 			}
+			if(item[value] === this.state.val){
+				itemStyle.backgroundColor = '#f2f2f2'
+			}
 			const className = ['xm-option', (item[disabled] ? ' disabled' : ''), (selected ? ' selected' : ''), (showIcon ? 'show-icon' : 'hide-icon') ].join(' ');
 			const iconClass = ['xm-option-icon xm-iconfont', radio ? 'xm-icon-danx' : 'xm-icon-duox'].join(' ');
 
@@ -348,6 +403,9 @@ class General extends Component{
 		const renderGroup = item => {
 			const isGroup = item[optgroup];
 			if(isGroup){//分组模式
+				if(item.__tmp){
+					return <div class="item--divided"></div>
+				}
 				return (
 					<div class="xm-group">
 						<div class="xm-group-item" onClick={ this.groupClick.bind(this, item) }>{ item[name] }</div>
@@ -388,6 +446,7 @@ class General extends Component{
 			input.addEventListener('compositionupdate', this.handleComposition.bind(this));
 			input.addEventListener('compositionend', this.handleComposition.bind(this));
 			input.addEventListener('input', this.searchInput.bind(this));
+			input.addEventListener('keydown', this.keydown.bind(this));
 			this.searchInputRef = input;
 		}
 	}

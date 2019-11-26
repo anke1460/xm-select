@@ -1,4 +1,5 @@
 import { h, Component, render } from 'preact'
+import { deepMerge, isFunction } from '@/common/util'
 
 class Tree extends Component{
 
@@ -242,11 +243,46 @@ class Tree extends Component{
 		}
 
 		let arr = data.map(item => renderGroup(item, 10 - tree.indent)).filter(a => a);
+		let safetyArr = deepMerge([], arr);
+		let safetySels = deepMerge([], sels);
 
-		if(!arr.length){
-			//查看无数据情况下是否显示分页
-			arr.push(<div class="xm-select-empty">{ empty }</div>)
-		}
+		//工具条操作
+		const toolbar = (
+			<div class='xm-toolbar'>
+				{ config.toolbar.list.map(tool => {
+					const toolClass = 'toolbar-tag';
+
+					let info, name = config.languageProp.toolbar[tool];
+					if(tool === 'ALL'){
+						info = { icon: 'xm-iconfont xm-icon-quanxuan', name, method: (pageData) => {
+
+						} };
+					}else if(tool === 'CLEAR'){
+						info = { icon: 'xm-iconfont xm-icon-qingkong', name, method: (pageData) => {
+
+						} };
+					}else if(tool === 'REVERSE'){
+						info = { icon: 'xm-iconfont xm-icon-fanxuan', name, method: (pageData) => {
+
+						} };
+					}else {
+						info = tool
+					}
+
+					const hoverChange = e => {
+						if(e.type === 'mouseenter') e.target.style.color = theme.color;
+						if(e.type === 'mouseleave') e.target.style.color = '';
+					}
+
+					return (<div class={ toolClass } onClick={ () => {
+						isFunction(info.method) && info.method(safetyArr, safetySels)
+					} } onMouseEnter={ hoverChange } onMouseLeave={ hoverChange }>
+						{ config.toolbar.showIcon && <i class={ info.icon }></i> }
+						<span>{ info.name }</span>
+					</div>)
+				}).filter(a => a) }
+			</div>
+		)
 
 		const search = (
 			<div class='xm-search'>
@@ -255,8 +291,14 @@ class Tree extends Component{
 			</div>
 		);
 
+		if(!arr.length){
+			//查看无数据情况下是否显示分页
+			arr.push(<div class="xm-select-empty">{ empty }</div>)
+		}
+
 		return (
 			<div onClick={ this.blockClick } class="xm-body-tree" >
+				{ config.toolbar.show && toolbar }
 				{ filterable && search }
 				<div class="scroll-body" style={ {maxHeight: config.height} }>{ arr }</div>
 			</div>

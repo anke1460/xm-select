@@ -33,13 +33,16 @@ class Framework extends Component{
 	}
 
 	init(props, refresh){
-		let { data, prop, initValue } = props, sels;
+		let { data, prop, initValue, radio } = props, sels;
 		//如果新数据和旧数据不同 或者 强制刷新 才进行数据处理
 		if(refresh){
 			let dataObj = {};
 			let flatData = [];
 			this.load(data, dataObj, flatData);
-			sels = initValue ? this.exchangeValue(initValue, true, dataObj) : Object.values(dataObj).filter(item => item[prop.selected] === true).filter(item => item[prop.optgroup] !== true)
+			sels = this.exchangeValue(initValue ? initValue :  Object.values(dataObj).filter(item => item[prop.selected] === true), dataObj)
+			if(radio && sels.length > 1){
+				sels = sels.slice(0, 1)
+			}
 			this.setState({ sels, dataObj, flatData });
 		}
 
@@ -48,8 +51,12 @@ class Framework extends Component{
 		return sels;
 	}
 
-	exchangeValue(arr, filterGroup = true, dataObj = this.state.dataObj){
+	exchangeValue(arr, dataObj = this.state.dataObj){
 		let list = arr.map(sel => typeof sel === 'object' ? sel : dataObj[sel]).filter(a => a)
+		let filterGroup = true, { tree } = this.props;
+		if(tree.show && tree.strict === false){
+			filterGroup = false;
+		}
 		filterGroup && (list = list.filter(item => item[this.props.prop.optgroup] !== true))
 		return list;
 	}
@@ -60,7 +67,7 @@ class Framework extends Component{
 		}
 
 		const { prop, tree } = this.props;
-		let changeData = this.exchangeValue(sels, !tree.show);
+		let changeData = this.exchangeValue(sels);
 		if(tree.show && tree.strict){
 			let data = this.state.data;
 			this.clearAndReset(data, changeData);
