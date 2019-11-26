@@ -1,6 +1,6 @@
 /*!
  * @Title: xm-select
- * @Version: 1.1.0
+ * @Version: 1.1.1
  * @Description：基于layui的多选解决方案
  * @Site: https://gitee.com/maplemei/xm-select
  * @Author: maplemei
