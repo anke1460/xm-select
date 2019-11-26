@@ -114,8 +114,9 @@ export default function (lan = 'zn') {
 		},
 		//主题配置
 		theme: {
-			color: '#009688',	   //默认主题颜色
+			color: '#009688',		//默认主题颜色
 			maxColor: '#e54d42',	//多选上限边框闪烁颜色
+			hover: '#f2f2f2',		//键盘hover的颜色
 		},
 		//模型
 		model: {
