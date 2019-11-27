@@ -482,7 +482,7 @@ class General extends Component{
 			input.addEventListener('compositionstart', this.handleComposition.bind(this));
 			input.addEventListener('compositionupdate', this.handleComposition.bind(this));
 			input.addEventListener('compositionend', this.handleComposition.bind(this));
-			input.addEventListener('input', this.searchInput.bind(this, 'input'));
+			input.addEventListener('input', this.searchInput.bind(this));
 			this.searchInputRef = input;
 		}
 		this.base.addEventListener('keydown', this.keydown.bind(this, 'div'));
