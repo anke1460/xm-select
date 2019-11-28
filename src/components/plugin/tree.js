@@ -204,11 +204,20 @@ class Tree extends Component{
 			const iconClass = ['xm-option-icon xm-iconfont', radio ? 'xm-icon-danx' : tree.strict && half ? 'xm-icon-banxuan' : 'xm-icon-duox'].join(' ');
 			const treeIconClass = ['xm-tree-icon', expand ? 'expand':'', item[children] && (item[children].length > 0 || (tree.lazy && item.__node.loading !== false)) ? 'visible':'hidden'].join(' ');
 
+			const iconArray = [];
+			if(tree.showFolderIcon){
+				iconArray.push(<i class={ treeIconClass }></i>);
+				if(tree.showLine){
+					if(expand){
+						iconArray.push(<i class='left-line' style={ {left: indent - tree.indent + 3 + 'px'} }></i>)
+					}
+					iconArray.push(<i class='top-line' style={ { left: indent - tree.indent + 3 + 'px', width: tree.indent + (expand === 0 ? 10 : -2) + 'px' } }></i>);
+				}
+			}
+
 			return (
 				<div class={ className } style={ itemStyle } value={ item[value] } onClick={ this.optionClick.bind(this, item, selected, item[disabled], 'line') }>
-					{ tree.showFolderIcon && <i class={ treeIconClass }></i> }
-					{ tree.showFolderIcon && tree.showLine && <i class={ expand ? 'top-line expand' : 'top-line' } style={ { left: indent - tree.indent + 3 + 'px', width: tree.indent + (expand === 0 ? 10 : -2) + 'px' } }></i> }
-					{ tree.showFolderIcon && tree.showLine && <i class={ expand ? 'left-line expand' : 'left-line' } style={ {left: indent - tree.indent + 3 + 'px'} }></i> }
+					{ iconArray }
 					{ item.__node.loading && <span class="loader"></span> }
 					{ showIcon && <i class={ iconClass } style={ iconStyle } onClick={ this.optionClick.bind(this, item, selected, item[disabled], 'checkbox') }></i> }
 					<div class='xm-option-content' dangerouslySetInnerHTML={{ __html: template({ data, item, arr: sels, name: item[name], value: item[value] }) }}></div>

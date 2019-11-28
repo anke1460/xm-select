@@ -11,13 +11,13 @@ var demo1 = xmSelect.render({
 	paging: true,
 	pageSize: 2,
 	tree: {
-		strict: true,
-		show: false,
+		strict: false,
+		show: true,
 		showFolderIcon: true,
 		showLine: true,
 		indent: 20,
 		expandedKeys: [ -1 ],
-		lazy: true,
+		lazy: false,
 		load: function(item, cb){
 			setTimeout(function(){
 				var name = item.name + 1;
@@ -34,11 +34,7 @@ var demo1 = xmSelect.render({
 	height: 'auto',
 	data(){
 		return [
-			{name: '销售员', value: -1, selected: true, children: [
-				{name: '张三1', value: 100, selected: false, children: []},
-				{name: '李四1', value: 2, selected: false},
-				{name: '王五1', value: 3, disabled: false},
-			]},
+			{name: '销售员', value: -1, selected: true},
 			{name: '奖品', value: -2, children: [
 				{name: '奖品3', value: -3, children: [
 					{name: '苹果3', value: 14, selected: false},

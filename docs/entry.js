@@ -11,7 +11,7 @@ import VueRouter from 'vue-router';
 import routes from './router';
 import App from './App.vue';
 import demoBlock from './components/demo-block.vue';
-import './plugins'
+// import './plugins'
 
 Vue.use(ElementUI);
 Vue.use(VueRouter);
