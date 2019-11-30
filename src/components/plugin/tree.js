@@ -1,6 +1,8 @@
 import { h, Component, render } from 'preact'
 import { deepMerge, isFunction } from '@/common/util'
 
+const emptyVal = {};
+
 class Tree extends Component{
 
 	constructor(options){
@@ -9,6 +11,7 @@ class Tree extends Component{
 		this.state = {
 			expandedKeys: [],
 			filterValue: '',
+			val: emptyVal,
 		}
 
 		this.searchCid = 0;
@@ -155,7 +158,7 @@ class Tree extends Component{
 		if(this.props.show != props.show){
 			if(!props.show){
 				//清空输入框的值
-				this.setState({ filterValue: '' });
+				this.setState({ filterValue: '', val: emptyVal });
 				this.__value = '';
 				this.searchInputRef && (this.searchInputRef.value = '');
 			}else{
@@ -214,9 +217,24 @@ class Tree extends Component{
 					iconArray.push(<i class='top-line' style={ { left: indent - tree.indent + 3 + 'px', width: tree.indent + (expand === 0 ? 10 : -2) + 'px' } }></i>);
 				}
 			}
+			
+			//处理键盘的选择背景色
+			if(item[value] === this.state.val){
+				itemStyle.backgroundColor = theme.hover
+			}
+			//处理鼠标选择的背景色
+			const hoverChange = e => {
+				if(e.type === 'mouseenter'){
+					if(!item[disabled]){
+						this.setState({ val: item[value] })
+					}
+				}
+			}
 
 			return (
-				<div class={ className } style={ itemStyle } value={ item[value] } onClick={ this.optionClick.bind(this, item, selected, item[disabled], 'line') }>
+				<div class={ className } style={ itemStyle } value={ item[value] } onClick={ 
+					this.optionClick.bind(this, item, selected, item[disabled], 'line') 
+				} onMouseEnter={ hoverChange } onMouseLeave={ hoverChange }>
 					{ iconArray }
 					{ item.__node.loading && <span class="loader"></span> }
 					{ showIcon && <i class={ iconClass } style={ iconStyle } onClick={ this.optionClick.bind(this, item, selected, item[disabled], 'checkbox') }></i> }
