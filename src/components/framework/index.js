@@ -39,7 +39,10 @@ class Framework extends Component{
 			let dataObj = {};
 			let flatData = [];
 			this.load(data, dataObj, flatData);
-			sels = this.exchangeValue(initValue ? initValue :  Object.values(dataObj).filter(item => item[prop.selected] === true), dataObj)
+			sels = this.exchangeValue(initValue ? initValue :  Object.keys(dataObj).filter(key => {
+				let item = dataObj[key]
+				return item[prop.selected] === true
+			}), dataObj)
 			if(radio && sels.length > 1){
 				sels = sels.slice(0, 1)
 			}

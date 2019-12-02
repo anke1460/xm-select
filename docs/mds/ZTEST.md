@@ -16,17 +16,10 @@ var demo1 = xmSelect.render({
 		showFolderIcon: true,
 		showLine: true,
 		indent: 20,
-		expandedKeys: [ -1 ],
-		lazy: false,
-		load: function(item, cb){
-			setTimeout(function(){
-				var name = item.name + 1;
-				cb([
-					{name: item.name + 1, value: item.value + '1', children: [] },
-					{name: item.name + 2, value: item.value + '2' },
-				])
-			}, 500)
-		},
+		expandedKeys: [ -1, -2 ],
+	},
+	model: {
+		icon: 'hidden'
 	},
 	toolbar: {
 		show: true
@@ -34,18 +27,46 @@ var demo1 = xmSelect.render({
 	height: 'auto',
 	data(){
 		return [
-			{name: '销售员', value: -1, selected: true},
-			{name: '奖品', value: -2, children: [
-				{name: '奖品3', value: -3, children: [
-					{name: '苹果3', value: 14, selected: false},
-					{name: '香蕉3', value: 15},
-					{name: '葡萄3', value: 16},
-				]},
-				{name: '苹果2', value: 4, selected: false, disabled: true},
-				{name: '香蕉2', value: 5},
-				{name: '葡萄2', value: 6},
+			{name: '北京市', value: -1, children: [
+				{name: '朝阳区', value: 1},
+				{name: '海淀区', value: 2},
+				{name: '通州区', value: 3},
+			]},
+			{name: '河北省', value: -2, children: [
+				{name: '廊坊市', value: 4},
+				{name: '石家庄', value: 5},
+				{name: '邯郸市', value: 6},
 			]},
 		]
+	},
+	on: function(data){
+		var arr = data.arr;
+		var item = data.change[0];
+		var isAdd = data.isAdd;
+		
+		if(isAdd){
+			//检查是否有父节点
+			var parent = item.__node.parent;
+			if(parent){//有父节点，选中的是子节点，移除父节点的选中状态
+				var index = arr.findIndex(function(option){
+					return option.value === parent.value
+				})
+				if(index != -1){
+					arr.splice(index, 1)
+				}
+			}else{//无父节点，选中的是父节点，移除子节点的选中状态
+				var child = item.children;
+				child.forEach(function(childItem){
+					var index = arr.findIndex(function(option){
+						return option.value === childItem.value
+					})
+					if(index != -1){
+						arr.splice(index, 1)
+					}
+				})
+			}
+			return arr;
+		}
 	}
 })
 </script>

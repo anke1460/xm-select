@@ -52,6 +52,7 @@ class Tree extends Component{
 
 			//不是父节点的不需要处理
 			if(!tree.lazy && !item[prop.optgroup]){
+				this.props.ck(item, selected, disabled);
 				return
 			}
 
@@ -198,7 +199,15 @@ class Tree extends Component{
 			} : {
 				borderColor: theme.color,
 			};
+
 			const itemStyle = { paddingLeft: indent + 'px' }
+
+			//处理键盘的选择背景色
+			if(item[value] === this.state.val){
+				itemStyle.backgroundColor = theme.hover
+			}
+
+			//隐藏图标的处理
 			if(!showIcon && selected){
 				itemStyle.backgroundColor = theme.color;
 				dis && (itemStyle.backgroundColor = '#C2C2C2');
@@ -217,11 +226,8 @@ class Tree extends Component{
 					iconArray.push(<i class='top-line' style={ { left: indent - tree.indent + 3 + 'px', width: tree.indent + (expand === 0 ? 10 : -2) + 'px' } }></i>);
 				}
 			}
-			
-			//处理键盘的选择背景色
-			if(item[value] === this.state.val){
-				itemStyle.backgroundColor = theme.hover
-			}
+
+
 			//处理鼠标选择的背景色
 			const hoverChange = e => {
 				if(e.type === 'mouseenter'){
@@ -232,8 +238,8 @@ class Tree extends Component{
 			}
 
 			return (
-				<div class={ className } style={ itemStyle } value={ item[value] } onClick={ 
-					this.optionClick.bind(this, item, selected, item[disabled], 'line') 
+				<div class={ className } style={ itemStyle } value={ item[value] } onClick={
+					this.optionClick.bind(this, item, selected, item[disabled], 'line')
 				} onMouseEnter={ hoverChange } onMouseLeave={ hoverChange }>
 					{ iconArray }
 					{ item.__node.loading && <span class="loader"></span> }

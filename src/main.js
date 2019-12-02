@@ -8,7 +8,12 @@ const moduleName = 'xmSelect';
 /**
  * 监听全页面点击关闭事件
  */
-window.addEventListener('click', () => Object.values(datas).forEach(item => item && item.closed && item.closed()))
+window.addEventListener('click', () => {
+	Object.keys(datas).forEach(key => {
+		let item = datas[key]
+		item && item.closed && item.closed()
+	})
+})
 
 
 if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object') {

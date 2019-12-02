@@ -407,6 +407,12 @@ class General extends Component{
 				borderColor: theme.color,
 			};
 			const itemStyle = {}
+			
+			//处理键盘的选择背景色
+			if(item[value] === this.state.val){
+				itemStyle.backgroundColor = theme.hover
+			}
+			//不显示图标时候的背景色处理
 			if(!showIcon && selected){
 				itemStyle.backgroundColor = theme.color;
 				item[disabled] && (itemStyle.backgroundColor = '#C2C2C2');
@@ -414,10 +420,6 @@ class General extends Component{
 			const className = ['xm-option', (item[disabled] ? ' disabled' : ''), (selected ? ' selected' : ''), (showIcon ? 'show-icon' : 'hide-icon') ].join(' ');
 			const iconClass = ['xm-option-icon xm-iconfont', radio ? 'xm-icon-danx' : 'xm-icon-duox'].join(' ');
 
-			//处理键盘的选择背景色
-			if(item[value] === this.state.val){
-				itemStyle.backgroundColor = theme.hover
-			}
 			//处理鼠标选择的背景色
 			const hoverChange = e => {
 				if(e.type === 'mouseenter'){
