@@ -27,7 +27,7 @@ var demo1 = xmSelect.render({
 	height: 'auto',
 	data(){
 		return [
-			{name: '北京市', value: -1, children: [
+			{name: '北京市时代峰峻莱克斯顿荆防颗粒受到了开发建设的路口附近', value: -1, children: [
 				{name: '朝阳区', value: 1},
 				{name: '海淀区', value: 2},
 				{name: '通州区', value: 3},

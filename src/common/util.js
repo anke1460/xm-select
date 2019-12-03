@@ -2,7 +2,7 @@
  * 选中dom元素
  */
 export function selector(el) {
-	return document.querySelector(el);
+	return el.nodeType ? el : document.querySelector(el);
 }
 
 /**
