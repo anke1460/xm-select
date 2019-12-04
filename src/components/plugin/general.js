@@ -337,7 +337,7 @@ class General extends Component{
 		//查看是否创建了条目
 		if(creator){
 			creator = create(this.state.filterValue, deepMerge([], arr));
-			creator && arr.splice(0, 0, creator);
+			creator && arr.splice(0, 0, {...creator, __node: {}});
 		}
 
 		let safetyArr = deepMerge([], arr);

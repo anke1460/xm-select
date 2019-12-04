@@ -3,17 +3,15 @@
 :::demo 
 ```html
 <div id="demo1" class="xm-select-demo"></div>
-<button class="layui-btn layui-btn-xs">sdf</button>
 
 <script>
 var demo1 = xmSelect.render({
 	el: '#demo1', 
-	autoRow: true,
 	paging: true,
 	pageSize: 2,
-	size:'mini',
+	autoRow: true,
 	tree: {
-		strict: true,
+		strict: false,
 		show: true,
 		showFolderIcon: true,
 		showLine: true,
@@ -35,11 +33,12 @@ var demo1 = xmSelect.render({
 	model: {
 		icon: 'show'
 	},
-	radio: true,
+	radio: false,
 	toolbar: {
 		show: true
 	},
 	height: 'auto',
+	initValue: [-1, 1],
 	data(){
 		return [
 			{name: '北京市时代峰峻莱克斯顿荆防颗粒受到了开发建设的路口附近', value: -1, children: [
