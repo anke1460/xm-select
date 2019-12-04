@@ -3,6 +3,7 @@
 :::demo 
 ```html
 <div id="demo1" class="xm-select-demo"></div>
+<button class="layui-btn layui-btn-xs">sdf</button>
 
 <script>
 var demo1 = xmSelect.render({
@@ -10,17 +11,31 @@ var demo1 = xmSelect.render({
 	autoRow: true,
 	paging: true,
 	pageSize: 2,
+	size:'mini',
 	tree: {
-		strict: false,
+		strict: true,
 		show: true,
 		showFolderIcon: true,
 		showLine: true,
 		indent: 20,
 		expandedKeys: [ -1, -2 ],
+		lazy: true,
+		load: function(item, cb){
+			setTimeout(function(){
+				if(item.name.endsWith('2')){
+					return cb([]);
+				}
+				cb([
+					{name: item.name + 1, value: item.value + '1', children: [] },
+					{name: item.name + 2, value: item.value + '2', children: [] },
+				])
+			}, 500)
+		}
 	},
 	model: {
-		icon: 'hidden'
+		icon: 'show'
 	},
+	radio: true,
 	toolbar: {
 		show: true
 	},
@@ -28,7 +43,7 @@ var demo1 = xmSelect.render({
 	data(){
 		return [
 			{name: '北京市时代峰峻莱克斯顿荆防颗粒受到了开发建设的路口附近', value: -1, children: [
-				{name: '朝阳区', value: 1},
+				{name: '朝阳区', value: 1, children: []},
 				{name: '海淀区', value: 2},
 				{name: '通州区', value: 3},
 			]},
@@ -40,33 +55,6 @@ var demo1 = xmSelect.render({
 		]
 	},
 	on: function(data){
-		var arr = data.arr;
-		var item = data.change[0];
-		var isAdd = data.isAdd;
-		
-		if(isAdd){
-			//检查是否有父节点
-			var parent = item.__node.parent;
-			if(parent){//有父节点，选中的是子节点，移除父节点的选中状态
-				var index = arr.findIndex(function(option){
-					return option.value === parent.value
-				})
-				if(index != -1){
-					arr.splice(index, 1)
-				}
-			}else{//无父节点，选中的是父节点，移除子节点的选中状态
-				var child = item.children;
-				child.forEach(function(childItem){
-					var index = arr.findIndex(function(option){
-						return option.value === childItem.value
-					})
-					if(index != -1){
-						arr.splice(index, 1)
-					}
-				})
-			}
-			return arr;
-		}
 	}
 })
 </script>

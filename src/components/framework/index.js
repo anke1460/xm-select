@@ -55,7 +55,7 @@ class Framework extends Component{
 	}
 
 	exchangeValue(arr, dataObj = this.state.dataObj){
-		let list = arr.map(sel => typeof sel === 'object' ? sel : dataObj[sel]).filter(a => a)
+		let list = arr.map(sel => typeof sel === 'object' ? { ...sel, __node: {} } : dataObj[sel]).filter(a => a)
 		let filterGroup = true, { tree } = this.props;
 		if(tree.show && tree.strict === false){
 			filterGroup = false;
