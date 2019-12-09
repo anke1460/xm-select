@@ -426,7 +426,6 @@ class Framework extends Component{
 		//监听form的重置按钮
 		let dom = this.base;
 		while(dom){
-			dom = dom.parentElement;
 			if(dom.tagName === 'FORM'){
 				let resetBtn = dom.querySelector('button[type="reset"]')
 				resetBtn && resetBtn.addEventListener('click', e => {
@@ -434,6 +433,7 @@ class Framework extends Component{
 				});
 				break;
 			}
+			dom = dom.parentElement;
 		}
 
 	}
