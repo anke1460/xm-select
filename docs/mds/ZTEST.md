@@ -38,7 +38,10 @@ var demo1 = xmSelect.render({
 		show: true
 	},
 	height: 'auto',
-	initValue: [-1, 1],
+	initValue: [],
+	on: function(a){
+		console.log(this)
+	}.bind('#demo1'),
 	data(){
 		return [
 			{name: '北京市时代峰峻莱克斯顿荆防颗粒受到了开发建设的路口附近', value: -1, children: [
@@ -53,8 +56,6 @@ var demo1 = xmSelect.render({
 			]},
 		]
 	},
-	on: function(data){
-	}
 })
 </script>
 ```

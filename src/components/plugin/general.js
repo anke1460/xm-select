@@ -355,7 +355,7 @@ class General extends Component{
 						info = { icon: 'xm-iconfont xm-icon-quanxuan', name, method: (pageData) => {
 							const { optgroup, disabled } = prop;
 							const list = pageData.filter(item => !item[optgroup]).filter(item => !item[disabled])
-							this.props.onReset(mergeArr(list, sels, prop), 'sels');
+							this.props.onReset(radio ? list.slice(0, 1) : mergeArr(list, sels, prop), 'sels');
 						} };
 					}else if(tool === 'CLEAR'){
 						info = { icon: 'xm-iconfont xm-icon-qingkong', name, method: (pageData) => {
@@ -375,7 +375,7 @@ class General extends Component{
 									list.splice(index, 1);
 								}
 							})
-							this.props.onReset(mergeArr(list, selectedList, prop), 'sels');
+							this.props.onReset(radio ? selectedList.slice(0, 1) : mergeArr(list, selectedList, prop), 'sels');
 						} };
 					}else {
 						info = tool
@@ -407,7 +407,7 @@ class General extends Component{
 				borderColor: theme.color,
 			};
 			const itemStyle = {}
-			
+
 			//处理键盘的选择背景色
 			if(item[value] === this.state.val){
 				itemStyle.backgroundColor = theme.hover

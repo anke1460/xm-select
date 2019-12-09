@@ -394,12 +394,48 @@ class Framework extends Component{
 	componentDidMount(){
 		this.prepare = true;
 
+		//监听键盘事件
 		this.base.addEventListener('keydown', e => {
 			let keyCode = e.keyCode;
 			if(keyCode === 13){
 				this.onClick()
 			}
 		});
+
+		//表单验证
+		this.input = this.base.querySelector('.xm-select-default');
+		//监听class的变化, 然后进行边框变色处理, 或者更多的处理
+		let MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+		MutationObserver && new MutationObserver(mutations => {
+			mutations.forEach(mutation => {
+				if (mutation.type == "attributes") {
+					let attr = mutation.attributeName;
+					if(attr === 'class'){
+						if(this.input.className.indexOf('layui-form-danger') !== -1){
+							this.input.className = 'xm-select-default';
+							this.base.style.borderColor = this.props.theme.maxColor;
+							//这里可以自己新增一个回调, 也许看到源码的你能够看到
+							// this.base.scrollIntoView({ behavior: "smooth" });
+						}
+					}
+					console.log(attr);
+				}
+			});
+		}).observe(this.input, { attributes: true });
+
+		//监听form的重置按钮
+		let dom = this.base;
+		while(dom){
+			dom = dom.parentElement;
+			if(dom.tagName === 'FORM'){
+				let resetBtn = dom.querySelector('button[type="reset"]')
+				resetBtn && resetBtn.addEventListener('click', e => {
+					this.init(this.props, true);
+				});
+				break;
+			}
+		}
+
 	}
 
 	//此时页面又被重新渲染了
