@@ -11,8 +11,16 @@ export default {
 	version,
 	render(options) {
 		let { el } = options;
+		options.dom = selector(el);
+
+		if(el.nodeType){
+			let id = "DOM_RENDER_" + Date.now() + '_' + Math.random();
+			el.setAttribute(name, id);
+			el = `[${name}='${id}']`
+			options.el = el;
+		}
 		optionData[el] = options;
-		
+
 		let instance = new Select(options);
 		//已经渲染
 		if (instance) {

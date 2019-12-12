@@ -90,12 +90,13 @@ class Framework extends Component{
 		})
 	}
 
-	load(data, dataObj, flatData, parent){
+	load(data, dataObj, flatData, parent, level = 0){
 		const { prop, tree } = this.props;
 		const { children, optgroup, value, selected, disabled } = prop;
 		data.forEach(item => {
 			//数据提取/处理
-			item.__node = { parent, loading: item.__node && item.__node.loading }
+			item.__node = { parent, level, loading: item.__node && item.__node.loading },
+			console.log(item);
 
 			dataObj[item[value]] = item;
 			flatData.push(item);
@@ -104,7 +105,7 @@ class Framework extends Component{
 			if(child && isArray(child)){
 				let len = child.length;
 				if(len > 0){
-					this.load(child, dataObj, flatData, item);
+					this.load(child, dataObj, flatData, item, level + 1);
 
 					//是否包含子节点
 					item[optgroup] = true;
@@ -123,7 +124,7 @@ class Framework extends Component{
 					//检查子节点的数据是否都被选中
 					let slen = child.filter(i => i[selected] === true || i.__node.selected === true).length;
 					item.__node.selected = slen === len;
-					item.__node.half = slen > 0 && slen < len;
+					item.__node.half = slen > 0 && slen < len || child.filter(i => i.__node.half === true).length > 0;
 					item.__node.disabled = child.filter(i => i[disabled] === true || i.__node.disabled === true).length === len;
 				}
 			}

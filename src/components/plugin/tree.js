@@ -261,8 +261,8 @@ class Tree extends Component{
 				child.length === 0 && (expand = false)
 				return (
 					<div class="xm-tree">
-						{ tree.showFolderIcon && tree.showLine && expand && <i class='left-line left-line-group' style={ {left: indent + 3 + 'px'} }></i> }
-						{ renderItem(item, indent, child.length === 0 && item.__node.loading === false ? 0 : expand) }
+						{ tree.showFolderIcon && tree.showLine && expand && child.length > 1 && <i class='left-line left-line-group' style={ {left: indent + 3 + 'px'} }></i> }
+						{ renderItem(item, indent, child.length === 0 && (!tree.lazy || tree.lazy && item.__node.loading === false) ? 0 : expand) }
 						{ expand && <div class="xm-tree-box">{ child.map(c => renderGroup(c, indent)) }</div> }
 					</div>
 				)

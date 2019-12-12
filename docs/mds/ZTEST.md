@@ -11,12 +11,12 @@ var demo1 = xmSelect.render({
 	pageSize: 2,
 	autoRow: true,
 	tree: {
-		strict: false,
+		strict: true,
 		show: true,
 		showFolderIcon: true,
 		showLine: true,
 		indent: 20,
-		expandedKeys: [ -1, -2 ],
+		expandedKeys: [ 14 ],
 		lazy: true,
 		load: function(item, cb){
 			setTimeout(function(){
@@ -38,14 +38,20 @@ var demo1 = xmSelect.render({
 		show: true
 	},
 	height: 'auto',
-	initValue: [],
 	on: function(a){
 		console.log(this)
 	}.bind('#demo1'),
 	data(){
 		return [
 			{name: '北京市时代峰峻莱克斯顿荆防颗粒受到了开发建设的路口附近', value: -1, children: [
-				{name: '朝阳区', value: 1, children: []},
+				{name: '朝阳区', value: 1, children: [
+					{name: '河北省', value: -12, children: [
+						{name: '廊坊市', value: 14, selected: true},
+						{name: '石家庄', value: 15},
+						{name: '邯郸市', value: 16},
+					]}
+					
+				]},
 				{name: '海淀区', value: 2},
 				{name: '通州区', value: 3},
 			]},

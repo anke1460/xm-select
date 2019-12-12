@@ -1,9 +1,5 @@
 ## 安装
 
-### 投票 ^_^
-
-谢谢大家投出宝贵的一票，[2019 年度最受欢迎开源中国软件评选](https://www.oschina.net/p/xm-select)
-
 ### 简介
 
 :::tip
@@ -24,9 +20,11 @@ maplemei, 热爱前端的Java程序猿, 如果喜欢作者的插件, 可以请�
 
 ### 打赏
 
+喜欢就支持一下吧
+
 <p>
 	<a href="javascript:;">
-		<img src="../assets/wx.jpg" alt="打赏" width="300">
+		<img src="../assets/wx.jpg" alt="打赏" width="300" style="border: 1px solid #EFEFEF">
 	</a>
 </p>
 

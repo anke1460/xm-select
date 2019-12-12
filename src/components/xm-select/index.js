@@ -1,6 +1,6 @@
 import { h, Component, render } from 'preact'
 import { datas, optionData, childData } from '@/index.js';
-import { selector, warn, listenerClose, isArray, deepMerge, exchangeOptionsData } from '@/common/util'
+import { warn, listenerClose, isArray, deepMerge, exchangeOptionsData } from '@/common/util'
 import Framework from '@/components/framework'
 import defaultOptions from '@/config/options'
 
@@ -28,7 +28,7 @@ class xmOptions {
 		this.options = deepMerge(this.options, options);
 
 		//如果dom不存在, 则不进行渲染事项
-		let dom = selector(this.options.el);
+		let { dom } = this.options;
 		if(!dom){
 			warn(`没有找到渲染对象: ${options.el}, 请检查`)
 			return ;
