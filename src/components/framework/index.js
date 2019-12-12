@@ -96,7 +96,6 @@ class Framework extends Component{
 		data.forEach(item => {
 			//数据提取/处理
 			item.__node = { parent, level, loading: item.__node && item.__node.loading },
-			console.log(item);
 
 			dataObj[item[value]] = item;
 			flatData.push(item);
@@ -419,7 +418,6 @@ class Framework extends Component{
 							// this.base.scrollIntoView({ behavior: "smooth" });
 						}
 					}
-					console.log(attr);
 				}
 			});
 		}).observe(this.input, { attributes: true });
