@@ -11,7 +11,7 @@ var demo1 = xmSelect.render({
 	pageSize: 2,
 	autoRow: true,
 	tree: {
-		strict: true,
+		strict: false,
 		show: true,
 		showFolderIcon: true,
 		showLine: true,
@@ -33,7 +33,7 @@ var demo1 = xmSelect.render({
 	model: {
 		icon: 'show'
 	},
-	radio: false,
+	radio: true,
 	toolbar: {
 		show: true
 	},
@@ -47,7 +47,7 @@ var demo1 = xmSelect.render({
 				{name: '朝阳区', value: 1, children: [
 					{name: '河北省', value: -12, children: [
 						{name: '廊坊市', value: 14, selected: true},
-						{name: '石家庄', value: 15},
+						{name: '石家庄', value: 15, selected: true},
 						{name: '邯郸市', value: 16},
 					]}
 					

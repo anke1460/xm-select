@@ -69,9 +69,9 @@ QQ群: 660408068
 如果喜欢作者的插件, 可以请作者吃雪糕 ^_^
 
 <p>
-  <a href="javascript:;">
-    <img src="docs/assets/wx.jpg" alt="打赏" width="300">
-  </a>
+	<a href="javascript:;">
+		<img src="docs/assets/wx.jpg" alt="打赏" width="300"  style="border: 1px solid #EFEFEF">
+	</a>
 </p>
 
 #### 示例

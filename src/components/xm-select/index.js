@@ -114,7 +114,7 @@ class xmOptions {
 			warn('请传入数组结构...')
 			return ;
 		}
-		childData[this.options.el].value(sels, show, listenOn);
+		childData[this.options.el].value(this.options.radio ? sels.slice(0, 1) : sels, show, listenOn);
 		return this;
 	}
 
