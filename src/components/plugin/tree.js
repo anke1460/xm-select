@@ -20,20 +20,24 @@ class Tree extends Component{
 	}
 
 	init(props){
-		const { tree, dataObj, prop } = props;
-		const { value } = prop
+		const { tree, dataObj, flatData, prop } = props;
+		const { value, optgroup } = prop
 
 		let keys = [];
-		tree.expandedKeys.forEach(key => {
-			keys.push(key);
+		if(tree.expandedKeys === true){
+			keys = flatData.filter(item => item[optgroup] === true).map(item => item[value])
+		}else{
+			tree.expandedKeys.forEach(key => {
+				keys.push(key);
 
-			let item = dataObj[key];
-			while(item){
-				let pkey = item[value];
-				keys.findIndex(k => k === pkey) === -1 && (keys.push(pkey))
-				item = item.__node.parent
-			}
-		});
+				let item = dataObj[key];
+				while(item){
+					let pkey = item[value];
+					keys.findIndex(k => k === pkey) === -1 && (keys.push(pkey))
+					item = item.__node.parent
+				}
+			});
+		}
 		this.setState({ expandedKeys: keys })
 	}
 

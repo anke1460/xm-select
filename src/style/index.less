@@ -117,6 +117,7 @@ xm-select{
 			}
 			.xm-label-block > span{
 				white-space: unset;
+				height: 100%;
 			}
 		}
 
@@ -196,6 +197,17 @@ xm-select{
 		&.up{
 			top: auto;
 			bottom: 42px;
+		}
+
+		&.relative{
+			position: relative;
+			display: block !important;
+			top: 0;
+			box-shadow: none;
+			border: none;
+			animation-name: none;
+			animation-duration: 0;
+			min-width: 100%;
 		}
 
 		.xm-group{

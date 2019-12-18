@@ -139,6 +139,7 @@ export default function (lan = 'zn') {
 				},
 			},
 			icon: 'show',
+			type: 'absolute',
 		},
 
 		// 展开下拉框

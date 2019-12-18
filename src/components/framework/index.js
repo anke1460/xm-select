@@ -246,6 +246,10 @@ class Framework extends Component{
 
 	//select框被点击
 	onClick(e){
+		if(this.props.model.type === 'relative'){
+			return ;
+		}
+
 		if(this.props.disabled){
 			this.state.show !== false && this.setState({ show: false });
 			return ;
@@ -382,7 +386,7 @@ class Framework extends Component{
 				<i class={ show ? 'xm-icon xm-icon-expand' : 'xm-icon' } />
 				{ sels.length === 0 && <div class="xm-tips">{ config.tips }</div> }
 				<Label { ...labelProps } />
-				<div class={ show ? 'xm-body' : 'xm-body dis' } ref={ ref => this.bodyView = ref}>
+				<div class={ ['xm-body', config.model.type, show ? '':'dis', ].join(' ') } ref={ ref => this.bodyView = ref}>
 					{ Body }
 				</div>
 				{ disabled && <div class="xm-select-disabled"></div> }
@@ -439,7 +443,12 @@ class Framework extends Component{
 
 	//此时页面又被重新渲染了
 	componentDidUpdate(){
-		let { direction } = this.props;
+		let { direction, model } = this.props;
+		
+		if(model.type === 'relative'){
+			return ;
+		}
+		
 		let rect = this.base.getBoundingClientRect();
 		if(direction === 'auto'){
 			//用于控制js获取下拉框的高度
