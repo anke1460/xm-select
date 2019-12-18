@@ -175,8 +175,8 @@ list: [ "ALL", "CLEAR",
 | showFolderIcon	| 是否显示节点前的三角图标	| boolean	 	| true / false	| true   |
 | showLine			| 是否显示虚线		 	| boolean	 	| true / false	| true   |
 | indent	   		| 间距	 				| int	   		|	-   		| 20 	 |
-| expandedKeys 		| 默认展开的节点数组	 	| array	   		|	-			| [ ]	 |
-| strict 			| 是否遵循严格父子结构	 	| boolean	 	| true / false	| true	 |
+| expandedKeys 		| 默认展开的节点数组, 为true时展开所有节点	 	| array / boolean	   		|	-			| [ ]	 |
+| strict 			| 是否遵循严格父子结构	 | boolean	 	| true / false	| true	 |
 
 
 ### 全局方法
