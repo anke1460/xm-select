@@ -133,6 +133,8 @@ model: {
 			}
 		},
 	},
+	//展示类型, 下拉框形式: absolute, 直接显示模式: relative
+	type: 'absolute', 
 },
 ```
 
