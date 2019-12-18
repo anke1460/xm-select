@@ -318,7 +318,7 @@ class Tree extends Component{
 		)
 
 		const search = (
-			<div class='xm-search'>
+			<div class={ filterable ? 'xm-search' : 'xm-search dis' }>
 				<i class="xm-iconfont xm-icon-sousuo"></i>
 				<input class="xm-input xm-search-input" placeholder={ searchTips } />
 			</div>
@@ -332,7 +332,7 @@ class Tree extends Component{
 		// { config.toolbar.show && toolbar }
 		return (
 			<div onClick={ this.blockClick } class="xm-body-tree" >
-				{ filterable && search }
+				{ search }
 				<div class="scroll-body" style={ {maxHeight: config.height} }>{ arr }</div>
 			</div>
 		)

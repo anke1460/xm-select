@@ -258,7 +258,7 @@ class General extends Component{
 		}
 
 		const search = (
-			<div class='xm-search'>
+			<div class={ filterable ? 'xm-search' : 'xm-search dis' }>
 				<i class="xm-iconfont xm-icon-sousuo"></i>
 				<input class="xm-input xm-search-input" placeholder={ searchTips } />
 			</div>
@@ -466,7 +466,7 @@ class General extends Component{
 			<div onClick={ this.blockClick } tabindex="1" style="outline: none;">
 				<div>
 					{ config.toolbar.show && toolbar }
-					{ filterable && search }
+					{ search }
 					<div class="scroll-body" style={ {maxHeight: config.height} }>{ arr }</div>
 					{ config.paging && paging }
 				</div>
