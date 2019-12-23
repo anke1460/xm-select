@@ -12,7 +12,9 @@
 - 打包方式[webpack](https://www.webpackjs.com/)
 - 文档借鉴于[ElementUI](https://element.eleme.cn/#/zh-CN)的编写方式
 - [Fly社区交流贴](https://fly.layui.com/jie/57776/)
-- QQ交流群: `660408068`
+- xm-select技术群①: `660408068` (500人已满)
+- xm-select技术群②: `938624691` (500人)
+- 群满了加不进去的话 有问题就提 [issues](https://gitee.com/maplemei/xm-select/issues) 吧
 
 ### 作者
 
