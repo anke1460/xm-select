@@ -180,7 +180,8 @@ xm-select{
 		animation-fill-mode: both;
 
 		.scroll-body{
-			overflow: hidden auto;
+			overflow-x: hidden;
+			overflow-y: auto;
 
 			.scrollBorder() {
 				-webkit-border-radius: 2em;
@@ -424,6 +425,24 @@ xm-select{
 		}
 		.scroll-body>.xm-tree>.xm-option>.top-line, .scroll-body>.xm-option>.top-line{
 			width: 0 !important;
+		}
+
+		&.Cascader{
+			border: none;
+			background-color: transparent;
+			box-shadow: none;
+			width: unset;
+			min-width: unset;
+			padding: 0;
+			margin-left: -1px;
+
+			.xm-cascader{
+				border: @border;
+				border-radius: 2px;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
+				background-color: #FFF;
+				min-width: 100px;
+			}
 		}
 
 	}

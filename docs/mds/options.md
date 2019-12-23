@@ -79,9 +79,6 @@
 {name: '自定义', children: [...], click: function(item){
 	alert('自定义的, 想干嘛干嘛');
 }},
-
-
-
 ```
 
 
@@ -150,7 +147,6 @@ model: {
 > 自定义方式
 
 ```
-
 list: [ "ALL", "CLEAR", 
 	{
 		//显示图标, 可以是layui内置的图标, 也可以是自己引入的图标
@@ -165,8 +161,6 @@ list: [ "ALL", "CLEAR",
 		}
 	} 
 ]
-
-
 ```
 
 ### tree

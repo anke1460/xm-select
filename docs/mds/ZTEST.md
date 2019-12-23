@@ -7,11 +7,8 @@
 <script>
 var demo1 = xmSelect.render({
 	el: '#demo1', 
-	model: {
-		type: 'relative',
-	},
 	filterable: true,
-	tree: {
+	cascader: {
 		show: true,
 		showFolderIcon: true,
 		showLine: true,

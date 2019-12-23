@@ -102,6 +102,11 @@ export default function (lan = 'zn') {
 			//懒加载回调
 			load: null,
 		},
+		//级联结构
+		cascader: {
+			//是否展示级联
+			show: false,
+		},
 		//自定义属性名称
 		prop: {
 			name: 'name',
