@@ -30,6 +30,7 @@ class Framework extends Component{
 			sels: [],
 			show: false,
 			tmpColor: '',
+			bodyClass: '',
 		}
 	}
 
@@ -310,6 +311,10 @@ class Framework extends Component{
 		//树状结构数据更新
 		if(type === 'close'){
 			this.onClick();
+		}else
+		//重置class
+		if(type === 'class'){
+			this.setState({ bodyClass: data })
 		}
 	}
 
@@ -350,7 +355,7 @@ class Framework extends Component{
 	render(config, state) {
 		const { theme, prop, radio, repeat, clickClose, on, max, maxMethod, content, disabled, tree } = config;
 		const borderStyle = { borderColor: theme.color };
-		let { data, dataObj, flatData, sels, show, tmpColor } = state;
+		let { data, dataObj, flatData, sels, show, tmpColor, bodyClass } = state;
 
 		//组件为禁用状态
 		if(disabled){
@@ -387,7 +392,7 @@ class Framework extends Component{
 				<i class={ show ? 'xm-icon xm-icon-expand' : 'xm-icon' } />
 				{ sels.length === 0 && <div class="xm-tips">{ config.tips }</div> }
 				<Label { ...labelProps } />
-				<div class={ ['xm-body', Body.type.name, config.model.type, show ? '':'dis', ].join(' ') } ref={ ref => this.bodyView = ref}>
+				<div class={ ['xm-body', bodyClass, config.model.type, show ? '':'dis', ].join(' ') } ref={ ref => this.bodyView = ref}>
 					{ Body }
 				</div>
 				{ disabled && <div class="xm-select-disabled"></div> }

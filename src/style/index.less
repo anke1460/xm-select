@@ -427,22 +427,36 @@ xm-select{
 			width: 0 !important;
 		}
 
-		&.Cascader{
-			border: none;
-			background-color: transparent;
-			box-shadow: none;
-			width: unset;
-			min-width: unset;
-			padding: 0;
-			margin-left: -1px;
+		.xm-cascader{
+			// position: relative;
 
-			.xm-cascader{
-				border: @border;
-				border-radius: 2px;
-				box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
-				background-color: #FFF;
-				min-width: 100px;
+			&-box{
+				position: absolute;
+				left: 0;
+				right: 0;
+				top: 0;
+				bottom: 0;
+				overflow-x: hidden;
+				overflow-y: auto;
+				padding: 5px 0;
+
 			}
+			&-box[index="0"]{
+				background-color: #F5F5F5;
+			}
+			&-box[index="1"]{
+				background-color: #FAFAFA;
+			}
+			&-box[index="2"]{
+				background-color: #FFFFFF;
+			}
+			&-box[index="3"]{
+				background-color: #EFEFEF;
+			}
+		}
+		
+		&.cascader{
+			background-color: #EFEFEF;
 		}
 
 	}

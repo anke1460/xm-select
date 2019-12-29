@@ -106,6 +106,8 @@ export default function (lan = 'zn') {
 		cascader: {
 			//是否展示级联
 			show: false,
+			//间距
+			indent: 200,
 		},
 		//自定义属性名称
 		prop: {

@@ -11,12 +11,15 @@ class Tree extends Component{
 		this.state = {
 			expandedKeys: [],
 			filterValue: '',
+			remote: true,
+			loading: false,
 			val: emptyVal,
 		}
 
 		this.searchCid = 0;
 		this.inputOver = true;
 		this.__value = '';
+		this.tempData = [];
 	}
 
 	init(props){
@@ -109,7 +112,7 @@ class Tree extends Component{
 			//让搜索变成异步的
 			this.searchCid = setTimeout(() => {
 				this.callback = true;
-				this.setState({ filterValue: this.__value })
+				this.setState({ filterValue: this.__value, remote: true })
 			}, this.props.delay);
 		}
 	}
@@ -158,6 +161,22 @@ class Tree extends Component{
 		return data;
 	}
 
+	postData(){
+		if(this.state.remote){
+			this.callback = false;
+			this.setState({ loading: true, remote: false });
+			//让输入框失去焦点
+			this.blur();
+			this.props.remoteMethod(this.state.filterValue, (result, totalSize) => {
+				//回调后可以重新聚焦
+				this.focus();
+				this.callback = true;
+				this.setState({ loading: false, totalSize });
+				this.props.onReset(result, 'data');
+			}, this.props.show, 1);
+		}
+	}
+
 	//组件将要接收新属性
 	componentWillReceiveProps(props){
 		if(this.props.show != props.show){
@@ -179,7 +198,7 @@ class Tree extends Component{
 	}
 
 	render(config, { expandedKeys }) {
-		let { prop, empty, sels, theme, radio, template, data, tree, filterable, searchTips } = config;
+		let { prop, empty, sels, theme, radio, template, data, tree, filterable, remoteSearch, searchTips } = config;
 		let { name, value, disabled, children } = prop;
 
 		const showIcon = config.model.icon != 'hidden';
@@ -276,12 +295,19 @@ class Tree extends Component{
 
 		//这里处理过滤数据
 		if(filterable){
-			this.filterData(data, this.state.filterValue);
+			//检查是否需要远程搜索
+			if(remoteSearch){
+				this.postData();
+			}else{
+				this.filterData(data, this.state.filterValue);
+			}
 		}
 
 		let arr = data.map(item => renderGroup(item, 10 - tree.indent)).filter(a => a);
 		let safetyArr = deepMerge([], arr);
 		let safetySels = deepMerge([], sels);
+
+		this.tempData = safetyArr;
 
 		//工具条操作
 		const toolbar = (
@@ -338,6 +364,9 @@ class Tree extends Component{
 			<div onClick={ this.blockClick } class="xm-body-tree" >
 				{ search }
 				<div class="scroll-body" style={ {maxHeight: config.height} }>{ arr }</div>
+				{ this.state.loading && <div class="loading" >
+					<span class="loader"></span>
+				</div> }
 			</div>
 		)
 	}
@@ -351,6 +380,18 @@ class Tree extends Component{
 			input.addEventListener('compositionend', this.handleComposition.bind(this));
 			input.addEventListener('input', this.searchInput.bind(this));
 			this.searchInputRef = input;
+		}
+	}
+
+	//此时页面又被重新渲染了
+	componentDidUpdate(){
+		if(this.callback){
+			this.callback = false;
+
+			let done = this.props.filterDone;
+			if(isFunction(done)){
+				done(this.state.filterValue, this.tempData || []);
+			}
 		}
 	}
 

@@ -7,12 +7,11 @@
 <script>
 var demo1 = xmSelect.render({
 	el: '#demo1', 
-	filterable: true,
 	cascader: {
 		show: true,
 		showFolderIcon: true,
 		showLine: true,
-		indent: 20,
+		indent: 80,
 		expandedKeys: true,
 	},
 	filterable: true,
