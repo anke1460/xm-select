@@ -1,5 +1,5 @@
 import { h, Component, render } from 'preact'
-import { deepMerge, isFunction } from '@/common/util'
+import { deepMerge, isFunction, mergeArr } from '@/common/util'
 
 const emptyVal = {};
 
@@ -77,7 +77,7 @@ class Tree extends Component{
 					item.__node.loading = false;
 					item[prop.children] = this.handlerData(result, prop.children);
 					item[prop.selected] = sels.findIndex(i => i[prop.value] === item[prop.value]) != -1
-					this.props.onReset(item, 'treeData');
+					this.props.onReset(sels, 'treeData');
 				});
 			}
 		}else if(type === 'checkbox'){
@@ -199,7 +199,7 @@ class Tree extends Component{
 
 	render(config, { expandedKeys }) {
 		let { prop, empty, sels, theme, radio, template, data, tree, filterable, remoteSearch, searchTips } = config;
-		let { name, value, disabled, children } = prop;
+		let { name, value, disabled, children, optgroup } = prop;
 
 		const showIcon = config.model.icon != 'hidden';
 		const renderItem = (item, indent, expand) => {
@@ -303,13 +303,16 @@ class Tree extends Component{
 			}
 		}
 
-		let arr = data.map(item => renderGroup(item, 10 - tree.indent)).filter(a => a);
-		let safetyArr = deepMerge([], arr);
+		let safetyArr = deepMerge([], data);
 		let safetySels = deepMerge([], sels);
-
 		this.tempData = safetyArr;
 
+		let arr = data.map(item => renderGroup(item, 10 - tree.indent)).filter(a => a);
+
 		//工具条操作
+		function flat(list, array){
+			array.forEach(item => item[optgroup] ? flat(list, item[children]) : list.push(item))
+		}
 		const toolbar = (
 			<div class='xm-toolbar'>
 				{ config.toolbar.list.map(tool => {
@@ -318,15 +321,30 @@ class Tree extends Component{
 					let info, name = config.languageProp.toolbar[tool];
 					if(tool === 'ALL'){
 						info = { icon: 'xm-iconfont xm-icon-quanxuan', name, method: (pageData) => {
-
+							let list = [];
+							flat(list, pageData);
+							list = list.filter(item => !item[disabled])
+							this.props.onReset(radio ? list.slice(0, 1) : mergeArr(list, sels, prop), 'treeData');
 						} };
 					}else if(tool === 'CLEAR'){
 						info = { icon: 'xm-iconfont xm-icon-qingkong', name, method: (pageData) => {
-
+							this.props.onReset(sels.filter(item => item[prop.disabled]), 'treeData');
 						} };
 					}else if(tool === 'REVERSE'){
 						info = { icon: 'xm-iconfont xm-icon-fanxuan', name, method: (pageData) => {
-
+							let list = [];
+							flat(list, pageData);
+							list = list.filter(item => !item[disabled])
+							let selectedList = [];
+							sels.forEach(item => {
+								let index = list.findIndex(pageItem => pageItem[value] === item[value]);
+								if(index == -1){
+									selectedList.push(item);
+								}else{
+									list.splice(index, 1);
+								}
+							})
+							this.props.onReset(radio ? selectedList.slice(0, 1) : mergeArr(list, selectedList, prop), 'treeData');
 						} };
 					}else {
 						info = tool
@@ -359,9 +377,9 @@ class Tree extends Component{
 			arr.push(<div class="xm-select-empty">{ empty }</div>)
 		}
 
-		// { config.toolbar.show && toolbar }
 		return (
 			<div onClick={ this.blockClick } class="xm-body-tree" >
+				{ config.toolbar.show && toolbar }
 				{ search }
 				<div class="scroll-body" style={ {maxHeight: config.height} }>{ arr }</div>
 				{ this.state.loading && <div class="loading" >

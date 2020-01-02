@@ -7,14 +7,33 @@
 <script>
 var demo1 = xmSelect.render({
 	el: '#demo1', 
-	cascader: {
+	tree: {
 		show: true,
 		showFolderIcon: true,
 		showLine: true,
-		indent: 80,
+		indent: 20,
 		expandedKeys: true,
 	},
 	filterable: true,
+	filterDone(){
+		console.log('搜索结束')
+	},
+	remoteSearch: true,
+	//远程搜索回调
+	remoteMethod: function(val, cb){
+		console.log('远程')
+		cb([
+			{name: '销售员', value: -1, disabled: true, children: [
+				{name: '张三张三张三张三张三张三张三张三张三张三张三张三张三张三张三张三1', value: 1, selected: true, children: []},
+				{name: '李四1', value: 2, selected: true},
+				{name: '王五1', value: 3, disabled: true},
+			]},
+		]);
+	},
+	toolbar: {
+		show: true,
+		list: ['ALL', 'REVERSE', 'CLEAR']
+	},
 	height: 'auto',
 	data(){
 		return [

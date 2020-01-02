@@ -6,7 +6,7 @@ import Label from '../label';
 import General from '../plugin/general';
 import Custom from '../plugin/custom';
 import Tree from '../plugin/tree';
-import Cascader from '../plugin/cascader';
+// import Cascader from '../plugin/cascader';
 
 /**
  * 框架渲染类, 渲染基础的外边框 + 属性变化监听
@@ -306,7 +306,7 @@ class Framework extends Component{
 		}else
 		//树状结构数据更新
 		if(type === 'treeData'){
-			this.value(this.state.sels, null, true)
+			this.value(data, null, true)
 		}else
 		//树状结构数据更新
 		if(type === 'close'){
@@ -384,8 +384,9 @@ class Framework extends Component{
 		const bodyProps = {  ...config, data, dataObj, flatData, sels, ck: this.itemClick.bind(this), show, onReset: this.onReset.bind(this) }
 
 		//渲染组件
-		let Body = content ? <Custom { ...bodyProps } /> : tree.show ? <Tree { ...bodyProps } /> : config.cascader.show ? <Cascader { ...bodyProps } /> : <General { ...bodyProps } />;
-		
+		// let Body = content ? <Custom { ...bodyProps } /> : tree.show ? <Tree { ...bodyProps } /> : config.cascader.show ? <Cascader { ...bodyProps } /> : <General { ...bodyProps } />;
+		let Body = content ? <Custom { ...bodyProps } /> : tree.show ? <Tree { ...bodyProps } /> : <General { ...bodyProps } />;
+
 		return (
 			<xm-select { ...xmSelectProps } >
 				<input class="xm-select-default" lay-verify={ config.layVerify } lay-verType={ config.layVerType } name={ config.name } value={ sels.map(item => item[prop.value]).join(',') }></input>

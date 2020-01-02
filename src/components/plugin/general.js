@@ -94,7 +94,7 @@ class General extends Component{
 			//让搜索变成异步的
 			this.searchCid = setTimeout(() => {
 				this.callback = true;
-				this.setState({ filterValue: this.__value, remote: true })
+				this.setState({ filterValue: this.__value, remote: true, pageIndex: 1 })
 			}, this.props.delay);
 		}
 	}
