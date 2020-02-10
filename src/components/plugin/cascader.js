@@ -16,17 +16,30 @@ class Cascader extends Component{
 		e.stopPropagation();
 	}
 
-	optionClick(item, selected, disabled, index, e){
+	optionClick(item, selected, disabled, type, index, e){
+		if(type === 'line'){
+			if(disabled){
+				return ;
+			}
+			//加载中的不需要进行处理
+			if(item.__node.loading === true){
+				return;
+			}
+			
+			const { cascader, prop, sels } = this.props;
+			
+			//不是父节点的不需要处理
+			if(!cascader.lazy && !item[prop.optgroup]){
+				this.props.ck(item, selected, disabled);
+				return
+			}
 
-		console.log(item, index);
-
-		this.props.ck(item, selected, disabled);
-
-		let expand = this.state.expand.slice(0, index + 1);
-		expand[index] = item[this.props.prop.value];
-
-		this.setState({ expand });
-
+			let expand = this.state.expand.slice(0, index + 1);
+			expand[index] = item[this.props.prop.value];
+			this.setState({ expand });
+		}else if(type === 'checkbox'){
+			this.props.ck(item, selected, disabled);
+		}
 		//阻止父组件上的事件冒泡
 		this.blockClick(e);
 	}
@@ -47,7 +60,7 @@ class Cascader extends Component{
 		let { name, value, disabled, children } = prop;
 		const showIcon = config.model.icon != 'hidden';
 
-		const renderItem = (item, indent, index) => {
+		const renderItem = (item, indent, index, checked) => {
 			//是否被选中
 			let selected = !!sels.find(sel => sel[value] == item[value]);
 			//是否禁用
@@ -55,8 +68,11 @@ class Cascader extends Component{
 			// 是否半选
 			let half = item.__node.half === true;
 
-			selected = selected || half || item.__node.selected
-			dis = dis || item.__node.disabled;
+			//是否遵义严格父子结构
+			if(cascader.strict){
+				selected = selected || half || item.__node.selected
+				dis = dis || item.__node.disabled;
+			}
 
 			const iconStyle = selected ? {
 				color: theme.color,
@@ -67,8 +83,19 @@ class Cascader extends Component{
 
 			const itemStyle = { backgroundColor: 'transparent' }
 			const className = ['xm-option', (dis ? ' disabled' : ''), (selected ? ' selected' : ''), (showIcon ? 'show-icon' : 'hide-icon') ].join(' ');
-			const iconClass = ['xm-option-icon xm-iconfont', radio ? 'xm-icon-danx' : half ? 'xm-icon-banxuan' : 'xm-icon-duox'].join(' ');
+			const iconClass = ['xm-option-icon xm-iconfont', radio ? 'xm-icon-danx' : cascader.strict && half ? 'xm-icon-banxuan' : 'xm-icon-duox'].join(' ');
 
+			if(item[value] === this.state.val){
+				itemStyle.backgroundColor = theme.hover
+			}
+
+			const contentStyle = {}, checkedStyle = {};
+			if(checked){
+				contentStyle.color = theme.color
+				contentStyle.fontWeight = 700
+				checkedStyle.color = theme.color
+			}
+			let checkedClass = 'xm-right-arrow';
 
 			//处理鼠标选择的背景色
 			const hoverChange = e => {
@@ -83,31 +110,30 @@ class Cascader extends Component{
 
 			return (
 				<div class={ className } style={ itemStyle } value={ item[value] } onClick={
-					this.optionClick.bind(this, item, selected, dis, index)
+					this.optionClick.bind(this, item, selected, dis, 'line', index)
 				} onMouseEnter={ hoverChange } onMouseLeave={ hoverChange }>
-					{ showIcon && <i class={ iconClass } style={ iconStyle } ></i> }
-					<div class='xm-option-content' dangerouslySetInnerHTML={{ __html: template({ data, item, arr: sels, name: item[name], value: item[value] }) }}></div>
+					{ showIcon && <i class={ iconClass } style={ iconStyle } onClick={ this.optionClick.bind(this, item, selected, dis, 'checkbox', index) }></i> }
+					<div class='xm-option-content' style={ contentStyle } dangerouslySetInnerHTML={{ __html: template({ data, item, arr: sels, name: item[name], value: item[value] }) }}></div>
+					{ item[children] && <div class={ checkedClass } style={ checkedStyle }></div> }
 				</div>
 			)
 		}
 
+		let boxArr = [];
 		const renderGroup = (item, indent, index) => {
-
 			const child = item[children];
+			indent = indent + cascader.indent + 6
 
-			indent = cascader.indent + 10
-
-			return (
-				<div class="xm-cascader">
-					{ renderItem(item, indent, index) }
-					{ child && this.state.expand[index] === item[value] &&
-						<div class="xm-cascader-box" index={ index % 4 } style={{ left: indent + 'px' }}>{ child.map(c => renderGroup(c, indent, index + 1)) }</div>
-					}
+			const checked = child && this.state.expand[index] === item[value];
+			checked && boxArr.push(
+				<div class="xm-cascader-box" index={ index % 4 } style={{ left: indent + 'px', width: cascader.indent + 'px'}}>
+					<div class="xm-cascader-scroll">{ child.map(c => renderGroup(c, indent, index + 1)) }</div>
 				</div>
 			)
+			return renderItem(item, indent, index, checked)
 		}
 
-		let arr = data.map(item => renderGroup(item, 0, 0)).filter(a => a);
+		let arr = data.map(item => renderGroup(item, 2, 0)).concat(boxArr).filter(a => a);
 		// let safetyArr = deepMerge([], arr);
 		// let safetySels = deepMerge([], sels);
 
@@ -116,7 +142,7 @@ class Cascader extends Component{
 		}
 
 		return (
-			<div onClick={ this.blockClick } class="xm-body-cascader">
+			<div onClick={ this.blockClick } class="xm-body-cascader" style={{ width: cascader.indent + 'px', height: config.height }}>
 				{ arr }
 			</div>
 		)

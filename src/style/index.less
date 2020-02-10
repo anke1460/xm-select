@@ -401,7 +401,7 @@ xm-select{
 					margin-left: -2px;
 					transform: rotate(90deg);
 				}
-				&.visible{
+				&.xm-visible{
 					visibility: visible;
 				}
 			}
@@ -429,36 +429,57 @@ xm-select{
 
 		.xm-cascader{
 			// position: relative;
-
 			&-box{
 				position: absolute;
 				left: 0;
 				right: 0;
 				top: 0;
 				bottom: 0;
+				padding: 5px 0;
+				border: @border;
+				background-color: #fff;
+				border-radius: 2px;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
+				margin: -1px;
+
+				&::before{
+					content: ' ';
+					position: absolute;
+					width: 0;
+					height: 0;
+					border: 6px solid transparent;
+					border-right-color: @defaultBorderColor;
+					top: 10px;
+					left: -12px;
+				}
+				&::after{
+					content: ' ';
+					position: absolute;
+					width: 0;
+					height: 0;
+					border: 6px solid transparent;
+					border-right-color: #fff;
+					top: 10px;
+					left: -11px;
+				}
+			}
+			&-scroll{
+				height: 100%;
 				overflow-x: hidden;
 				overflow-y: auto;
-				padding: 5px 0;
-
-			}
-			&-box[index="0"]{
-				background-color: #F5F5F5;
-			}
-			&-box[index="1"]{
-				background-color: #FAFAFA;
-			}
-			&-box[index="2"]{
-				background-color: #FFFFFF;
-			}
-			&-box[index="3"]{
-				background-color: #EFEFEF;
 			}
 		}
-		
+
 		&.cascader{
-			background-color: #EFEFEF;
+			width: unset;
+			min-width: unset;
+			.xm-option-content{
+				padding-left: 8px;
+			}
+			.disabled .xm-right-arrow{
+				color: #C2C2C2 !important;
+			}
 		}
-
 	}
 
 	.xm-input{
@@ -533,6 +554,19 @@ xm-select{
 		cursor: initial;
 	}
 
+	.xm-right-arrow{
+		position: absolute;
+		color: #666;
+		right: 5px;
+		top: -1px;
+		font-weight: 700;
+		transform: scale(0.6, 1);
+
+		&::after{
+			content: '>';
+		}
+	}
+
 }
 
 //不同尺寸下的数据调整
@@ -573,7 +607,7 @@ xm-select{
 		.left-line-group{
 			height: calc(100% - @size);
 		}
-		.xm-tree-icon.hidden+.top-line{
+		.xm-tree-icon.xm-hidden+.top-line{
 			top: @size / 2 - 1px;
 		}
 	}

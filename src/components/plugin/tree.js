@@ -237,7 +237,7 @@ class Tree extends Component{
 			}
 			const className = ['xm-option', (dis ? ' disabled' : ''), (selected ? ' selected' : ''), (showIcon ? 'show-icon' : 'hide-icon') ].join(' ');
 			const iconClass = ['xm-option-icon xm-iconfont', radio ? 'xm-icon-danx' : tree.strict && half ? 'xm-icon-banxuan' : 'xm-icon-duox'].join(' ');
-			const treeIconClass = ['xm-tree-icon', expand ? 'expand':'', item[children] && (item[children].length > 0 || (tree.lazy && item.__node.loading !== false)) ? 'visible':'hidden'].join(' ');
+			const treeIconClass = ['xm-tree-icon', expand ? 'expand':'', item[children] && (item[children].length > 0 || (tree.lazy && item.__node.loading !== false)) ? 'xm-visible':'xm-hidden'].join(' ');
 
 			const iconArray = [];
 			if(tree.showFolderIcon){
@@ -284,7 +284,7 @@ class Tree extends Component{
 				child.length === 0 && (expand = false)
 				return (
 					<div class="xm-tree">
-						{ tree.showFolderIcon && tree.showLine && expand && child.length > 1 && <i class='left-line left-line-group' style={ {left: indent + 3 + 'px'} }></i> }
+						{ tree.showFolderIcon && tree.showLine && expand && child.length > 0 && <i class='left-line left-line-group' style={ {left: indent + 3 + 'px'} }></i> }
 						{ renderItem(item, indent, child.length === 0 && (!tree.lazy || tree.lazy && item.__node.loading === false) ? 0 : expand) }
 						{ expand && <div class="xm-tree-box">{ child.map(c => renderGroup(c, indent)) }</div> }
 					</div>
@@ -311,7 +311,7 @@ class Tree extends Component{
 
 		//工具条操作
 		function flat(list, array){
-			array.forEach(item => item[optgroup] ? flat(list, item[children]) : list.push(item))
+			array.forEach(item => item[optgroup] ? (!tree.strict && list.push(item), flat(list, item[children])) : list.push(item))
 		}
 		const toolbar = (
 			<div class='xm-toolbar'>

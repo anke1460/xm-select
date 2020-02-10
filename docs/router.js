@@ -101,6 +101,7 @@ export default [{
             { path: '/plugin/laydate', name: '下拉日期多选', component: importMd('/ZP03') },
             { path: '/plugin/panel', name: '下拉折叠面板', component: importMd('/ZP04') },
             { path: '/plugin/transfer', name: '下拉穿梭框', component: importMd('/ZP05') },
+            { path: '/plugin/cascader', name: '级联模式 Cascader', component: importMd('/ZP06') },
         ]
 	}, {
 		path: '/question',

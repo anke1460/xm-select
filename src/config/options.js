@@ -107,7 +107,9 @@ export default function (lan = 'zn') {
 			//是否展示级联
 			show: false,
 			//间距
-			indent: 200,
+			indent: 100,
+			//是否严格遵守父子模式
+			strict: true,
 		},
 		//自定义属性名称
 		prop: {

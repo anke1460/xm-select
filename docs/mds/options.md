@@ -48,6 +48,7 @@
 | disabled			| 是否禁用多选				 	|  boolean		| true / false	|	false	|
 | create			| 创建条目					 	|  function(val, data), val: 搜索的数据, data: 当前下拉数据		   |	-   |	null	|
 | tree				| 树形结构, 具体看下表			 	|  object		|	-  			|	-		|
+| cascader			| 级联结构, 具体看下表			 	|  object		|	-  			|	-		|
 
 
 ### prop
@@ -173,6 +174,15 @@ list: [ "ALL", "CLEAR",
 | indent	   		| 间距	 				| int	   		|	-   		| 20 	 |
 | expandedKeys 		| 默认展开的节点数组, 为true时展开所有节点	 	| array / boolean	   		|	-			| [ ]	 |
 | strict 			| 是否遵循严格父子结构	 | boolean	 	| true / false	| true	 |
+
+
+### cascader
+
+| 参数		  		| 说明	  				| 类型			| 可选值 		| 默认值	 |
+| ----------------- | --------------------- | ------------- | ------------- | ------ |
+| show				| 是否展示为级联结构   	| boolean		| true / false	| false  |
+| indent	   		| 每一级的宽度			| int	   		|	-   		| 100 	 |
+| strict 			| 是否遵循严格父子结构	 	| boolean	 	| true / false	| true	 |
 
 
 ### 全局方法

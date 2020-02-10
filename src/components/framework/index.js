@@ -6,7 +6,7 @@ import Label from '../label';
 import General from '../plugin/general';
 import Custom from '../plugin/custom';
 import Tree from '../plugin/tree';
-// import Cascader from '../plugin/cascader';
+import Cascader from '../plugin/cascader';
 
 /**
  * 框架渲染类, 渲染基础的外边框 + 属性变化监听
@@ -384,8 +384,7 @@ class Framework extends Component{
 		const bodyProps = {  ...config, data, dataObj, flatData, sels, ck: this.itemClick.bind(this), show, onReset: this.onReset.bind(this) }
 
 		//渲染组件
-		// let Body = content ? <Custom { ...bodyProps } /> : tree.show ? <Tree { ...bodyProps } /> : config.cascader.show ? <Cascader { ...bodyProps } /> : <General { ...bodyProps } />;
-		let Body = content ? <Custom { ...bodyProps } /> : tree.show ? <Tree { ...bodyProps } /> : <General { ...bodyProps } />;
+		let Body = content ? <Custom { ...bodyProps } /> : tree.show ? <Tree { ...bodyProps } /> : config.cascader.show ? <Cascader { ...bodyProps } /> : <General { ...bodyProps } />;
 
 		return (
 			<xm-select { ...xmSelectProps } >
