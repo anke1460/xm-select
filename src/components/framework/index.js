@@ -283,7 +283,6 @@ class Framework extends Component{
 		if(type === 'data'){
 			let changeData = data.filter(item => item[this.props.prop.selected] === true);
 			this.resetSelectValue(mergeArr(changeData, this.state.sels, this.props.prop), changeData, true);
-
 			let dataObj = {}, flatData = [];
 			this.load(data, dataObj, flatData);
 			this.setState({ data, flatData });

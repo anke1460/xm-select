@@ -164,3 +164,30 @@ export function exchangeOptionsData(arr, { prop }){
 	}
 	return newArr;
 }
+
+export function toSimple(data, sels, list, prop){
+	if(!data || !isArray(data)){
+		return;
+	}
+
+	let { children, selected, value } = prop;
+	data.forEach(item => {
+		if(item.__node[selected] || sels.find(i => i[value] === item[value])){
+			list.push(item);
+		}else{
+			toSimple(item[children], sels, list, prop);
+		}
+	})
+}
+
+export function delProp(data, children, props){
+	if(!data || !isArray(data)){
+		return;
+	}
+	return data.map(item => {
+		item = { ...item };
+		props.forEach(prop => delete item[prop]);
+		item[children] = delProp(item[children], children, props);
+		return item;
+	})
+}

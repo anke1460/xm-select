@@ -125,13 +125,15 @@ class General extends Component{
 			this.setState({ loading: true, remote: false });
 			//让输入框失去焦点
 			this.blur();
-			this.props.remoteMethod(this.state.filterValue, (result, totalSize) => {
-				//回调后可以重新聚焦
-				this.focus();
-
-				this.callback = true;
-				this.setState({ loading: false, totalSize });
-				this.props.onReset(result, 'data');
+			this.props.remoteMethod(this.state.filterValue, (result, totalSize = 1) => {
+				//这里同步修改为异步
+				setTimeout(() => {
+					//回调后可以重新聚焦
+					this.focus();
+					this.callback = true;
+					this.setState({ loading: false, totalSize });
+					this.props.onReset(result, 'data');
+				}, 10);
 			}, this.props.show, pageIndex);
 		}
 	}
@@ -215,46 +217,42 @@ class General extends Component{
 	}
 
 	render(config) {
-		let { data, flatData, prop, template, theme, radio, sels, empty, filterable, filterMethod, remoteSearch, remoteMethod, delay, searchTips, create, pageRemote } = config
+		let { data, flatData, prop, template, theme, radio, sels, empty, filterable, filterMethod, remoteSearch, remoteMethod, delay, searchTips, create, pageRemote, max } = config
 
 		const { name, value, disabled, children, optgroup } = prop;
 
 		let arr = deepMerge([], flatData), creator;
 
-		//是否开启了搜索
-		if(filterable){
-			if(remoteSearch){//是否进行远程搜索
-				this.postData();
-			}else{
-				const filterData = (item, index) => {
-					const isGroup = item[optgroup];
-					if(isGroup){
-						delete item.__del;
-						return true;
-					}
-					return filterMethod(this.state.filterValue, item, index, prop);
-				}
-				arr = arr.filter(filterData);
-
-				for(let i = 0; i < arr.length - 1; i++){
-					let a = arr[i];
-					let b = arr[i + 1];
-					if(a[optgroup] && b[optgroup]){
-						arr[i].__del = true;
-					}
-				}
-				if(arr.length && arr[arr.length - 1][optgroup]){
-					arr[arr.length - 1].__del = true;
-				}
-				arr = arr.filter(item => !item.__del);
-				//创建条目
-				creator = this.state.filterValue && isFunction(create);
-			}
+		//远程分页 或者 远程搜索
+		if(pageRemote || filterable && remoteSearch){
+			this.postData();
 		}
 
-		//远程分页
-		if(pageRemote){
-			this.postData();
+		//本地搜索
+		if(filterable && !remoteSearch){
+			const filterData = (item, index) => {
+				const isGroup = item[optgroup];
+				if(isGroup){
+					delete item.__del;
+					return true;
+				}
+				return filterMethod(this.state.filterValue, item, index, prop);
+			}
+			arr = arr.filter(filterData);
+
+			for(let i = 0; i < arr.length - 1; i++){
+				let a = arr[i];
+				let b = arr[i + 1];
+				if(a[optgroup] && b[optgroup]){
+					arr[i].__del = true;
+				}
+			}
+			if(arr.length && arr[arr.length - 1][optgroup]){
+				arr[arr.length - 1].__del = true;
+			}
+			arr = arr.filter(item => !item.__del);
+			//创建条目
+			creator = this.state.filterValue && isFunction(create);
 		}
 
 		const search = (
@@ -355,7 +353,19 @@ class General extends Component{
 						info = { icon: 'xm-iconfont xm-icon-quanxuan', name, method: (pageData) => {
 							const { optgroup, disabled } = prop;
 							const list = pageData.filter(item => !item[optgroup]).filter(item => !item[disabled])
-							this.props.onReset(radio ? list.slice(0, 1) : mergeArr(list, sels, prop), 'sels');
+
+							const disSels = sels.filter(item => item[prop.disabled]);
+							let result = [];
+							//单选的处理
+							if(radio){
+								result = disSels.length ? disSels : list.slice(0, 1)
+							}else if(max > 0){
+								result = disSels.length >= max ? disSels : mergeArr(list.slice(0, max - disSels.length), disSels, prop)
+							}else{
+								result = mergeArr(list, sels, prop)
+							}
+
+							this.props.onReset(result, 'sels');
 						} };
 					}else if(tool === 'CLEAR'){
 						info = { icon: 'xm-iconfont xm-icon-qingkong', name, method: (pageData) => {
@@ -375,7 +385,19 @@ class General extends Component{
 									list.splice(index, 1);
 								}
 							})
-							this.props.onReset(radio ? selectedList.slice(0, 1) : mergeArr(list, selectedList, prop), 'sels');
+
+							const disSels = selectedList.filter(item => item[prop.disabled]);
+							let result = [];
+							//单选的处理
+							if(radio){
+								result = disSels.length ? disSels : list.slice(0, 1)
+							}else if(max > 0){
+								result = disSels.length >= max ? disSels : mergeArr(list.slice(0, max - disSels.length), disSels, prop)
+							}else{
+								result = mergeArr(list, selectedList, prop)
+							}
+
+							this.props.onReset(result, 'sels');
 						} };
 					}else {
 						info = tool

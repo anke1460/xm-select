@@ -101,6 +101,8 @@ export default function (lan = 'zn') {
 			lazy: false,
 			//懒加载回调
 			load: null,
+			//是否开启极简模式
+			simple: false,
 		},
 		//级联结构
 		cascader: {

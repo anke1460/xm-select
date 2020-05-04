@@ -1,5 +1,5 @@
 import { h, Component, render } from 'preact'
-import { isFunction } from '@/common/util'
+import { isFunction, toSimple } from '@/common/util'
 
 /**
  * 标签的渲染
@@ -43,7 +43,7 @@ class Label extends Component{
 	}
 
 	render(config) {
-		const { data, prop, theme, model, sels, autoRow } = config;
+		const { data, prop, theme, model, sels, autoRow, tree } = config;
 		const { name, disabled } = prop;
 
 		//获取配置项
@@ -51,17 +51,24 @@ class Label extends Component{
 		const type = label.type;
 		const conf = label[type];
 
+		let list = sels;
+		//树结构开启极简显示
+		if(tree.show && tree.strict && tree.simple){
+			list = []
+			toSimple(data, sels, list, prop);
+		}
+
 		//渲染结果
 		let html = '', innerHTML = true;
 		//悬浮显示已选择
-		let title = sels.map(item => item[name]).join(',')
+		let title = list.map(item => item[name]).join(',')
 
 		if(type === 'text'){
-			html = sels.map(sel => `${conf.left}${sel[name]}${conf.right}`).join(conf.separator)
+			html = list.map(sel => `${conf.left}${sel[name]}${conf.right}`).join(conf.separator)
 		}else if(type === 'block'){
 			innerHTML = false;
 			//已选择的数据
-			let arr = [...sels];
+			let arr = [...list];
 
 			const style = { backgroundColor: theme.color }
 			//显示的个数
@@ -91,10 +98,10 @@ class Label extends Component{
 				)
 			}
 		}else{
-			if(sels.length && conf && conf.template){
-				html = conf.template(data, sels);
+			if(list.length && conf && conf.template){
+				html = conf.template(data, list);
 			}else{
-				html = sels.map(sel => sel[name]).join(',')
+				html = list.map(sel => sel[name]).join(',')
 			}
 		}
 

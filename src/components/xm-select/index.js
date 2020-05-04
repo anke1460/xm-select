@@ -1,6 +1,6 @@
 import { h, Component, render } from 'preact'
 import { datas, optionData, childData } from '@/index.js';
-import { warn, listenerClose, isArray, deepMerge, exchangeOptionsData } from '@/common/util'
+import { warn, listenerClose, isArray, deepMerge, exchangeOptionsData, toSimple, delProp } from '@/common/util'
 import Framework from '@/components/framework'
 import defaultOptions from '@/config/options'
 
@@ -84,11 +84,17 @@ class xmOptions {
 	 * 获取多选选中的数据
 	 */
 	getValue(type){
-		let arr = childData[this.options.el].state.sels.map(item => {
-			item = { ...item };
-			delete item.__node;
-			return item;
-		});
+		const { tree, prop, data } = this.options;
+		let sels = childData[this.options.el].state.sels;
+		let list = sels;
+
+		//树结构开启极简显示
+		if(tree.show && tree.strict && tree.simple){
+			list = []
+			toSimple(data, sels, list, prop);
+		}
+		
+		let arr = delProp(list, prop.children, [ '__node' ]);;
 
 		if(type === 'name'){
 			return arr.map(item => item[this.options.prop.name]);
