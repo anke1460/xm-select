@@ -26,8 +26,11 @@
 
 > 联系方式 
 
-- xm-select技术群①: `660408068` (500人已满)
+- xm-select技术群①: `660408068` (500人)
 - xm-select技术群②: `938624691` (500人)
+- xm-select技术群③: `1145047250` (500人)
+
+[issues 需求记录](https://gitee.com/maplemei/xm-select/issues/I1NSO7)
 
 
 [更新日志](CHANGELOG.md)
@@ -64,6 +67,9 @@
 2. cd xm-select
 3. yarn 或者 npm install
 ```
+
+[目录结构说明](https://gitee.com/maplemei/xm-select/wikis/pages?sort_id=2465940&doc_id=820743)
+
 
 > 打赏
 
@@ -137,4 +143,5 @@ maplemei, 一个90后, 热爱前端的程序猿
 
 目前作者几乎不怎么使用layui, 已经走向了vue, react的新途 , xm-select的维护是对layui的一种情怀 ^_^
 ```
+
 

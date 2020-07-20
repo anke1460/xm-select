@@ -7,5 +7,9 @@ export default {
 		CLEAR: 'clear',
 		REVERSE: 'invert select',
 		SEARCH: 'search',
+	},
+	paging: {
+		prev: 'prev',
+		next: 'next',
 	}
 }

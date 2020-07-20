@@ -12,9 +12,13 @@
 - 打包方式[webpack](https://www.webpackjs.com/)
 - 文档借鉴于[ElementUI](https://element.eleme.cn/#/zh-CN)的编写方式
 - [Fly社区交流贴](https://fly.layui.com/jie/57776/)
-- xm-select技术群①: `660408068` (500人已满)
-- xm-select技术群②: `938624691` (500人)
-- 群满了加不进去的话 有问题就提 [issues](https://gitee.com/maplemei/xm-select/issues) 吧
+- xm-select技术群①: **660408068** (500人) <a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=BD2HaEzKyK8IZqI0E3OABxuxZEdk4jOv&jump_from=webapi"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="xm-select技术群①" title="xm-select技术群①"></a>
+- xm-select技术群②: **938624691** (500人) <a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=iBguKjw2qKcijuJL98PxaVnMu-BKZ8A7&jump_from=webapi"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="xm-select技术群②" title="xm-select技术群②"></a>
+- xm-select技术群③: **1145047250** (500人) <a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=K71Fc-ynL1jCLMzRPUuoFY94vkXd6o1y&jump_from=webapi"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="xm-select技术群③" title="xm-select技术群③"></a>
+- 如果群满了加不进去的话 有问题就提 [issues](https://gitee.com/maplemei/xm-select/issues) 吧
+
+
+
 
 ### 作者
 
@@ -41,6 +45,8 @@ maplemei, 热爱前端的Java程序猿, 如果喜欢作者的插件, 可以请�
 
 ### 二次开发
 
+有兴趣的小伙伴可以从git上下载源码进行二次开发
+
 ```
 $ git clone https://gitee.com/maplemei/xm-select.git
 $ cd xm-select
@@ -49,6 +55,8 @@ $ npm install && npm run dev
 
 
 ### Hello World
+
+一个简单的小栗子，看看如何使用xm-select.js
 
 ```
 第一步: 下载

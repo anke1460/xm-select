@@ -305,9 +305,9 @@ class General extends Component{
 
 			paging = (
 				<div class='xm-paging'>
-					<span style={ prevStyle } onClick={ this.pagePrevClick.bind(this, size) }>上一页</span>
+					<span style={ prevStyle } onClick={ this.pagePrevClick.bind(this, size) }>{ config.languageProp.paging.prev }</span>
 					<span>{ this.state.pageIndex } / { size }</span>
-					<span style={ nextStyle } onClick={ this.pageNextClick.bind(this, size) }>下一页</span>
+					<span style={ nextStyle } onClick={ this.pageNextClick.bind(this, size) }>{ config.languageProp.paging.next }</span>
 				</div>
 			)
 		}else{
