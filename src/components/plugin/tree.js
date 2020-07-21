@@ -236,7 +236,17 @@ class Tree extends Component{
 				dis && (itemStyle.backgroundColor = '#C2C2C2');
 			}
 			const className = ['xm-option', (dis ? ' disabled' : ''), (selected ? ' selected' : ''), (showIcon ? 'show-icon' : 'hide-icon') ].join(' ');
-			const iconClass = ['xm-option-icon xm-iconfont', radio ? 'xm-icon-danx' : tree.strict && half ? 'xm-icon-banxuan' : 'xm-icon-duox'].join(' ');
+			const iconClass = ['xm-option-icon', (() => {
+				//如果是半选状态，但是没有配置半选图标就用默认的
+				if(half){
+					return config.iconfont.half ? config.iconfont.half + ' xm-custom-icon' : 0;
+				}
+				if(selected){
+					return config.iconfont.select ? config.iconfont.select : 0;
+				}
+				return config.iconfont.unselect ? config.iconfont.unselect + ' xm-custom-icon' : 0;
+			})() || ('xm-iconfont ' + (radio ? 'xm-icon-danx' : tree.strict && half ? 'xm-icon-banxuan' : 'xm-icon-duox'))].join(' ');
+
 			const treeIconClass = ['xm-tree-icon', expand ? 'expand':'', item[children] && (item[children].length > 0 || (tree.lazy && item.__node.loading !== false)) ? 'xm-visible':'xm-hidden'].join(' ');
 
 			const iconArray = [];

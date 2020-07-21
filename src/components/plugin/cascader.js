@@ -83,7 +83,16 @@ class Cascader extends Component{
 
 			const itemStyle = { backgroundColor: 'transparent' }
 			const className = ['xm-option', (dis ? ' disabled' : ''), (selected ? ' selected' : ''), (showIcon ? 'show-icon' : 'hide-icon') ].join(' ');
-			const iconClass = ['xm-option-icon xm-iconfont', radio ? 'xm-icon-danx' : cascader.strict && half ? 'xm-icon-banxuan' : 'xm-icon-duox'].join(' ');
+			const iconClass = ['xm-option-icon', (() => {
+				//如果是半选状态，但是没有配置半选图标就用默认的
+				if(half){
+					return config.iconfont.half ? config.iconfont.half + ' xm-custom-icon' : 0;
+				}
+				if(selected){
+					return config.iconfont.select ? config.iconfont.select : 0;
+				}
+				return config.iconfont.unselect ? config.iconfont.unselect + ' xm-custom-icon' : 0;
+			})() || ('xm-iconfont ' + (radio ? 'xm-icon-danx' : cascader.strict && half ? 'xm-icon-banxuan' : 'xm-icon-duox'))].join(' ');
 
 			if(item[value] === this.state.val){
 				itemStyle.backgroundColor = theme.hover

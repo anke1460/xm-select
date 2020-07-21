@@ -229,7 +229,7 @@ class General extends Component{
 		}
 
 		//本地搜索
-		if(filterable && !remoteSearch){
+		if(filterable && !(remoteSearch || pageRemote)){
 			const filterData = (item, index) => {
 				const isGroup = item[optgroup];
 				if(isGroup){
@@ -440,7 +440,16 @@ class General extends Component{
 				item[disabled] && (itemStyle.backgroundColor = '#C2C2C2');
 			}
 			const className = ['xm-option', (item[disabled] ? ' disabled' : ''), (selected ? ' selected' : ''), (showIcon ? 'show-icon' : 'hide-icon') ].join(' ');
-			const iconClass = ['xm-option-icon xm-iconfont', radio ? 'xm-icon-danx' : 'xm-icon-duox'].join(' ');
+			const iconClass = ['xm-option-icon', (() => {
+				let selectICON = config.iconfont.select;
+				let unselectICON = config.iconfont.unselect;
+				if(selectICON){
+					return !selected && unselectICON ? unselectICON + ' xm-custom-icon' : selectICON;
+				}
+				return 0;
+			})() || ('xm-iconfont ' + (radio ? 'xm-icon-danx' : 'xm-icon-duox'))].join(' ');
+
+			console.log(iconClass)
 
 			//处理鼠标选择的背景色
 			const hoverChange = e => {

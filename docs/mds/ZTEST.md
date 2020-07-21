@@ -9,6 +9,7 @@ var demo1 = xmSelect.render({
 	el: '#demo1', 
 	autoRow: true,
 	height: '300px',
+	radio: true,
 	tree: {
 		show: false,
 		simple: true,
