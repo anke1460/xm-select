@@ -314,6 +314,14 @@ class Framework extends Component{
 		//重置class
 		if(type === 'class'){
 			this.setState({ bodyClass: data })
+		}else
+		//聚焦label搜索框
+		if(type === 'labelSearchBlur'){
+			this.labelView.blur(data);
+		}else
+		//聚焦label搜索框
+		if(type === 'labelSearch'){
+			this.generalView.labelSearch(data);
 		}
 	}
 
@@ -379,18 +387,18 @@ class Framework extends Component{
 
 		//普通多选数据
 		const valueProp = prop.value;
-		const labelProps = {  ...config, data, sels, ck: this.itemClick.bind(this), title: sels.map(sel => sel[prop.name]).join(',') }
+		const labelProps = {  ...config, data, sels, ck: this.itemClick.bind(this), title: sels.map(sel => sel[prop.name]).join(','), onReset: this.onReset.bind(this) }
 		const bodyProps = {  ...config, data, dataObj, flatData, sels, ck: this.itemClick.bind(this), show, onReset: this.onReset.bind(this) }
 
 		//渲染组件
-		let Body = content ? <Custom { ...bodyProps } /> : tree.show ? <Tree { ...bodyProps } /> : config.cascader.show ? <Cascader { ...bodyProps } /> : <General { ...bodyProps } />;
+		let Body = content ? <Custom { ...bodyProps } /> : tree.show ? <Tree { ...bodyProps } /> : config.cascader.show ? <Cascader { ...bodyProps } /> : <General { ...bodyProps } ref={ ref => this.generalView = ref } />;
 
 		return (
 			<xm-select { ...xmSelectProps } >
 				<input class="xm-select-default" lay-verify={ config.layVerify } lay-verType={ config.layVerType } name={ config.name } value={ sels.map(item => item[prop.value]).join(',') }></input>
 				<i class={ show ? 'xm-icon xm-icon-expand' : 'xm-icon' } />
 				{ sels.length === 0 && <div class="xm-tips">{ config.tips }</div> }
-				<Label { ...labelProps } />
+				<Label { ...labelProps } ref={ ref => this.labelView = ref } />
 				<div class={ ['xm-body', bodyClass, config.model.type, show ? '':'dis', ].join(' ') } ref={ ref => this.bodyView = ref}>
 					{ Body }
 				</div>

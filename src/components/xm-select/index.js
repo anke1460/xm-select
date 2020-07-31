@@ -44,7 +44,7 @@ class xmOptions {
 			return ;
 		}
 
-		render(<Framework { ...this.options } updateData={ updateData } />, dom);
+		render(<Framework { ...this.options } __update={ Date.now() } updateData={ updateData } />, dom);
 
 		//返回多选对象
 		return this;

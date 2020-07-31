@@ -79,6 +79,14 @@ class General extends Component{
 		})
 	}
 
+	labelSearch(e){
+		if(e.type == 'input'){
+			this.searchInput(e)
+		}else{
+			this.handleComposition(e)
+		}
+	}
+
 	searchInput(e){
 		let v = e.target.value;
 
@@ -86,7 +94,7 @@ class General extends Component{
 			return ;
 		}
 
-		clearTimeout(this.searchCid);
+		this.searchCid && clearTimeout(this.searchCid);
 		if(this.inputOver){
 			//保证输入框内的值是实时的
 			this.__value = v;
@@ -112,7 +120,7 @@ class General extends Component{
 
 		if(type === 'compositionstart'){
 			this.inputOver = false;
-			clearTimeout(this.searchCid);
+			this.searchCid && clearTimeout(this.searchCid);
 		}else if(type === 'compositionend'){
 			this.inputOver = true;
 			this.searchInput(e);
@@ -203,16 +211,22 @@ class General extends Component{
 				this.setState({ filterValue: '', val: emptyVal });
 				this.__value = '';
 				this.searchInputRef && (this.searchInputRef.value = '');
+				this.props.onReset('', 'labelSearchBlur')
 			}else{
 				//聚焦输入框
 				setTimeout(() => {
-					if(props.filterable){
+					if(props.model.label.type === 'search'){
+
+					}else if(props.filterable){
 						this.focus()
 					}else{
 						this.base.focus()
 					}
 				}, 0);
 			}
+		}
+		if(this.props.__update != props.__update){
+			this.setState({ remote: true })
 		}
 	}
 
@@ -256,7 +270,7 @@ class General extends Component{
 		}
 
 		const search = (
-			<div class={ filterable ? 'xm-search' : 'xm-search dis' }>
+			<div class={ filterable && config.model.label.type != 'search' ? 'xm-search' : 'xm-search dis' }>
 				<i class="xm-iconfont xm-icon-sousuo"></i>
 				<input class="xm-input xm-search-input" placeholder={ searchTips } />
 			</div>
@@ -448,8 +462,6 @@ class General extends Component{
 				}
 				return 0;
 			})() || ('xm-iconfont ' + (radio ? 'xm-icon-danx' : 'xm-icon-duox'))].join(' ');
-
-			console.log(iconClass)
 
 			//处理鼠标选择的背景色
 			const hoverChange = e => {

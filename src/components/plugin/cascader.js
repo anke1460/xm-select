@@ -25,9 +25,9 @@ class Cascader extends Component{
 			if(item.__node.loading === true){
 				return;
 			}
-			
+
 			const { cascader, prop, sels } = this.props;
-			
+
 			//不是父节点的不需要处理
 			if(!cascader.lazy && !item[prop.optgroup]){
 				this.props.ck(item, selected, disabled);
@@ -151,7 +151,7 @@ class Cascader extends Component{
 		}
 
 		return (
-			<div onClick={ this.blockClick } class="xm-body-cascader" style={{ width: cascader.indent + 'px', height: config.height }}>
+			<div onClick={ this.blockClick } class="xm-body-cascader" style={{ width: cascader.indent + 'px', maxHeight: config.height }}>
 				{ arr }
 			</div>
 		)
@@ -160,13 +160,10 @@ class Cascader extends Component{
 	//组件完成挂载
 	componentDidMount(){
 		this.props.onReset('cascader', 'class');
-
 	}
 
 	//此时页面又被重新渲染了
-	componentDidUpdate(){
-
-	}
+	// componentDidUpdate(){}
 }
 
 export default Cascader;

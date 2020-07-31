@@ -154,9 +154,9 @@ export default function (lan = 'zn') {
 		},
 		//自定义选中的图标
 		iconfont: {
-			select: 'layui-icon layui-icon-cellphone',
-			unselect: 'layui-icon layui-icon-cellphone',
-			half: 'xm-iconfont xm-icon-banxuan',
+			select: '',
+			unselect: '',
+			half: '',
 		},
 		// 展开下拉框
 		show(){

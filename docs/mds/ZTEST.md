@@ -8,31 +8,30 @@
 var demo1 = xmSelect.render({
 	el: '#demo1', 
 	autoRow: true,
-	height: '300px',
-	radio: true,
-	tree: {
-		show: false,
-		simple: true,
-		expandedKeys: [-1],
-	},
-	toolbar: {
-		show: true,
-		list: ['ALL', 'REVERSE', 'CLEAR']
-	},
-	filterable: true,
+	toolbar: { show: true },
 	paging: true,
 	pageRemote: true,
+	filterable: true,
 	remoteSearch: true,
-	remoteMethod(val, cb, show, pageIndex){
-		cb([
-			{name: '张三11111111111', value: 1, selected: true, children: []},
-			{name: '李四1', value: 2, selected: true},
-			{name: '王五1', value: 3, disabled: false},
-		])
+	remoteMethod: function(val, cb, show){
+		//这里如果val为空, 则不触发搜索
+		/* if(!val){
+			return cb([]);
+		} */
+		//这里引入了一个第三方插件axios, 相当于$.ajax
+		axios({
+			method: 'get',
+			url: 'https://www.fastmock.site/mock/98228b1f16b7e5112d6c0c87921eabc1/xmSelect/search',
+			params: {
+				keyword: val,
+			}
+		}).then(response => {
+			var res = response.data;
+			cb(res.data, 80)
+		}).catch(err => {
+			cb([]);
+		});
 	},
-	data(){
-		return []
-	}
 })
 
 </script>

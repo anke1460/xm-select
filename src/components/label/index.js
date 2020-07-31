@@ -32,6 +32,11 @@ class Label extends Component{
 		}
 	}
 
+	blur(){
+		let input = this.base.querySelector('.label-search-input');
+		input && input.blur();
+	}
+
 	componentDidMount(){
 		if (this.labelRef.addEventListener) {
 			this.labelRef.addEventListener('DOMMouseScroll', this.scrollFunc.bind(this), false);
@@ -97,6 +102,23 @@ class Label extends Component{
 					</div>
 				)
 			}
+		}else if(type == 'search'){
+			innerHTML = false;
+			let one = list[0][name];
+
+			html = (
+				<input class="label-search-input" type="text" placeholder={ config.searchTips } style={{ width: '100%', border: 'none' }} value={
+					one
+				} onInput={ e => {
+					this.props.onReset(e, 'labelSearch')
+				}}  onCompositionstart={ e => {
+					this.props.onReset(e, 'labelSearch')
+				}}  compositionupdate={ e => {
+					this.props.onReset(e, 'labelSearch')
+				}}  compositionend={ e => {
+					this.props.onReset(e, 'labelSearch')
+				}}></input>
+			)
 		}else{
 			if(list.length && conf && conf.template){
 				html = conf.template(data, list);
@@ -110,7 +132,7 @@ class Label extends Component{
 			<div class={ className }>
 				<div class="scroll" ref={ ref => this.labelRef = ref }>
 					{ innerHTML ?
-						<div class="label-content" dangerouslySetInnerHTML={{__html: html}}></div> :
+						<div class="label-content" dangerouslySetInnerHTML={{ __html: html }}></div> :
 						<div class="label-content" title={ title }>{ html }</div>
 					}
 				</div>
