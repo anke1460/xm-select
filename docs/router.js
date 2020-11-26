@@ -25,7 +25,7 @@ export default [{
 		component: importVue('/changelog'),
 	}, {
 		path: '/add',
-		name: 'QQ群: 660408068',
+		name: 'QQ群: 1145047250',
 		redirect: '/',
 	}, {
 		path: '/component',

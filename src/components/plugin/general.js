@@ -182,6 +182,9 @@ class General extends Component{
 			}
 			let val = data[index][value];
 			this.setState({ val })
+			//键盘选中时滚动到可视范围内
+			let opt = this.base.querySelector(`.xm-option[value="${ val }"]`);
+			opt && opt.scrollIntoView(false)
 		}else
 		//Down 键
 		if(keyCode === 40){
@@ -192,6 +195,9 @@ class General extends Component{
 			}
 			let val = data[index][value];
 			this.setState({ val })
+			//键盘选中时滚动到可视范围内
+			let opt = this.base.querySelector(`.xm-option[value="${ val }"]`);
+			opt && opt.scrollIntoView(false)
 		}else
 		//Enter 键
 		if(keyCode === 13){

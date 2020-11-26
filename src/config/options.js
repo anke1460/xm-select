@@ -21,6 +21,8 @@ export default function (lan = 'zn') {
 		layVerify: '',
 		//验证类型
 		layVerType: '',
+		//验证提示
+		layReqText: '',
 		//尺寸
 		size: 'medium',
 		//是否禁用多选
@@ -103,6 +105,8 @@ export default function (lan = 'zn') {
 			load: null,
 			//是否开启极简模式
 			simple: false,
+			//标注节点类型的key
+			nodeType: '__node_type',
 		},
 		//级联结构
 		cascader: {
@@ -157,6 +161,7 @@ export default function (lan = 'zn') {
 			select: '',
 			unselect: '',
 			half: '',
+			parent: '',
 		},
 		// 展开下拉框
 		show(){

@@ -137,27 +137,45 @@ class Tree extends Component{
 		}
 	}
 
-	filterData(data, val){
+	filterData(data, val, parentHidden){
 		const { prop, filterMethod, tree } = this.props;
 		const { children, optgroup, name, value } = prop;
+
 		data.forEach((item, index) => {
+			//首先判断父节点的状态是显示还是隐藏
+			let hiddenStatus = val ? !filterMethod(val, item, index, prop) : false;
+			//严格模式下, 不计算父节点的状态
+			let thisParentHidden;
+			if(tree.strict){
+				thisParentHidden = false;
+			}else{//非严格模式下, 父节点显示, 子节点无条件显示
+				thisParentHidden = parentHidden === false ? false : hiddenStatus;
+				hiddenStatus = thisParentHidden
+			}
+			//如果包含了子节点
 			if(item[optgroup]){
-				let child = this.filterData(item[children], val);
-				item.__node.hidn = val ? child.filter(c => !c.__node.hidn).length === 0 : false;
-				if(!item.__node.hidn){
+				//过滤出来子节点的数据
+				let child = this.filterData(item[children], val, thisParentHidden);
+				let childHiddenStatus = val ? child.filter(c => !c.__node.hidn).length === 0 : false;
+
+				//严格模式下子节点都隐藏了, 父节点也不显示
+				if(tree.strict){
+					hiddenStatus = childHiddenStatus;
+				}else{//非严格模式, 父节点没有搜索到, 看看子节点有没有显示的
+					hiddenStatus = thisParentHidden && childHiddenStatus;
+				}
+
+				if(!hiddenStatus){//如果是显示状态
 					let keys = this.state.expandedKeys;
 					if(val && keys.findIndex(key => key === item[value]) === -1){
 						keys.push(item[value]);
 						this.setState({ expandedKeys: keys })
 					}
-					return
-				}
-				if(tree.strict){
-					return
 				}
 			}
-			item.__node.hidn = val ? !filterMethod(val, item, index, prop) : false;
+			item.__node.hidn = hiddenStatus;
 		});
+
 		return data;
 	}
 
@@ -198,10 +216,10 @@ class Tree extends Component{
 	}
 
 	render(config, { expandedKeys }) {
-		let { prop, empty, sels, theme, radio, template, data, tree, filterable, remoteSearch, searchTips } = config;
+		let { prop, empty, sels, theme, radio, template, data, tree, filterable, remoteSearch, searchTips, iconfont } = config;
 		let { name, value, disabled, children, optgroup } = prop;
 
-		const showIcon = config.model.icon != 'hidden';
+		let showIcon = config.model.icon != 'hidden';
 		const renderItem = (item, indent, expand) => {
 			//是否被选中
 			let selected = !!sels.find(sel => sel[value] == item[value]);
@@ -236,16 +254,24 @@ class Tree extends Component{
 				dis && (itemStyle.backgroundColor = '#C2C2C2');
 			}
 			const className = ['xm-option', (dis ? ' disabled' : ''), (selected ? ' selected' : ''), (showIcon ? 'show-icon' : 'hide-icon') ].join(' ');
-			const iconClass = ['xm-option-icon', (() => {
-				//如果是半选状态，但是没有配置半选图标就用默认的
-				if(half){
-					return config.iconfont.half ? config.iconfont.half + ' xm-custom-icon' : 0;
+			const iconClass = (() => {
+				if(expand !== 0 && iconfont.parent === 'hidden'){
+					return 'xm-option-icon-hidden'
 				}
-				if(selected){
-					return config.iconfont.select ? config.iconfont.select : 0;
-				}
-				return config.iconfont.unselect ? config.iconfont.unselect + ' xm-custom-icon' : 0;
-			})() || ('xm-iconfont ' + (radio ? 'xm-icon-danx' : tree.strict && half ? 'xm-icon-banxuan' : 'xm-icon-duox'))].join(' ');
+				return ['xm-option-icon', (() => {
+					//如果是半选状态，但是没有配置半选图标就用默认的
+					if(half){
+						return iconfont.half ? iconfont.half + ' xm-custom-icon' : 0;
+					}
+					if(expand !== 0 && iconfont.parent){
+						return iconfont.parent + ' xm-custom-icon';
+					}
+					if(selected){
+						return iconfont.select ? iconfont.select : 0;
+					}
+					return iconfont.unselect ? iconfont.unselect + ' xm-custom-icon' : 0;
+				})() || ('xm-iconfont ' + (radio ? 'xm-icon-danx' : tree.strict && half ? 'xm-icon-banxuan' : 'xm-icon-duox'))].join(' ');
+			})()
 
 			const treeIconClass = ['xm-tree-icon', expand ? 'expand':'', item[children] && (item[children].length > 0 || (tree.lazy && item.__node.loading !== false)) ? 'xm-visible':'xm-hidden'].join(' ');
 
@@ -321,7 +347,18 @@ class Tree extends Component{
 
 		//工具条操作
 		function flat(list, array){
-			array.forEach(item => item[optgroup] ? (!tree.strict && list.push(item), flat(list, item[children])) : list.push(item))
+			//array.forEach(item => item[optgroup] ? (!tree.strict && list.push(item), flat(list, item[children])) : list.push(item))
+			array.forEach(item => {
+				if(item[optgroup]){
+					//非严格模式, 如果隐藏父节点, 证明不可选
+					if(!tree.strict && iconfont.parent !== 'hidden'){
+						list.push(item)
+					}
+					flat(list, item[children])
+				}else{
+					list.push(item)
+				}
+			})
 		}
 		const toolbar = (
 			<div class='xm-toolbar'>
@@ -333,7 +370,8 @@ class Tree extends Component{
 						info = { icon: 'xm-iconfont xm-icon-quanxuan', name, method: (pageData) => {
 							let list = [];
 							flat(list, pageData);
-							list = list.filter(item => !item[disabled])
+							//过滤掉禁用状态的不操作, 隐藏状态的不操作
+							list = list.filter(item => !item[disabled] && !item.__node.hidn)
 							this.props.onReset(radio ? list.slice(0, 1) : mergeArr(list, sels, prop), 'treeData');
 						} };
 					}else if(tool === 'CLEAR'){
@@ -344,7 +382,7 @@ class Tree extends Component{
 						info = { icon: 'xm-iconfont xm-icon-fanxuan', name, method: (pageData) => {
 							let list = [];
 							flat(list, pageData);
-							list = list.filter(item => !item[disabled])
+							list = list.filter(item => !item[disabled] && !item.__node.hidn)
 							let selectedList = [];
 							sels.forEach(item => {
 								let index = list.findIndex(pageItem => pageItem[value] === item[value]);

@@ -93,7 +93,7 @@ class xmOptions {
 			list = []
 			toSimple(data, sels, list, prop);
 		}
-		
+
 		let arr = delProp(list, prop.children, [ '__node' ]);;
 
 		if(type === 'name'){
@@ -159,6 +159,88 @@ class xmOptions {
 		) : (
 			childData[this.options.el].updateBorderColor(showColor)
 		)
+		return this;
+	}
+
+	/**
+	 * 获取选中的节点
+	 * leafOnly: 是否只是叶子节点，默认值为 false
+	 * includeHalfChecked: 是否包含半选节点，默认值为 false
+	 */
+	getTreeValue(leafOnly, includeHalfChecked){
+		const { tree, cascader, prop } = this.options;
+		const { value } = prop;
+
+		//如果不是树状结构, 直接使用getValue
+		if(!(tree.show || cascader.show)){
+			return this.getValue(leafOnly);
+		}
+
+		//获得当前已经选中的数据
+		let sels = childData[this.options.el].state.sels;
+
+		//存储选中的数据
+		let list = [];
+
+		let nodeType = tree.nodeType;
+
+		const listPush = (item, type) => {
+			if(!list.find(i => i[value] === item[value])){
+				item = { ...item }
+				item[nodeType] = type;
+				list.push(item);
+			}
+		}
+
+		for(let i = 0; i < sels.length; i++){
+			let node = { ...sels[i] };
+			//首页先把子节点放入到数据中
+			listPush(node, 'leaf');
+			while(node = node.__node.parent){
+				let { half, selected } = node.__node
+				//如果想要父节点, 检测父节点是否为选中状态
+				if(!leafOnly && selected){
+					listPush(node, 'parent');
+				}else
+				//如果是需要半选状态, 并且处于半选状态
+				if(includeHalfChecked && half && !selected){
+					listPush(node, 'half');
+				}
+			}
+		}
+
+		let arr = delProp(list, prop.children, [ '__node' ]);;
+
+		return arr;
+	}
+
+	/**
+	 * 动态启用一些选项
+	 */
+	enable(sels){
+		if(!isArray(sels)){
+			warn('请传入数组结构...')
+			return ;
+		}
+		if(sels.length === 0){
+			return ;
+		}
+		childData[this.options.el].upDate(sels, true)
+		return this;
+	}
+
+	/**
+	 * 动态禁用一些选项
+	 */
+	disable(sels){
+		if(!isArray(sels)){
+			warn('请传入数组结构...')
+			return ;
+		}
+		if(sels.length === 0){
+			return ;
+		}
+		childData[this.options.el].upDate(sels, false)
 		return this;
 	}
 

@@ -56,6 +56,36 @@ class Framework extends Component{
 		return sels;
 	}
 
+	upDate(sels, enable){
+		let { dataObj } = this.state;
+		let { prop, tree, cascader } = this.props;
+		let { value, disabled, children } = prop;
+		sels.map(sel => dataObj[typeof sel === 'object' ? sel[value] : sel]).filter(a => a).forEach(item => {
+			item[disabled] = !enable
+
+			//严格模式下操作
+			if(tree.strict || cascader.strict){
+				if(enable){//启用父节点, 向上父节点启用
+					let parent = item
+					while(parent){
+						parent[disabled] = false;
+						parent = parent.__node.parent
+					}
+				}
+				//启用禁用节点 子节点启用禁用
+				const upChild = (parent) => {
+					parent[disabled] = !enable
+					let child = parent[children];
+					if(child && isArray(child)){
+						child.forEach(c => upChild(c))
+					}
+				}
+				upChild(item);
+			}
+		})
+		this.setState({ dataObj })
+	}
+
 	exchangeValue(arr, dataObj = this.state.dataObj){
 		let list = arr.map(sel => typeof sel === 'object' ? { ...sel, __node: {} } : dataObj[sel]).filter(a => a)
 		let filterGroup = true, { tree } = this.props;
@@ -71,14 +101,19 @@ class Framework extends Component{
 			show = this.state.show;
 		}
 
-		const { prop, tree } = this.props;
+		const { prop, tree, cascader } = this.props;
 		let changeData = this.exchangeValue(sels);
-		if(tree.show && tree.strict){
+
+		//检测是否超选了
+		if(this.checkMax(changeData, changeData)){
+			return ;
+		}
+
+		if(tree.show && tree.strict || cascader.show && cascader.strict){
 			let data = this.state.data;
 			this.clearAndReset(data, changeData);
 			changeData = this.init({ data, prop }, true);
 		}
-
 		this.resetSelectValue(changeData, changeData, true, listenOn);
 		this.setState({ show })
 	}
@@ -148,7 +183,7 @@ class Framework extends Component{
 		this.setState({ tmpColor });
 	}
 
-	treeHandler(sels, parent, change, type){
+	treeHandler(sels, parent, change, type, changeStatus){
 		const { value, selected, disabled, children, optgroup } = this.props.prop;
 		let child = parent[children];
 		child.filter(item => !(item[disabled] || item.__node.disabled)).forEach(item => {
@@ -169,37 +204,61 @@ class Framework extends Component{
 				}
 			}
 		})
-		let len = child.length;
-		let slen = child.filter(i => sels.findIndex(sel => sel[value] === i[value]) !== -1 || i.__node.selected === true).length;
-		parent.__node.selected = slen === len;
-		parent.__node.half = slen > 0 && slen < len;
+		if(changeStatus){
+			let len = child.length;
+			let slen = child.filter(i => sels.findIndex(sel => sel[value] === i[value]) !== -1 || i.__node.selected === true).length;
+			parent.__node.selected = slen === len;
+			parent.__node.half = slen > 0 && slen < len;
+		}
+	}
+
+	checkMax(item, sels){
+		const { max, maxMethod, theme } = this.props
+		//查看是否设置了多选上限
+		let maxCount = toNum(max);
+		if(maxCount > 0 && sels.length >= maxCount){
+			this.updateBorderColor(theme.maxColor);
+			//查看是否需要回调
+			maxMethod && isFunction(maxMethod) && maxMethod(sels, item);
+			return true;
+		}
 	}
 
 	//选项, 选中状态, 禁用状态, 是否强制删除:在label上点击删除
 	itemClick(item, itemSelected, itemDisabled, mandatoryDelete){
 
 		const { theme, prop, radio, repeat, clickClose, max, maxMethod, tree } = this.props
-		let { sels } = this.state
+		let sels = [ ...this.state.sels ]
 		const { value, selected, disabled, children, optgroup } = prop
 
 		//如果是禁用状态, 不能进行操作
 		if(itemDisabled) return;
 
 		if(item[optgroup] && tree.strict){
-			let child = item[children], change = [], isAdd = true;
+			let child = item[children], change = [], isAdd = true, handlerType;
 			if(item.__node.selected){
-				this.treeHandler(sels, item, change, 'del');
+				handlerType = 'del';
 				isAdd = false;
 			}else if(item.__node.half){
-				this.treeHandler(sels, item, change, 'half');
+				handlerType = 'half';
+				this.treeHandler(sels, item, change, handlerType);
 				//无法操作禁用状态, 变成取消操作
 				if(change.length === 0){
-					this.treeHandler(sels, item, change, 'del');
+					handlerType = 'del';
 					isAdd = false;
 				}
 			}else{
-				this.treeHandler(sels, item, change, 'add');
+				handlerType = 'add';
 			}
+			if(handlerType != 'half'){
+				this.treeHandler(sels, item, change, handlerType);
+			}
+			if(this.checkMax(change, change)){
+				return ;
+			}
+			sels = [ ...this.state.sels ], change = [];
+			this.treeHandler(sels, item, change, handlerType, true);
+
 			this.resetSelectValue(sels, change, isAdd);
 			this.setState({ data: this.state.data })
 		}else{
@@ -212,11 +271,7 @@ class Framework extends Component{
 				}
 			}else{
 				//查看是否设置了多选上限
-				let maxCount = toNum(max);
-				if(maxCount > 0 && sels.length >= maxCount){
-					this.updateBorderColor(theme.maxColor);
-					//查看是否需要回调
-					maxMethod && isFunction(maxMethod) && maxMethod(sels, item);
+				if(this.checkMax(item, sels)){
 					return ;
 				}
 
@@ -395,7 +450,13 @@ class Framework extends Component{
 
 		return (
 			<xm-select { ...xmSelectProps } >
-				<input class="xm-select-default" lay-verify={ config.layVerify } lay-verType={ config.layVerType } name={ config.name } value={ sels.map(item => item[prop.value]).join(',') }></input>
+				<input class="xm-select-default" 
+					lay-verify={ config.layVerify } 
+					lay-verType={ config.layVerType } 
+					lay-reqText={ config.layReqText }
+					name={ config.name } 
+					value={ sels.map(item => item[prop.value]).join(',') }
+				></input>
 				<i class={ show ? 'xm-icon xm-icon-expand' : 'xm-icon' } />
 				{ sels.length === 0 && <div class="xm-tips">{ config.tips }</div> }
 				<Label { ...labelProps } ref={ ref => this.labelView = ref } />
