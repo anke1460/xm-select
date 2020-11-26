@@ -15,6 +15,7 @@ var demo1 = xmSelect.render({
 		showLine: true,
 		indent: 20,
 		expandedKeys: [ -3 ],
+		simple: true,
 	},
 	toolbar: {
 		show: true,

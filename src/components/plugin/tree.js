@@ -29,6 +29,8 @@ class Tree extends Component{
 		let keys = [];
 		if(tree.expandedKeys === true){
 			keys = flatData.filter(item => item[optgroup] === true).map(item => item[value])
+		}else if(tree.expandedKeys === false){
+
 		}else{
 			tree.expandedKeys.forEach(key => {
 				keys.push(key);

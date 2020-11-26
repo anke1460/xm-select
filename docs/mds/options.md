@@ -208,6 +208,7 @@ list: [ "ALL", "CLEAR",
 | render | 渲染多选				| (options: 配置项) 								| 实例对象 			|
 | get	 | 获取页面中已经渲染的多选	| (filter: 过滤`el`, single: 是否返回单实例) 		| 符合条件的实例数组 	|
 | batch  | 批量操作已渲染的多选	    | (filter: 过滤`el`, method: 方法, ...方法参数) 	| 符合条件的实例数组 	|
+| arrr2tree | 把列表数据转化为树状结构 | (arr: 数据, pid: 父节点ID的key, id: 对应key, children: 对应key, topParentId: 顶级节点的ID) 	| 符合条件的数组 	|
 
 ```
 //render 使用方式
@@ -251,5 +252,6 @@ xmSelect.render()后会返回一个xmSelect对象, 可以进行方法调用
 | update  	| 更新多选选中, reset不保留 	| (options: 见配置项) |
 | warning  	| 警告 						| (color: 默认同theme.maxColor, sustain: 是否持续显示) |
 | getTreeValue  | 树节点模式下获取数据, v1.2.0 新增	| (leafOnly: 是否只是叶子节点，默认值为 false, includeHalfChecked: 是否包含半选节点，默认值为 false) |
+| changeExpandedKeys  | 树模式下更新节点展开状态, v1.2.0 新增	| (keys: true-全部展开, false-全部关闭, 数组-展开的节点值) |
 | enable  	| 启用选项, disabled=false, v1.2.0 新增	| (array: 想要启用的选项数组) |
 | disable  	| 禁用用选项, disabled=true, v1.2.0 新增	| (array: 想要禁用的选项数组) |

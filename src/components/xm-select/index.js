@@ -213,6 +213,14 @@ class xmOptions {
 
 		return arr;
 	}
+	
+	/**
+	 * 动态操作树状结构的节点展开状态
+	 */
+	changeExpandedKeys(keys){
+		childData[this.options.el].changeExpandedKeys(keys)
+		return this;
+	}
 
 	/**
 	 * 动态启用一些选项

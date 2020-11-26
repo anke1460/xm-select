@@ -46,11 +46,26 @@ export default {
 		}
 		let keys = Object.keys(datas)
 		let list = (method ? keys.filter(method) : keys).map(key => datas[key]).filter(instance => selector(instance.options.el));
+
 		return single ? list[0] : list;
 	},
 	batch(filter, method) {
 		let args = [...arguments];
 		args.splice(0, 2);
 		return this.get(filter).map(instance => instance[method](...args));
+	},
+	arr2tree(arr, pid, id, children, topParentId){
+		arr.forEach(item => {
+			if(item[pid] != topParentId){
+				let parent = arr.find(i => i[id] === item[pid])
+				if(parent){
+					if(!parent[children]){
+						parent[children] = [];
+					}
+					parent[children].push(item)
+				}
+			}
+		})
+		return arr.filter(i => i[pid] == topParentId)
 	}
 }

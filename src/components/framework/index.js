@@ -40,7 +40,7 @@ class Framework extends Component{
 		if(refresh){
 			let dataObj = {};
 			let flatData = [];
-			this.load(data, dataObj, flatData);
+			this.load(data, dataObj, flatData, null, 0, initValue ? initValue.map(i => typeof i === 'object' ? i[prop.value] : i) : null);
 			sels = this.exchangeValue(initValue ? initValue :  Object.keys(dataObj).filter(key => {
 				let item = dataObj[key]
 				return item[prop.selected] === true
@@ -88,15 +88,15 @@ class Framework extends Component{
 
 	exchangeValue(arr, dataObj = this.state.dataObj){
 		let list = arr.map(sel => typeof sel === 'object' ? { ...sel, __node: {} } : dataObj[sel]).filter(a => a)
-		let filterGroup = true, { tree } = this.props;
-		if(tree.show && tree.strict === false){
+		let filterGroup = true, { tree, cascader } = this.props;
+		if(tree.show && tree.strict === false || cascader.show && cascader.strict === false){
 			filterGroup = false;
 		}
 		filterGroup && (list = list.filter(item => item[this.props.prop.optgroup] !== true))
 		return list;
 	}
 
-	value(sels, show, listenOn){
+	value(sels, show, listenOn, jsChangeData){
 		if(show !== false && show !== true){
 			show = this.state.show;
 		}
@@ -114,7 +114,7 @@ class Framework extends Component{
 			this.clearAndReset(data, changeData);
 			changeData = this.init({ data, prop }, true);
 		}
-		this.resetSelectValue(changeData, changeData, true, listenOn);
+		this.resetSelectValue(changeData, jsChangeData ? jsChangeData : changeData, true, listenOn);
 		this.setState({ show })
 	}
 
@@ -127,12 +127,17 @@ class Framework extends Component{
 		})
 	}
 
-	load(data, dataObj, flatData, parent, level = 0){
-		const { prop, tree } = this.props;
+	load(data, dataObj, flatData, parent, level = 0, initValue){
+		const { prop, tree, cascader } = this.props;
 		const { children, optgroup, value, selected, disabled } = prop;
 		data.forEach(item => {
 			//数据提取/处理
-			item.__node = { parent, level, loading: item.__node && item.__node.loading },
+			item.__node = { parent, level, loading: item.__node && item.__node.loading };
+
+			if(initValue){
+				delete item[selected]
+				initValue.find(i => i === item[value]) && (item[selected] = true)
+			}
 
 			dataObj[item[value]] = item;
 			flatData.push(item);
@@ -141,12 +146,12 @@ class Framework extends Component{
 			if(child && isArray(child)){
 				let len = child.length;
 				if(len > 0){
-					this.load(child, dataObj, flatData, item, level + 1);
+					this.load(child, dataObj, flatData, item, level + 1, initValue);
 
 					//是否包含子节点
 					item[optgroup] = true;
 					//严格的父子结构
-					if(tree.strict){
+					if(tree.strict || cascader.strict){
 						if(item[selected] === true){
 							delete item[selected]
 							child.forEach(c => c[selected] = true)
@@ -372,36 +377,44 @@ class Framework extends Component{
 		}else
 		//聚焦label搜索框
 		if(type === 'labelSearchBlur'){
-			this.labelView.blur(data);
+			this.labelRef.blur(data);
 		}else
 		//聚焦label搜索框
 		if(type === 'labelSearch'){
-			this.generalView.labelSearch(data);
+			this.generalRef.labelSearch(data);
 		}
 	}
 
 	append(arr){
 		let changeData = this.exchangeValue(arr);
-		this.resetSelectValue(mergeArr(changeData, this.state.sels, this.props.prop), changeData, true);
+		this.value(mergeArr(changeData, this.state.sels, this.props.prop), this.props.show, true, changeData);
 	}
 
 	del(arr){
 		let value = this.props.prop.value;
 		let sels = this.state.sels;
-		arr = this.exchangeValue(arr);
-		arr.forEach(v => {
+		let changeData = this.exchangeValue(arr);
+		changeData.forEach(v => {
 			let index = sels.findIndex(item => item[value] === v[value]);
 			if(index != -1){
 				sels.splice(index, 1);
 			}
 		});
-		this.resetSelectValue(sels, arr, false);
+		this.value(sels, this.props.show, true, changeData)
 	}
 
 	auto(arr){
 		let value = this.props.prop.value;
 		let sels = arr.filter(v => this.state.sels.findIndex(item => item[value] === v[value]) != -1);
 		sels.length == arr.length ? this.del(arr) : this.append(arr);
+	}
+
+	changeExpandedKeys(expandedKeys){
+		const { tree, prop } = this.props;
+		const { dataObj, flatData } = this.state;
+		if(tree.show){
+			this.treeRef.init({ dataObj, flatData, prop, tree: { expandedKeys } })
+		}
 	}
 
 	//组件将要接收新属性
@@ -446,20 +459,20 @@ class Framework extends Component{
 		const bodyProps = {  ...config, data, dataObj, flatData, sels, ck: this.itemClick.bind(this), show, onReset: this.onReset.bind(this) }
 
 		//渲染组件
-		let Body = content ? <Custom { ...bodyProps } /> : tree.show ? <Tree { ...bodyProps } /> : config.cascader.show ? <Cascader { ...bodyProps } /> : <General { ...bodyProps } ref={ ref => this.generalView = ref } />;
+		let Body = content ? <Custom { ...bodyProps } /> : tree.show ? <Tree { ...bodyProps } ref={ ref => this.treeRef = ref } /> : config.cascader.show ? <Cascader { ...bodyProps } /> : <General { ...bodyProps } ref={ ref => this.generalRef = ref } />;
 
 		return (
 			<xm-select { ...xmSelectProps } >
-				<input class="xm-select-default" 
-					lay-verify={ config.layVerify } 
-					lay-verType={ config.layVerType } 
+				<input class="xm-select-default"
+					lay-verify={ config.layVerify }
+					lay-verType={ config.layVerType }
 					lay-reqText={ config.layReqText }
-					name={ config.name } 
+					name={ config.name }
 					value={ sels.map(item => item[prop.value]).join(',') }
 				></input>
 				<i class={ show ? 'xm-icon xm-icon-expand' : 'xm-icon' } />
 				{ sels.length === 0 && <div class="xm-tips">{ config.tips }</div> }
-				<Label { ...labelProps } ref={ ref => this.labelView = ref } />
+				<Label { ...labelProps } ref={ ref => this.labelRef = ref } />
 				<div class={ ['xm-body', bodyClass, config.model.type, show ? '':'dis', ].join(' ') } ref={ ref => this.bodyView = ref}>
 					{ Body }
 				</div>
