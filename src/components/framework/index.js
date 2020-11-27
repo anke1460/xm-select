@@ -193,7 +193,7 @@ class Framework extends Component{
 		let child = parent[children];
 		child.filter(item => !(item[disabled] || item.__node.disabled)).forEach(item => {
 			if(item[optgroup]){
-				this.treeHandler(sels, item, change, type);
+				this.treeHandler(sels, item, change, type, changeStatus);
 			}else{
 				let index = sels.findIndex(sel => sel[value] == item[value])
 				if(type === 'del'){
@@ -255,9 +255,11 @@ class Framework extends Component{
 			}else{
 				handlerType = 'add';
 			}
+			
 			if(handlerType != 'half'){
 				this.treeHandler(sels, item, change, handlerType);
 			}
+			
 			if(this.checkMax(change, change)){
 				return ;
 			}

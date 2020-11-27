@@ -45,6 +45,7 @@
 | layReqText		| 表单验证, 同layui的lay-reqText	|  string  		|   -  			|	''		|
 | toolbar			| 工具条, 具体看下表			 	|  object  		|   -  			|	-		|
 | showCount			| 展示在下拉框中的最多选项数量	|  int  		|   - 		 	|	0		|
+| enableKeyboard	| 是否启用键盘操作选项			|  boolean 		| true / false  |	true	|
 | autoRow			| 是否开启自动换行(选项过多时)	|  boolean  	| true / false  |	false	|
 | size				| 尺寸						 	|  string  		| large / medium / small / mini  |	medium	|
 | disabled			| 是否禁用多选				 	|  boolean		| true / false	|	false	|
@@ -189,6 +190,8 @@ list: [ "ALL", "CLEAR",
 | strict 			| 是否遵循严格父子结构	 	| boolean	 	| true / false	| true	 |
 | simple 			| 是否开启极简模式	 		| boolean	 	| true / false	| false	 |
 | nodeType 			| 标注节点类型的key	 		| string	 	| leaf: 叶子节点, parent: 父节点, half: 半选节点	| __node_type	 |
+| clickExpand 		| 点击节点是否展开, false时点击三角箭头进行展开操作| boolean	 	| true / false	| true	 |
+| clickCheck 		| 点击节点是否选中, false时点击复选框进行选中操作	| boolean	 	| true / false	| true	 |
 
 
 ### cascader

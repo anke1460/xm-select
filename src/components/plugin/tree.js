@@ -58,31 +58,43 @@ class Tree extends Component{
 			}
 
 			const { tree, prop, sels } = this.props;
+			const { clickExpand, clickCheck } = tree;
+			
+			//检测点击的是不是三角箭头
+			let isExpand = e.target && isFunction(e.target.getAttribute) && e.target.getAttribute('type') === 'expand'
+			//如果点击即展开
+			if(clickExpand || isExpand){
+				//不是父节点的不需要处理
+				if(!tree.lazy && !item[prop.optgroup]){
+					this.props.ck(item, selected, disabled);
+					return
+				}
 
-			//不是父节点的不需要处理
-			if(!tree.lazy && !item[prop.optgroup]){
-				this.props.ck(item, selected, disabled);
-				return
+				let val = item[this.props.prop.value];
+				let expandedKeys = this.state.expandedKeys;
+				let index = expandedKeys.findIndex(v => v === val);
+				index === -1 ? expandedKeys.push(val) : expandedKeys.splice(index, 1);
+				this.setState({ expandedKeys });
+
+				//是否需要懒加载
+				let child = item[prop.children];
+				if(tree.lazy && child && child.length === 0 && item.__node.loading !== false){
+					item.__node.loading = true;
+					tree.load(item, (result) => {
+						item.__node.loading = false;
+						item[prop.children] = this.handlerData(result, prop.children);
+						item[prop.selected] = sels.findIndex(i => i[prop.value] === item[prop.value]) != -1
+						this.props.onReset(sels, 'treeData');
+					});
+				}
+			}else{
+				if(clickCheck){
+					type = 'checkbox'
+				}
 			}
+		}
 
-			let val = item[this.props.prop.value];
-			let expandedKeys = this.state.expandedKeys;
-			let index = expandedKeys.findIndex(v => v === val);
-			index === -1 ? expandedKeys.push(val) : expandedKeys.splice(index, 1);
-			this.setState({ expandedKeys });
-
-			//是否需要懒加载
-			let child = item[prop.children];
-			if(tree.lazy && child && child.length === 0 && item.__node.loading !== false){
-				item.__node.loading = true;
-				tree.load(item, (result) => {
-					item.__node.loading = false;
-					item[prop.children] = this.handlerData(result, prop.children);
-					item[prop.selected] = sels.findIndex(i => i[prop.value] === item[prop.value]) != -1
-					this.props.onReset(sels, 'treeData');
-				});
-			}
-		}else if(type === 'checkbox'){
+		if(type === 'checkbox'){
 			this.props.ck(item, selected, disabled);
 		}
 		//阻止父组件上的事件冒泡
@@ -218,7 +230,7 @@ class Tree extends Component{
 	}
 
 	render(config, { expandedKeys }) {
-		let { prop, empty, sels, theme, radio, template, data, tree, filterable, remoteSearch, searchTips, iconfont } = config;
+		let { prop, empty, sels, theme, radio, template, data, tree, filterable, remoteSearch, searchTips, iconfont, enableKeyboard } = config;
 		let { name, value, disabled, children, optgroup } = prop;
 
 		let showIcon = config.model.icon != 'hidden';
@@ -246,7 +258,7 @@ class Tree extends Component{
 			const itemStyle = { paddingLeft: indent + 'px' }
 
 			//处理键盘的选择背景色
-			if(item[value] === this.state.val){
+			if(enableKeyboard && item[value] === this.state.val){
 				itemStyle.backgroundColor = theme.hover
 			}
 
@@ -279,7 +291,7 @@ class Tree extends Component{
 
 			const iconArray = [];
 			if(tree.showFolderIcon){
-				iconArray.push(<i class={ treeIconClass }></i>);
+				iconArray.push(<i class={ treeIconClass } type="expand"></i>);
 				if(tree.showLine){
 					if(expand){
 						iconArray.push(<i class='left-line' style={ {left: indent - tree.indent + 3 + 'px'} }></i>)
@@ -293,7 +305,19 @@ class Tree extends Component{
 			const hoverChange = e => {
 				if(e.type === 'mouseenter'){
 					if(!item[disabled]){
-						this.setState({ val: item[value] })
+						if(enableKeyboard){
+							this.setState({ val: item[value] })
+						}else{
+							e.target.style.backgroundColor = theme.hover;
+						}
+					}
+				}else if(e.type === 'mouseleave'){
+					if(!item[disabled]){
+						if(enableKeyboard){
+
+						}else{
+							e.target.style.backgroundColor = '';
+						}
 					}
 				}
 			}
@@ -349,7 +373,6 @@ class Tree extends Component{
 
 		//工具条操作
 		function flat(list, array){
-			//array.forEach(item => item[optgroup] ? (!tree.strict && list.push(item), flat(list, item[children])) : list.push(item))
 			array.forEach(item => {
 				if(item[optgroup]){
 					//非严格模式, 如果隐藏父节点, 证明不可选

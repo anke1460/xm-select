@@ -79,6 +79,8 @@ export default function (lan = 'zn') {
 		maxMethod: function(sels, item){},
 		//选项显示数量
 		showCount: 0,
+		//是否开启键盘操作
+		enableKeyboard: true,
 		//工具条
 		toolbar: {
 			show: false,
@@ -107,6 +109,10 @@ export default function (lan = 'zn') {
 			simple: false,
 			//标注节点类型的key
 			nodeType: '__node_type',
+			//点击节点是否展开
+			clickExpand: true,
+			//点击节点是否选中
+			clickCheck: true,
 		},
 		//级联结构
 		cascader: {

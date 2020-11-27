@@ -164,46 +164,48 @@ class General extends Component{
 				this.pageNextClick();
 			}
 		}
-
-		const { value, optgroup, disabled } = this.props.prop;
-		let data = this.tempData.filter(item => !item[optgroup] && !item[disabled]);
-		let len = data.length - 1;
-		if(len === -1){
-			return ;
-		}
-
-		let index = data.findIndex(item => item[value] === this.state.val);
-		//Up 键
-		if(keyCode === 38){
-			if(index <= 0){
-				index = len
-			}else if(index > 0){
-				index -= 1;
+		
+		if(this.props.enableKeyboard){
+			const { value, optgroup, disabled } = this.props.prop;
+			let data = this.tempData.filter(item => !item[optgroup] && !item[disabled]);
+			let len = data.length - 1;
+			if(len === -1){
+				return ;
 			}
-			let val = data[index][value];
-			this.setState({ val })
-			//键盘选中时滚动到可视范围内
-			let opt = this.base.querySelector(`.xm-option[value="${ val }"]`);
-			opt && opt.scrollIntoView(false)
-		}else
-		//Down 键
-		if(keyCode === 40){
-			if(index === -1 || index === len){
-				index = 0
-			}else if(index < len){
-				index += 1;
-			}
-			let val = data[index][value];
-			this.setState({ val })
-			//键盘选中时滚动到可视范围内
-			let opt = this.base.querySelector(`.xm-option[value="${ val }"]`);
-			opt && opt.scrollIntoView(false)
-		}else
-		//Enter 键
-		if(keyCode === 13){
-			if(this.state.val != emptyVal){
-				let option = data[index];
-				this.optionClick(option, this.props.sels.findIndex(item => item[value] === this.state.val) != -1, option[disabled], e)
+			
+			let index = data.findIndex(item => item[value] === this.state.val);
+			//Up 键
+			if(keyCode === 38){
+				if(index <= 0){
+					index = len
+				}else if(index > 0){
+					index -= 1;
+				}
+				let val = data[index][value];
+				this.setState({ val })
+				//键盘选中时滚动到可视范围内
+				let opt = this.base.querySelector(`.xm-option[value="${ val }"]`);
+				opt && opt.scrollIntoView(false)
+			}else
+			//Down 键
+			if(keyCode === 40){
+				if(index === -1 || index === len){
+					index = 0
+				}else if(index < len){
+					index += 1;
+				}
+				let val = data[index][value];
+				this.setState({ val })
+				//键盘选中时滚动到可视范围内
+				let opt = this.base.querySelector(`.xm-option[value="${ val }"]`);
+				opt && opt.scrollIntoView(false)
+			}else
+			//Enter 键
+			if(keyCode === 13){
+				if(this.state.val != emptyVal){
+					let option = data[index];
+					this.optionClick(option, this.props.sels.findIndex(item => item[value] === this.state.val) != -1, option[disabled], e)
+				}
 			}
 		}
 
@@ -237,7 +239,7 @@ class General extends Component{
 	}
 
 	render(config) {
-		let { data, flatData, prop, template, theme, radio, sels, empty, filterable, filterMethod, remoteSearch, remoteMethod, delay, searchTips, create, pageRemote, max } = config
+		let { data, flatData, prop, template, theme, radio, sels, empty, filterable, filterMethod, remoteSearch, remoteMethod, delay, searchTips, create, pageRemote, max, enableKeyboard } = config
 
 		const { name, value, disabled, children, optgroup } = prop;
 
@@ -451,7 +453,7 @@ class General extends Component{
 			const itemStyle = {}
 
 			//处理键盘的选择背景色
-			if(item[value] === this.state.val){
+			if(enableKeyboard && item[value] === this.state.val){
 				itemStyle.backgroundColor = theme.hover
 			}
 			//不显示图标时候的背景色处理
@@ -473,7 +475,19 @@ class General extends Component{
 			const hoverChange = e => {
 				if(e.type === 'mouseenter'){
 					if(!item[disabled]){
-						this.setState({ val: item[value] })
+						if(enableKeyboard){
+							this.setState({ val: item[value] })
+						}else{
+							e.target.style.backgroundColor = theme.hover;
+						}
+					}
+				}else if(e.type === 'mouseleave'){
+					if(!item[disabled]){
+						if(enableKeyboard){
+
+						}else{
+							e.target.style.backgroundColor = '';
+						}
 					}
 				}
 			}

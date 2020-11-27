@@ -117,6 +117,8 @@ class Label extends Component{
 					this.props.onReset(e, 'labelSearch')
 				}}  compositionend={ e => {
 					this.props.onReset(e, 'labelSearch')
+				}}  onClick={ e => {
+					e.stopPropagation();
 				}}></input>
 			)
 		}else{
