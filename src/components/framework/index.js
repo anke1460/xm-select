@@ -87,13 +87,33 @@ class Framework extends Component{
 	}
 
 	exchangeValue(arr, dataObj = this.state.dataObj){
+		let { prop, tree, cascader, data } = this.props;
+		const { children, value } = prop;
 		let list = arr.map(sel => typeof sel === 'object' ? { ...sel, __node: {} } : dataObj[sel]).filter(a => a)
-		let filterGroup = true, { tree, cascader } = this.props;
-		if(tree.show && tree.strict === false || cascader.show && cascader.strict === false){
-			filterGroup = false;
+		let cgList = [ ...list ]
+
+		if(tree.show && tree.strict || cascader.show && cascader.strict){//严格模式
+			//向下递归, 找到所有的子节点
+			const addChild = (ls, parent) => {
+				let childs = parent[children]
+				if(childs && isArray(childs)){
+					childs.forEach(child => {
+						if(list.findIndex(l => l[value] === child[value]) === -1){
+							ls.push(child);
+						}
+						addChild(ls, child);
+					})
+				}
+			}
+
+			const firstParent = {}
+			firstParent[children] = list;
+			addChild(cgList, firstParent)
+
+			cgList = cgList.filter(item => item[this.props.prop.optgroup] !== true)
 		}
-		filterGroup && (list = list.filter(item => item[this.props.prop.optgroup] !== true))
-		return list;
+
+		return cgList;
 	}
 
 	value(sels, show, listenOn, jsChangeData){
@@ -111,19 +131,19 @@ class Framework extends Component{
 
 		if(tree.show && tree.strict || cascader.show && cascader.strict){
 			let data = this.state.data;
-			this.clearAndReset(data, changeData);
+			this.clearAndReset(data, changeData, false);
 			changeData = this.init({ data, prop }, true);
 		}
 		this.resetSelectValue(changeData, jsChangeData ? jsChangeData : changeData, true, listenOn);
 		this.setState({ show })
 	}
 
-	clearAndReset(data, changeData){
+	clearAndReset(data, changeData, parentCK){
 		const { selected, children, value } = this.props.prop;
 		data.forEach(item => {
-			item[selected] = changeData.findIndex(c => c[value] === item[value]) != -1;
+			item[selected] = changeData.findIndex(c => c[value] === item[value]) != -1 || parentCK;
 			let child = item[children];
-			child && isArray(child) && this.clearAndReset(child, changeData)
+			child && isArray(child) && this.clearAndReset(child, changeData, item[selected])
 		})
 	}
 
@@ -255,11 +275,11 @@ class Framework extends Component{
 			}else{
 				handlerType = 'add';
 			}
-			
+
 			if(handlerType != 'half'){
 				this.treeHandler(sels, item, change, handlerType);
 			}
-			
+
 			if(this.checkMax(change, change)){
 				return ;
 			}

@@ -18,7 +18,9 @@ var demo1 = xmSelect.render({
 		simple: true,
 		clickExpand: false,
 		clickCheck: false,
+		strict: false
 	},
+	radio: true,
 	toolbar: {
 		show: true,
 		list: ['ALL', 'REVERSE', 'CLEAR']
@@ -48,6 +50,7 @@ var demo1 = xmSelect.render({
 		select: '',
 		unselect: '',
 		half: '',
+		parent: 'hidden',
 	},
 })
 
