@@ -25,7 +25,6 @@ var demo1 = xmSelect.render({
 		list: ['ALL', 'REVERSE', 'CLEAR']
 	},
 	filterable: true,
-	height: 'auto',
 	data(){
 		return [
 			{name: '销售员', value: -1, disabled: true, children: [

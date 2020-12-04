@@ -23,7 +23,7 @@ export default {
 
 		let instance = new Select(options);
 		//已经渲染
-		if (instance) {
+		if (instance && instance.__render_success) {
 			datas[el] = instance;
 		}
 		return instance;

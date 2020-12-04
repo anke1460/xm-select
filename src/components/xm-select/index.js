@@ -26,6 +26,7 @@ class xmOptions {
 
 		//记录最新的配置项
 		this.options = deepMerge(this.options, options);
+		this.options.__render_success = false;
 
 		//如果dom不存在, 则不进行渲染事项
 		let { dom } = this.options;
@@ -45,7 +46,9 @@ class xmOptions {
 		}
 
 		render(<Framework { ...this.options } __update={ Date.now() } updateData={ updateData } />, dom);
-
+		
+		this.options.__render_success = true;
+		
 		//返回多选对象
 		return this;
 	}
@@ -213,7 +216,7 @@ class xmOptions {
 
 		return arr;
 	}
-	
+
 	/**
 	 * 动态操作树状结构的节点展开状态
 	 */
@@ -249,6 +252,15 @@ class xmOptions {
 			return ;
 		}
 		childData[this.options.el].upDate(sels, false)
+		return this;
+	}
+
+	/**
+	 * 滚动到某个选项
+	 */
+	scroll(val){
+		let opt = this.options.dom.querySelector(`.xm-option[value="${ val }"]`);
+		opt && opt.scrollIntoView(false)
 		return this;
 	}
 
