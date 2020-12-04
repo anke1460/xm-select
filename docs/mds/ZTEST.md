@@ -20,7 +20,6 @@ var demo1 = xmSelect.render({
 		clickCheck: false,
 		strict: false
 	},
-	radio: true,
 	toolbar: {
 		show: true,
 		list: ['ALL', 'REVERSE', 'CLEAR']
@@ -34,7 +33,7 @@ var demo1 = xmSelect.render({
 				{name: '李四1', value: 2, selected: true},
 				{name: '王五1', value: 3, disabled: true},
 			]},
-			{name: '奖品', value: -2, children: [
+			{name: '奖品', value: -2, disabled: true, children: [
 				{name: '奖品3', value: -3, children: [
 					{name: '苹果3', value: 14, selected: true},
 					{name: '香蕉3', value: 15},
@@ -45,12 +44,6 @@ var demo1 = xmSelect.render({
 				{name: '葡萄2', value: 6},
 			]},
 		]
-	},
-	iconfont: {
-		select: '',
-		unselect: '',
-		half: '',
-		parent: 'hidden',
 	},
 })
 

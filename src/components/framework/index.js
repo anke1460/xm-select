@@ -64,7 +64,7 @@ class Framework extends Component{
 			item[disabled] = !enable
 
 			//严格模式下操作
-			if(tree.strict || cascader.strict){
+			if(tree.show && tree.strict || cascader.show && cascader.strict){
 				if(enable){//启用父节点, 向上父节点启用
 					let parent = item
 					while(parent){
@@ -171,7 +171,7 @@ class Framework extends Component{
 					//是否包含子节点
 					item[optgroup] = true;
 					//严格的父子结构
-					if(tree.strict || cascader.strict){
+					if(tree.show && tree.strict || cascader.show && cascader.strict){
 						if(item[selected] === true){
 							delete item[selected]
 							child.forEach(c => c[selected] = true)
