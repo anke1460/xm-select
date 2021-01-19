@@ -1,4 +1,4 @@
-import { name, version } from '../package.json'
+import { name, version, website } from '../package.json'
 import { selector, warn } from '@/common/util'
 import Select from '@/components/xm-select'
 
@@ -9,6 +9,7 @@ export const childData = {};
 export default {
 	name,
 	version,
+	doc: website,
 	render(options) {
 		let { el } = options;
 		options.dom = selector(el);
@@ -23,7 +24,7 @@ export default {
 
 		let instance = new Select(options);
 		//已经渲染
-		if (instance && instance.__render_success) {
+		if (instance && instance.options.__render_success) {
 			datas[el] = instance;
 		}
 		return instance;

@@ -263,6 +263,14 @@ class xmOptions {
 		opt && opt.scrollIntoView(false)
 		return this;
 	}
+	
+	/**
+	 * 重新计算下拉的位置
+	 */
+	calcPosition(){
+		childData[this.options.el].calcPosition()
+		return this;
+	}
 
 }
 

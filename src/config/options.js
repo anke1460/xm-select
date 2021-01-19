@@ -160,7 +160,7 @@ export default function (lan = 'zn') {
 				},
 			},
 			icon: 'show',
-			type: 'absolute',
+			type: 'absolute',//可选值， relative， fixed
 		},
 		//自定义选中的图标
 		iconfont: {

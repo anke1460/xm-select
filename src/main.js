@@ -15,6 +15,16 @@ window.addEventListener('click', () => {
 	})
 })
 
+/**
+ * 监听页面滚动事件
+ */
+window.addEventListener('scroll', () => {
+	Object.keys(datas).forEach(key => {
+		let item = datas[key]
+		item && item.calcPosition && item.calcPosition()
+	})
+})
+
 
 if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object') {
 	module.exports = xmSelect;

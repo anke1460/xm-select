@@ -38,6 +38,8 @@
 				this.fixedControl = bottom > document.documentElement.clientHeight &&
 					top + 44 <= document.documentElement.clientHeight;
 				this.$refs.control.style.left = this.fixedControl ? `${ left }px` : '0';
+
+				xmSelect.get().forEach(xs => xs.calcPosition());
 			},
 			removeScrollHandler() {
 				this.scrollParent && this.scrollParent.removeEventListener('scroll', this.scrollHandler);

@@ -286,8 +286,9 @@ class General extends Component{
 
 		//如果是分组模式, 要分页先去除分组, 然后在计算分页, 最后再加上分组
 		let groupInfo = {};
-		arr.filter(item => item[optgroup]).forEach(g => {
-			g[children].forEach(item => groupInfo[item[value]] = g);
+		arr.filter(item => item[optgroup]).forEach((g, groupIndex) => {
+			groupInfo[groupIndex] = g;
+			g[children].forEach(item => item.__group__index = groupIndex);
 		});
 		arr = arr.filter(item => !item[optgroup]);
 
@@ -342,7 +343,8 @@ class General extends Component{
 		let newArr = [], group, tmpGroup = { __tmp: true };
 		tmpGroup[optgroup] = true;
 		arr.forEach(item => {
-			let g = groupInfo[item[value]];
+			let g = groupInfo[item.__group__index];
+			delete item.__group__index;
 			if(group && !g){
 				g = tmpGroup
 			}

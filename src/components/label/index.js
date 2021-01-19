@@ -104,7 +104,10 @@ class Label extends Component{
 			}
 		}else if(type == 'search'){
 			innerHTML = false;
-			let one = list[0][name];
+			let one = '';
+			if(list.length){
+				one = list[0][name]
+			}
 
 			html = (
 				<input class="label-search-input" type="text" placeholder={ config.searchTips } style={{ width: '100%', border: 'none' }} value={

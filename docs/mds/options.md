@@ -134,7 +134,7 @@ model: {
 			}
 		},
 	},
-	//展示类型, 下拉框形式: absolute, 直接显示模式: relative
+	//展示类型, 下拉框形式: absolute, 直接显示模式: relative, 浮动布局: fixed
 	type: 'absolute', 
 },
 ```
@@ -258,3 +258,4 @@ xmSelect.render()后会返回一个xmSelect对象, 可以进行方法调用
 | changeExpandedKeys  | 树模式下更新节点展开状态, v1.2.0 新增	| (keys: true-全部展开, false-全部关闭, 数组-展开的节点值) |
 | enable  	| 启用选项, disabled=false, v1.2.0 新增	| (array: 想要启用的选项数组) |
 | disable  	| 禁用用选项, disabled=true, v1.2.0 新增	| (array: 想要禁用的选项数组) |
+| calcPosition | fixed布局模式下重新计算位置, v1.2.2 新增	| -		 |

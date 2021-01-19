@@ -31,11 +31,12 @@ class Framework extends Component{
 			show: false,
 			tmpColor: '',
 			bodyClass: '',
+			time: 0,
 		}
 	}
 
 	init(props, refresh){
-		let { data, prop, initValue, radio } = props, sels;
+		let { data, prop, initValue, radio, tree, cascader } = props, sels;
 		//如果新数据和旧数据不同 或者 强制刷新 才进行数据处理
 		if(refresh){
 			let dataObj = {};
@@ -47,6 +48,9 @@ class Framework extends Component{
 			}), dataObj)
 			if(radio && sels.length > 1){
 				sels = sels.slice(0, 1)
+				if(tree.show && tree.strict || cascader.show && cascader.strict){
+					this.clearAndReset(data, sels, false);
+				}
 			}
 			this.setState({ sels, dataObj, flatData });
 		}
@@ -139,13 +143,22 @@ class Framework extends Component{
 	}
 
 	clearAndReset(data, changeData, parentCK){
-		const { selected, children, value } = this.props.prop;
+		const { selected, disabled, children, value } = this.props.prop;
 		data.forEach(item => {
 			item[selected] = changeData.findIndex(c => c[value] === item[value]) != -1 || parentCK;
 			let child = item[children];
-			child && isArray(child) && this.clearAndReset(child, changeData, item[selected])
+			if(child && isArray(child)){
+				this.clearAndReset(child, changeData, item[selected])
+				let len = child.length;
+				let slen = child.filter(i => i[selected] === true || i.__node.selected === true).length;
+				item.__node.selected = slen === len;
+				item.__node.half = slen > 0 && slen < len || child.filter(i => i.__node.half === true).length > 0;
+				item.__node.disabled = child.filter(i => i[disabled] === true || i.__node.disabled === true).length === len;
+			}
 		})
 	}
+
+
 
 	load(data, dataObj, flatData, parent, level = 0, initValue){
 		const { prop, tree, cascader } = this.props;
@@ -252,7 +265,7 @@ class Framework extends Component{
 	//选项, 选中状态, 禁用状态, 是否强制删除:在label上点击删除
 	itemClick(item, itemSelected, itemDisabled, mandatoryDelete){
 
-		const { theme, prop, radio, repeat, clickClose, max, maxMethod, tree } = this.props
+		const { theme, prop, radio, repeat, clickClose, max, maxMethod, tree, data } = this.props
 		let sels = [ ...this.state.sels ]
 		const { value, selected, disabled, children, optgroup } = prop
 
@@ -308,6 +321,7 @@ class Framework extends Component{
 				}else{
 					sels = [...sels, item]
 				}
+				this.clearAndReset(data, sels, itemSelected)
 				this.resetSelectValue(sels, [item], !itemSelected);
 			}
 		}
@@ -439,6 +453,20 @@ class Framework extends Component{
 		}
 	}
 
+	calcPosition(){
+		if(this.state.show && this.props.model.type === 'fixed'){
+			let rect = this.base.getBoundingClientRect();
+			(Date.now() - this.state.time > 10) && this.setState({ time: Date.now() })
+			return {
+				position: 'fixed',
+				left: rect.x,
+				top: rect.y + rect.height + 4,
+				width: rect.width,
+			}
+		}
+		return {};
+	}
+
 	//组件将要接收新属性
 	componentWillReceiveProps(props){
 		this.init(props, props.updateData);
@@ -482,6 +510,7 @@ class Framework extends Component{
 
 		//渲染组件
 		let Body = content ? <Custom { ...bodyProps } /> : tree.show ? <Tree { ...bodyProps } ref={ ref => this.treeRef = ref } /> : config.cascader.show ? <Cascader { ...bodyProps } /> : <General { ...bodyProps } ref={ ref => this.generalRef = ref } />;
+		let bodyStyle = this.calcPosition();
 
 		return (
 			<xm-select { ...xmSelectProps } >
@@ -495,7 +524,7 @@ class Framework extends Component{
 				<i class={ show ? 'xm-icon xm-icon-expand' : 'xm-icon' } />
 				{ sels.length === 0 && <div class="xm-tips">{ config.tips }</div> }
 				<Label { ...labelProps } ref={ ref => this.labelRef = ref } />
-				<div class={ ['xm-body', bodyClass, config.model.type, show ? '':'dis', ].join(' ') } ref={ ref => this.bodyView = ref}>
+				<div class={ ['xm-body', bodyClass, config.model.type, show ? '':'dis', ].join(' ') } style={ bodyStyle } ref={ ref => this.bodyView = ref}>
 					{ Body }
 				</div>
 				{ disabled && <div class="xm-select-disabled"></div> }
@@ -555,6 +584,10 @@ class Framework extends Component{
 		let { direction, model } = this.props;
 
 		if(model.type === 'relative'){
+			return ;
+		}
+
+		if(model.type === 'fixed'){
 			return ;
 		}
 
