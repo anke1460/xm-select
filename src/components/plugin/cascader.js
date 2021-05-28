@@ -18,7 +18,7 @@ class Cascader extends Component{
 
 	optionClick(item, selected, disabled, type, index, e){
 		if(type === 'line'){
-			if(disabled){
+			if(!item.optgroup && disabled){
 				return ;
 			}
 			//加载中的不需要进行处理
@@ -57,7 +57,7 @@ class Cascader extends Component{
 	render(config, state) {
 
 		const { prop, empty, sels, theme, radio, template, data, cascader } = config;
-		let { name, value, disabled, children } = prop;
+		let { name, value, disabled, children, optgroup } = prop;
 		const showIcon = config.model.icon != 'hidden';
 
 		const renderItem = (item, indent, index, checked) => {
@@ -108,6 +108,12 @@ class Cascader extends Component{
 				itemStyle.backgroundColor = theme.hover
 			}
 
+			//隐藏图标的处理
+			if(!showIcon && selected){
+				itemStyle.backgroundColor = theme.color;
+				dis && (itemStyle.backgroundColor = '#C2C2C2');
+			}
+
 			const contentStyle = {}, checkedStyle = {};
 			if(checked){
 				contentStyle.color = theme.color
@@ -133,7 +139,7 @@ class Cascader extends Component{
 				} onMouseEnter={ hoverChange } onMouseLeave={ hoverChange }>
 					{ showIcon && <i class={ iconClass } style={ iconStyle } onClick={ this.optionClick.bind(this, item, selected, dis, 'checkbox', index) }></i> }
 					<div class='xm-option-content' style={ contentStyle } dangerouslySetInnerHTML={{ __html: template({ data, item, arr: sels, name: item[name], value: item[value] }) }}></div>
-					{ item[children] && <div class={ checkedClass } style={ checkedStyle }></div> }
+					{ item[optgroup] && <div class={ checkedClass } style={ checkedStyle }></div> }
 				</div>
 			)
 		}
@@ -146,7 +152,7 @@ class Cascader extends Component{
 			const checked = child && this.state.expand[index] === item[value];
 			checked && boxArr.push(
 				<div class="xm-cascader-box" index={ index % 4 } style={{ left: indent + 'px', width: cascader.indent + 'px'}}>
-					<div class="xm-cascader-scroll">{ child.map(c => renderGroup(c, indent, index + 1)) }</div>
+					<div class="xm-cascader-scroll scroll-body">{ child.map(c => renderGroup(c, indent, index + 1)) }</div>
 				</div>
 			)
 			return renderItem(item, indent, index, checked)
@@ -161,7 +167,7 @@ class Cascader extends Component{
 		}
 
 		return (
-			<div onClick={ this.blockClick } class="xm-body-cascader" style={{ width: cascader.indent + 'px', maxHeight: config.height }}>
+			<div onClick={ this.blockClick } class="xm-body-cascader scroll-body" style={{ width: cascader.indent + 'px', maxHeight: config.height }}>
 				{ arr }
 			</div>
 		)

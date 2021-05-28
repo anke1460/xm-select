@@ -184,6 +184,9 @@ export default function (lan = 'zn') {
 		//监听选中事件
 		on({ arr, item, selected }){
 
+		},
+		submitConversion(sels, prop){
+			return sels.map(item => item[prop.value]).join(',')
 		}
 	}
 }

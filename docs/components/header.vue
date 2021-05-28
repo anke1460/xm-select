@@ -4,10 +4,7 @@
             <div class="container">
                 <h1>
                     <router-link :to="`/`">
-                        <!-- logo -->
                         <slot>
-                            <!-- <img src="../assets/images/element-logo.svg" alt="element-logo" class="nav-logo"> -->
-                            <!-- <img src="../assets/images/element-logo-small.svg" alt="element-logo" class="nav-logo-small"> -->
 							xm-select
                         </slot>
                     </router-link>
@@ -19,7 +16,7 @@
                         <router-link active-class="active" :to="`/`">使用手册</router-link>
 					</li>
 					<li class="nav-item">
-					    <a href='https://gitee.com/maplemei/xm-select/issues/I1NSO7' target="_blank" style="opacity: 1;">提新需求↗</a>
+					    <a href='https://gitee.com/maplemei/xm-select/issues' target="_blank" style="opacity: 1;">提新需求↗</a>
 					</li>
 
                     <li class="nav-item">

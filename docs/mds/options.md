@@ -52,6 +52,7 @@
 | create			| 创建条目					 	|  function(val, data), val: 搜索的数据, data: 当前下拉数据		   |	-   |	null	|
 | tree				| 树形结构, 具体看下表			|  object		|	-  			|	-		|
 | cascader			| 级联结构, 具体看下表			|  object		|	-  			|	-		|
+| submitConversion	| 配置表单提交数据				|  function(sels, prop), sels: 已选中数据, prop: 自定义的prop	|	-  			|	-		|
 
 
 ### prop
@@ -211,7 +212,7 @@ list: [ "ALL", "CLEAR",
 | render | 渲染多选				| (options: 配置项) 								| 实例对象 			|
 | get	 | 获取页面中已经渲染的多选	| (filter: 过滤`el`, single: 是否返回单实例) 		| 符合条件的实例数组 	|
 | batch  | 批量操作已渲染的多选	    | (filter: 过滤`el`, method: 方法, ...方法参数) 	| 符合条件的实例数组 	|
-| arrr2tree | 把列表数据转化为树状结构 | (arr: 数据, pid: 父节点ID的key, id: 对应key, children: 对应key, topParentId: 顶级节点的ID) 	| 符合条件的数组 	|
+| arr2tree | 把列表数据转化为树状结构 | (arr: 数据, pid: 父节点ID的key, id: 对应key, children: 对应key, topParentId: 顶级节点的ID) 	| 符合条件的数组 	|
 
 ```
 //render 使用方式

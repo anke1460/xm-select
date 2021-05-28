@@ -1,5 +1,22 @@
 ## 更新日志
 
+### 1.2.3
+
+*2021-05-28*
+
+#### 新增
+
+- 新增`submitConversion`配置方法, 用于拓展表单提交数据, 默认是value数组
+
+#### Bug fixes
+
+- 修复级联模式下第一组数据过多时不显示滚动条
+- 修复级联模式下隐藏图标背景色透明的bug
+- 修复级联模式下如果子节点是空数组也显示右箭头的bug
+- 修复级联/树模式下,如果子节点是空数组,然后操作选中状态异常
+- 修复工具条点击清空, `on`监听到的`isAdd`为`true`的bug [#I3T2KE](https://gitee.com/maplemei/xm-select/issues/I3T2KE)
+- 修复setValue时对多选上限的判断异常 [#I3SABO](https://gitee.com/maplemei/xm-select/issues/I3SABO)
+
 
 ### 1.2.2
 

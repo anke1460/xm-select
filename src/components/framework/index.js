@@ -120,7 +120,7 @@ class Framework extends Component{
 		return cgList;
 	}
 
-	value(sels, show, listenOn, jsChangeData){
+	value(sels, show, listenOn, jsChangeData, isAdd = true){
 		if(show !== false && show !== true){
 			show = this.state.show;
 		}
@@ -129,7 +129,7 @@ class Framework extends Component{
 		let changeData = this.exchangeValue(sels);
 
 		//检测是否超选了
-		if(this.checkMax(changeData, changeData)){
+		if(this.checkMax(changeData, changeData, true)){
 			return ;
 		}
 
@@ -138,7 +138,7 @@ class Framework extends Component{
 			this.clearAndReset(data, changeData, false);
 			changeData = this.init({ data, prop }, true);
 		}
-		this.resetSelectValue(changeData, jsChangeData ? jsChangeData : changeData, true, listenOn);
+		this.resetSelectValue(changeData, jsChangeData ? jsChangeData : changeData, isAdd, listenOn);
 		this.setState({ show })
 	}
 
@@ -147,7 +147,7 @@ class Framework extends Component{
 		data.forEach(item => {
 			item[selected] = changeData.findIndex(c => c[value] === item[value]) != -1 || parentCK;
 			let child = item[children];
-			if(child && isArray(child)){
+			if(child && isArray(child) && child.length > 0){
 				this.clearAndReset(child, changeData, item[selected])
 				let len = child.length;
 				let slen = child.filter(i => i[selected] === true || i.__node.selected === true).length;
@@ -250,11 +250,12 @@ class Framework extends Component{
 		}
 	}
 
-	checkMax(item, sels){
+	checkMax(item, sels, contains){
 		const { max, maxMethod, theme } = this.props
 		//查看是否设置了多选上限
 		let maxCount = toNum(max);
-		if(maxCount > 0 && sels.length >= maxCount){
+		let flag = (contains ? sels.length : (isArray(item) ? item.length : 1) + sels.length) > maxCount;
+		if(maxCount > 0 && flag){
 			this.updateBorderColor(theme.maxColor);
 			//查看是否需要回调
 			maxMethod && isFunction(maxMethod) && maxMethod(sels, item);
@@ -265,14 +266,14 @@ class Framework extends Component{
 	//选项, 选中状态, 禁用状态, 是否强制删除:在label上点击删除
 	itemClick(item, itemSelected, itemDisabled, mandatoryDelete){
 
-		const { theme, prop, radio, repeat, clickClose, max, maxMethod, tree, data } = this.props
+		const { theme, prop, radio, repeat, clickClose, max, maxMethod, tree, cascader, data } = this.props
 		let sels = [ ...this.state.sels ]
 		const { value, selected, disabled, children, optgroup } = prop
 
 		//如果是禁用状态, 不能进行操作
 		if(itemDisabled) return;
 
-		if(item[optgroup] && tree.strict){
+		if(item[optgroup] && (tree.strict || cascader.strict)){
 			let child = item[children], change = [], isAdd = true, handlerType;
 			if(item.__node.selected){
 				handlerType = 'del';
@@ -293,7 +294,7 @@ class Framework extends Component{
 				this.treeHandler(sels, item, change, handlerType);
 			}
 
-			if(this.checkMax(change, change)){
+			if(this.checkMax(change, sels)){//TODO 这里还是有问题, 如果是取消的
 				return ;
 			}
 			sels = [ ...this.state.sels ], change = [];
@@ -401,7 +402,7 @@ class Framework extends Component{
 		}else
 		//树状结构数据更新
 		if(type === 'treeData'){
-			this.value(data, null, true)
+			this.value(data, null, true, false, false)
 		}else
 		//树状结构数据更新
 		if(type === 'close'){
@@ -436,7 +437,7 @@ class Framework extends Component{
 				sels.splice(index, 1);
 			}
 		});
-		this.value(sels, this.props.show, true, changeData)
+		this.value(sels, this.props.show, true, changeData, false)
 	}
 
 	auto(arr){
@@ -478,7 +479,7 @@ class Framework extends Component{
 	}
 
 	render(config, state) {
-		const { theme, prop, radio, repeat, clickClose, on, max, maxMethod, content, disabled, tree } = config;
+		const { theme, prop, radio, repeat, clickClose, on, max, maxMethod, content, disabled, tree, submitConversion } = config;
 		const borderStyle = { borderColor: theme.color };
 		let { data, dataObj, flatData, sels, show, tmpColor, bodyClass } = state;
 
@@ -519,7 +520,7 @@ class Framework extends Component{
 					lay-verType={ config.layVerType }
 					lay-reqText={ config.layReqText }
 					name={ config.name }
-					value={ sels.map(item => item[prop.value]).join(',') }
+					value={ submitConversion(sels, prop) }
 				></input>
 				<i class={ show ? 'xm-icon xm-icon-expand' : 'xm-icon' } />
 				{ sels.length === 0 && <div class="xm-tips">{ config.tips }</div> }

@@ -30,7 +30,7 @@
 - xm-select技术群②: `938624691` (500人)
 - xm-select技术群③: `1145047250` (500人)
 
-[issues 需求记录](https://gitee.com/maplemei/xm-select/issues/I1NSO7)
+[issues 需求记录](https://gitee.com/maplemei/xm-select/issues)
 
 
 [更新日志](CHANGELOG.md)

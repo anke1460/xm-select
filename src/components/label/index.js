@@ -37,6 +37,65 @@ class Label extends Component{
 		input && input.blur();
 	}
 
+	labelDrag(item, e){
+		let type = e.type;
+		let node = e.target;
+		while(true){
+			if(!node || node.tagName === 'I'){
+				return ;
+			}
+			if(node.tagName === 'DIV' && node.style.position !== 'fixed'){
+				break;
+			}
+			node = node.parentNode;
+		}
+
+		console.log(e)
+
+		if(type === 'mousedown'){
+			let dragNode = node.cloneNode(true);
+			let { pageX, pageY, offsetX, offsetY } = e;//鼠标当前位置
+
+			console.log(pageX, pageY, offsetX, offsetY)
+
+			dragNode.style.position = 'fixed';
+			dragNode.style.left = (pageX - offsetX) + 'px';
+			dragNode.style.top = (pageY - offsetY) + 'px';
+			node.appendChild(dragNode);
+
+			console.log(dragNode)
+
+
+			dragNode.onmousemove = (ev) => {
+				dragNode.style.left = (ev.pageX - offsetX) + 'px';
+				dragNode.style.top = (ev.pageY - offsetY) + 'px';
+			}
+
+			dragNode.mouseup = () => {
+				dragNode.parentNode.removeChild(dragNode);
+				dragNode.onmousemove = null;
+				dragNode.mouseup = null;
+				dragNode.mouseleave = null;
+			}
+			dragNode.mouseleave = () => {
+				console.log('mouseleave')
+			}
+		}else if(type === 'mouseup'){
+			let childs = node.childNodes;
+			for(let i = 0; i < childs.length; i++) {
+				let f = childs[i];
+				if(f.tagName === 'DIV'){
+					node.removeChild(f);
+					f.onmousemove = null;
+					break;
+				}
+			}
+		}
+
+
+		e.stopPropagation();
+	}
+
 	componentDidMount(){
 		if (this.labelRef.addEventListener) {
 			this.labelRef.addEventListener('DOMMouseScroll', this.scrollFunc.bind(this), false);
@@ -82,8 +141,12 @@ class Label extends Component{
 			html = arr.splice(0, count).map(sel => {
 				const styleProps = { width: conf.showIcon ? 'calc(100% - 20px)' : '100%', }
 				const className = ['xm-label-block', sel[disabled] ? 'disabled':''].join(' ');
+				// onMouseDown = { this.labelDrag.bind(this, sel) }
+				// onMouseUp = { this.labelDrag.bind(this, sel) }
 				return (
-					<div class={className} style={ style }>
+					<div class={className} style={ style }
+						
+					>
 						{ conf.template && isFunction(conf.template) ? (
 							<span style={ styleProps } dangerouslySetInnerHTML={{ __html: conf.template(sel, arr) }}></span>
 						) : (
