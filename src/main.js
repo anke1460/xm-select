@@ -2,6 +2,7 @@ import '@/common/expand'
 import '@/style/index.less'
 import '@/style/iconfont.less'
 import { default as xmSelect, datas } from './index.js';
+import {throttle} from '@/common/util'
 
 const moduleName = 'xmSelect';
 
@@ -18,12 +19,13 @@ window.addEventListener('click', () => {
 /**
  * 监听页面滚动事件
  */
-window.addEventListener('scroll', () => {
+window.addEventListener('scroll', throttle(() => {
+	console.log(1123);
 	Object.keys(datas).forEach(key => {
 		let item = datas[key]
 		item && item.calcPosition && item.calcPosition()
 	})
-})
+}))
 
 
 if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object') {
