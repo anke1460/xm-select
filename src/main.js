@@ -1,6 +1,6 @@
 import '@/common/expand'
-import '@/style/index.less'
 import '@/style/iconfont.less'
+import '@/style/index.less'
 import { default as xmSelect, datas } from './index.js';
 import {throttle} from '@/common/util'
 
@@ -20,7 +20,6 @@ window.addEventListener('click', () => {
  * 监听页面滚动事件
  */
 window.addEventListener('scroll', throttle(() => {
-	console.log(1123);
 	Object.keys(datas).forEach(key => {
 		let item = datas[key]
 		item && item.calcPosition && item.calcPosition()
