@@ -273,7 +273,7 @@ class Framework extends Component{
 		//如果是禁用状态, 不能进行操作
 		if(itemDisabled) return;
 
-		if(item[optgroup] && (tree.strict || cascader.strict)){
+		if(item[optgroup] && (tree.show && tree.strict || cascader.show && cascader.strict)){
 			let child = item[children], change = [], isAdd = true, handlerType;
 			if(item.__node.selected){
 				handlerType = 'del';
@@ -540,10 +540,15 @@ class Framework extends Component{
 		//监听键盘事件
 		this.base.addEventListener('keydown', e => {
 			let keyCode = e.keyCode;
+			//ENTER
 			if(keyCode === 13){
-				this.onClick()
+				this.onClick(e)
 			}
 		});
+		
+		// focus 可以监听tab切换
+		// this.base.addEventListener('focus', e => {
+		// })
 
 		//表单验证
 		this.input = this.base.querySelector('.xm-select-default');
@@ -558,7 +563,7 @@ class Framework extends Component{
 							this.input.className = 'xm-select-default';
 							this.base.style.borderColor = this.props.theme.maxColor;
 							//这里可以自己新增一个回调, 也许看到源码的你能够看到
-							// this.base.scrollIntoView({ behavior: "smooth" });
+							this.base.scrollIntoView && this.base.scrollIntoView({ behavior: "smooth" });
 						}
 					}
 				}
@@ -578,6 +583,8 @@ class Framework extends Component{
 			dom = dom.parentElement;
 		}
 
+		let { done } = this.props;
+		done && done();
 	}
 
 	//此时页面又被重新渲染了

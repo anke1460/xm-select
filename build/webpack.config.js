@@ -94,6 +94,9 @@ const webpackConfig = {
 		new webpack.BannerPlugin(banner),
 		new VueLoaderPlugin(),
 	],
+	optimization: {
+		minimize: true,//可以自行配置是否压缩
+	},
 	devServer: {
 		host: '0.0.0.0',
 		port: 9001,

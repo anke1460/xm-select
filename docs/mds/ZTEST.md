@@ -8,18 +8,17 @@
 xmSelect.render({
 	el: '#demo1', 
 	autoRow: true,
-	cascader: {
+	tree: {
 		show: true,
-		indent: 200,
 	},
 	height: '200px',
-	max: 1,
 	maxMethod(a, item){
 		console.log(item)
 	},
 	submitConversion(sels, prop){
 		return sels.map(item => item[prop.name]).join(',')
 	},
+	filterable: true,
 	data(){
 		return [
 			{name: '销售员', value: -1, disabled: false, children: [

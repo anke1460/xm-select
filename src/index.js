@@ -10,6 +10,10 @@ export default {
 	name,
 	version,
 	doc: website,
+	KeyCode: {
+		Enter: 13,
+		Space: 32,
+	},
 	render(options) {
 		let { el } = options;
 		options.dom = selector(el);

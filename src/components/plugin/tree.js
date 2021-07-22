@@ -20,6 +20,7 @@ class Tree extends Component{
 		this.inputOver = true;
 		this.__value = '';
 		this.tempData = [];
+		this.__skipAutoExpand = '';
 	}
 
 	init(props){
@@ -59,7 +60,7 @@ class Tree extends Component{
 
 			const { tree, prop, sels } = this.props;
 			const { clickExpand, clickCheck } = tree;
-			
+
 			//检测点击的是不是三角箭头
 			let isExpand = e.target && isFunction(e.target.getAttribute) && e.target.getAttribute('type') === 'expand'
 			//如果点击即展开
@@ -180,10 +181,13 @@ class Tree extends Component{
 				}
 
 				if(!hiddenStatus){//如果是显示状态
-					let keys = this.state.expandedKeys;
-					if(val && keys.findIndex(key => key === item[value]) === -1){
-						keys.push(item[value]);
-						this.setState({ expandedKeys: keys })
+					if(this.__skipAutoExpand != val){//第一次搜索默认展开过滤后的数据
+						let keys = this.state.expandedKeys;
+						if(val && keys.findIndex(key => key === item[value]) === -1){
+							keys.push(item[value]);
+							this.setState({ expandedKeys: keys })
+						}
+						this.__skipAutoExpand = val;
 					}
 				}
 			}
@@ -216,6 +220,7 @@ class Tree extends Component{
 				//清空输入框的值
 				this.setState({ filterValue: '', val: emptyVal });
 				this.__value = '';
+				this.__skipAutoExpand = '';
 				this.searchInputRef && (this.searchInputRef.value = '');
 			}else{
 				//聚焦输入框

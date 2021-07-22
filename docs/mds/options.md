@@ -46,6 +46,8 @@
 | toolbar			| 工具条, 具体看下表			 	|  object  		|   -  			|	-		|
 | showCount			| 展示在下拉框中的最多选项数量	|  int  		|   - 		 	|	0		|
 | enableKeyboard	| 是否启用键盘操作选项			|  boolean 		| true / false  |	true	|
+| enableHoverFirst	| 是否默认选中第一项				|  boolean 		| true / false  |	true	|
+| selectedKeyCode	| 选中的键盘KeyCode				|  int	 		| 全部KeyCode, 也可xmSelect.KeyCode.Enter,xmSelect.KeyCode.Space   |	13	|
 | autoRow			| 是否开启自动换行(选项过多时)	|  boolean  	| true / false  |	false	|
 | size				| 尺寸						 	|  string  		| large / medium / small / mini  |	medium	|
 | disabled			| 是否禁用多选				 	|  boolean		| true / false	|	false	|
@@ -53,6 +55,7 @@
 | tree				| 树形结构, 具体看下表			|  object		|	-  			|	-		|
 | cascader			| 级联结构, 具体看下表			|  object		|	-  			|	-		|
 | submitConversion	| 配置表单提交数据				|  function(sels, prop), sels: 已选中数据, prop: 自定义的prop	|	-  			|	-		|
+| done				| 渲染完成回调					|  function	|	-  			|	-		|
 
 
 ### prop

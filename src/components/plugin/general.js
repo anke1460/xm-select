@@ -164,7 +164,7 @@ class General extends Component{
 				this.pageNextClick();
 			}
 		}
-		
+
 		if(this.props.enableKeyboard){
 			const { value, optgroup, disabled } = this.props.prop;
 			let data = this.tempData.filter(item => !item[optgroup] && !item[disabled]);
@@ -172,7 +172,7 @@ class General extends Component{
 			if(len === -1){
 				return ;
 			}
-			
+
 			let index = data.findIndex(item => item[value] === this.state.val);
 			//Up 键
 			if(keyCode === 38){
@@ -183,9 +183,7 @@ class General extends Component{
 				}
 				let val = data[index][value];
 				this.setState({ val })
-				//键盘选中时滚动到可视范围内
-				let opt = this.base.querySelector(`.xm-option[value="${ val }"]`);
-				opt && opt.scrollIntoView(false)
+				this.viewTo(val);
 			}else
 			//Down 键
 			if(keyCode === 40){
@@ -196,19 +194,24 @@ class General extends Component{
 				}
 				let val = data[index][value];
 				this.setState({ val })
-				//键盘选中时滚动到可视范围内
-				let opt = this.base.querySelector(`.xm-option[value="${ val }"]`);
-				opt && opt.scrollIntoView(false)
+				this.viewTo(val);
 			}else
 			//Enter 键
-			if(keyCode === 13){
+			if(keyCode === this.props.selectedKeyCode){
 				if(this.state.val != emptyVal){
 					let option = data[index];
 					this.optionClick(option, this.props.sels.findIndex(item => item[value] === this.state.val) != -1, option[disabled], e)
 				}
 			}
 		}
+	}
 
+	viewTo(val){
+		//键盘选中时滚动到可视范围内
+		if(void 0 != this.base){
+			let opt = this.base.querySelector(`.xm-option[value="${ val }"]`);
+			opt && opt.scrollIntoView(false)
+		}
 	}
 
 	//组件将要接收新属性
@@ -239,7 +242,7 @@ class General extends Component{
 	}
 
 	render(config) {
-		let { data, flatData, prop, template, theme, radio, sels, empty, filterable, filterMethod, remoteSearch, remoteMethod, delay, searchTips, create, pageRemote, max, enableKeyboard } = config
+		let { data, flatData, prop, template, theme, radio, sels, empty, filterable, filterMethod, remoteSearch, remoteMethod, delay, searchTips, create, pageRemote, max, enableKeyboard, enableHoverFirst } = config
 
 		const { name, value, disabled, children, optgroup } = prop;
 
@@ -359,7 +362,9 @@ class General extends Component{
 		//查看是否创建了条目
 		if(creator){
 			creator = create(this.state.filterValue, deepMerge([], arr));
-			creator && arr.splice(0, 0, {...creator, __node: {}});
+			if(void 0 != creator){
+				arr.splice(0, 0, ...(isArray(creator) ? creator : [creator]).map(i => ({ ...i, __node: {} })));
+			}
 		}
 
 		let safetyArr = deepMerge([], arr);
@@ -521,7 +526,11 @@ class General extends Component{
 
 		arr = arr.map(renderGroup);
 
-		if(!arr.length){
+		if(arr.length){
+			if(enableHoverFirst && this.state.val == emptyVal){
+				this.keydown('div', { keyCode: 40 })
+			}
+		}else{
 			//查看无数据情况下是否显示分页
 			!config.pageEmptyShow && (paging = '');
 			arr.push(<div class="xm-select-empty">{ empty }</div>)

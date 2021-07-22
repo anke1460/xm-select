@@ -81,6 +81,10 @@ export default function (lan = 'zn') {
 		showCount: 0,
 		//是否开启键盘操作
 		enableKeyboard: true,
+		//开启键盘操作后是否默认选中第一条
+		enableHoverFirst: true,
+		//键盘选中的KeyCode, 默认是Enter
+		selectedKeyCode: 13,
 		//工具条
 		toolbar: {
 			show: false,
@@ -187,6 +191,9 @@ export default function (lan = 'zn') {
 		},
 		submitConversion(sels, prop){
 			return sels.map(item => item[prop.value]).join(',')
+		},
+		done(){
+
 		}
 	}
 }

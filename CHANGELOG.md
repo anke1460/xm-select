@@ -1,5 +1,24 @@
 ## 更新日志
 
+### 1.2.4
+
+*2021-07-22*
+
+#### 新增
+
+- 新增渲染完成的回调`done`
+- `create`支持一次性创建多个, 返回一个数组即可 [#I40MU0](https://gitee.com/maplemei/xm-select/issues/I40MU0)
+- 增加预选配置`enableHoverFirst`, 默认选中第一项可选中数据 [#I3ZCRX](https://gitee.com/maplemei/xm-select/issues/I3ZCRX)
+- 新增focus后的样式提醒
+- 新增自定义设置选中键盘KeyCode配置`selectedKeyCode`, 可选 `xmSelect.KeyCode.Enter`, `xmSelect.KeyCode.Space`, 也可自行定义数值 [#I41NNI](https://gitee.com/maplemei/xm-select/issues/I41NNI)
+- 表单验证失败后 滚动到可视范围内 ##灰度##
+
+#### Bug fixes
+
+- 修复`tree`非严格模式下, 无法选中父节点
+- 修复`tree`模式下搜索后无法折叠的问题 [#I3XBF1](https://gitee.com/maplemei/xm-select/issues/I3XBF1)
+
+
 ### 1.2.3
 
 *2021-06-30*
