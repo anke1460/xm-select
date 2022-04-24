@@ -246,7 +246,7 @@ class General extends Component{
 
 		const { name, value, disabled, children, optgroup } = prop;
 
-		let arr = deepMerge([], flatData), creator;
+		let arr = deepMerge([], flatData), creator, all_arr = [];
 
 		//远程分页 或者 远程搜索
 		if(pageRemote || filterable && remoteSearch){
@@ -317,6 +317,7 @@ class General extends Component{
 				//实现简单的物理分页
 				let start = (pageIndex - 1) * config.pageSize;
 				let end = start + config.pageSize;
+				all_arr = arr;
 				arr = arr.slice(start, end);
 			}
 
@@ -368,6 +369,7 @@ class General extends Component{
 		}
 
 		let safetyArr = deepMerge([], arr);
+		let allSafetyArr = deepMerge([], all_arr);
 		this.tempData = safetyArr;
 
 		//工具条操作
@@ -438,7 +440,7 @@ class General extends Component{
 					}
 
 					return (<div class={ toolClass } style={ toolStyle } onClick={ () => {
-						isFunction(info.method) && info.method(safetyArr)
+						isFunction(info.method) && info.method(allSafetyArr)
 						this.focus()
 					} } onMouseEnter={ hoverChange } onMouseLeave={ hoverChange }>
 						{ config.toolbar.showIcon && <i class={ info.icon }></i> }
