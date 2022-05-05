@@ -358,17 +358,17 @@ class General extends Component{
 			}
 			newArr.push(item);
 		});
-		arr = newArr;
+		all_arr = newArr;
 
 		//查看是否创建了条目
 		if(creator){
-			creator = create(this.state.filterValue, deepMerge([], arr));
+			creator = create(this.state.filterValue, deepMerge([], all_arr));
 			if(void 0 != creator){
-				arr.splice(0, 0, ...(isArray(creator) ? creator : [creator]).map(i => ({ ...i, __node: {} })));
+				all_arr.splice(0, 0, ...(isArray(creator) ? creator : [creator]).map(i => ({ ...i, __node: {} })));
 			}
 		}
 
-		let safetyArr = deepMerge([], arr);
+		let safetyArr = deepMerge([], all_arr);
 		let allSafetyArr = deepMerge([], all_arr);
 		this.tempData = safetyArr;
 
