@@ -358,7 +358,7 @@ class General extends Component{
 			}
 			newArr.push(item);
 		});
-		all_arr = newArr;
+		// all_arr = newArr;
 
 		//查看是否创建了条目
 		if(creator){

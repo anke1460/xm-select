@@ -7,6 +7,7 @@ export default {
 		CLEAR: '清空',
 		REVERSE: '反选',
 		SEARCH: '搜索',
+		CLOSE: '关闭'
 	},
 	paging: {
 		prev: '上一页',
